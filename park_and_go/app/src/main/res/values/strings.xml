@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">park_and_go</string>
+    <string name="title_Activity_maps">Map</string>
 </resources>
