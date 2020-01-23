@@ -1,2 +1,0 @@
-include ':app'
-rootProject.name='park_and_go'
