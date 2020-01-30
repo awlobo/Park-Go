@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Park&amp;Go</string>
     <string name="title_activity_maps">Map</string>
+    <string name="autores">Andrea Lobo y Rubén Ortega</string>
+    <string name="guardar_aparcamiento">Guardar aparcamiento</string>
+    <string name="mi_coche">¿Dónde está mi coche?</string>
+    <string name="buscar">Buscar lugares</string>
+    <string name="aparcamientos_publicos">Aparcamientos Públicos</string>
+    <string name="ocio">Ocio</string>
+    <string name="embajadas_y_consulados">Embajadas y consulados</string>
+    <string name="todo">Todo</string>
+    <string name="filtrar">Filtrar</string>
+    <string name="transporte_compartido">Transporte compartido</string>
+    <string name="favoritos">Favoritos</string>
 </resources>

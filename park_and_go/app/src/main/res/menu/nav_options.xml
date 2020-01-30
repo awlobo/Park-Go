@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_guardar_aparcamiento"
+            android:icon="@drawable/location"
+            android:title="@string/guardar_aparcamiento" />
+        <item
+            android:id="@+id/menu_recuperar_aparcamiento"
+            android:icon="@drawable/car"
+            android:title="@string/mi_coche" />
+
+        <item android:title="@string/buscar">
+            <menu>
+                <item
+                    android:id="@+id/menu_aparcamientos"
+                    android:icon="@drawable/location"
+                    android:title="@string/aparcamientos_publicos" />
+                <item
+                    android:id="@+id/menu_ocio"
+                    android:icon="@drawable/location"
+                    android:title="@string/ocio" />
+                <item
+                    android:id="@+id/menu_embajadas"
+                    android:icon="@drawable/location"
+                    android:title="@string/embajadas_y_consulados" />
+                <item
+                    android:id="@+id/menu_todo"
+                    android:icon="@drawable/location"
+                    android:title="@string/todo" />
+                <item
+                    android:id="@+id/menu_filtrar"
+                    android:icon="@drawable/location"
+                    android:title="@string/filtrar" />
+            </menu>
+        </item>
+
+        <item
+            android:id="@+id/menu_transporte"
+            android:icon="@drawable/car"
+            android:title="@string/transporte_compartido" />
+        <item
+            android:id="@+id/menu_favoritos"
+            android:icon="@drawable/fav"
+            android:title="@string/favoritos" />
+
+    </group>
+
+
+</menu>
