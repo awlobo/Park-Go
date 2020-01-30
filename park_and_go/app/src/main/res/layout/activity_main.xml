@@ -22,11 +22,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="65dp"
-            android:src="@drawable/logo" />
+            app:srcCompat="@drawable/logo" />
 
     </LinearLayout>
 
-    <android.support.design.widget.NavigationView
+    <com.google.android.material.navigation.NavigationView
         android:id="@+id/navview"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -34,8 +34,7 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/header_navigation_drawer"
         app:menu="@menu/nav_options">
-
-    </android.support.design.widget.NavigationView>
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
 
