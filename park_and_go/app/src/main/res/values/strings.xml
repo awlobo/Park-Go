@@ -10,6 +10,12 @@
     <string name="embajadas_y_consulados">Embajadas y consulados</string>
     <string name="todo">Todo</string>
     <string name="filtrar">Filtrar</string>
-    <string name="transporte_compartido">Transporte compartido</string>
     <string name="favoritos">Favoritos</string>
+    <string name="llamar">Llamar a emergencias</string>
+    <string name="_112">112</string>
+    <string name="transporte_compartido">Transporte compartido</string>
+    <string name="patinetes_electricos">Patinetes eléctricos</string>
+    <string name="bicicletas_electricas">Bicicletas eléctricas</string>
+    <string name="carsharing">Carsharing</string>
+    <string name="motosharing">Motosharing</string>
 </resources>
