@@ -18,11 +18,26 @@
             layout="@layout/toolbar" />
 
         <ImageView
-            android:layout_width="match_parent"
+            android:layout_width="285dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="65dp"
+            android:layout_marginBottom="1dp"
             app:srcCompat="@drawable/logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/llamar"
+            android:textSize="12pt" />
+
+        <Button
+            android:id="@+id/numTel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/_112"
+            android:textSize="18pt" />
 
     </LinearLayout>
 
@@ -33,8 +48,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/header_navigation_drawer"
-        app:menu="@menu/nav_options">
-    </com.google.android.material.navigation.NavigationView>
+        app:menu="@menu/nav_options"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
 
