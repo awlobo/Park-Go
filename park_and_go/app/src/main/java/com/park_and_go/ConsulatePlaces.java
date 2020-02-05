@@ -28,9 +28,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ParkPlaces extends AppCompatActivity implements LocationListener {
-
+public class ConsulatePlaces extends AppCompatActivity implements LocationListener {
     private final String TAG = getClass().getSimpleName();
+    private Context mContext = this;
     private static final Integer PERMIS_GPS_FINE = 1;
     private LocationManager mLocManager;
     private List<PlacesResponse.Places> mPlaces;
@@ -42,10 +42,10 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_park_places);
+        setContentView(R.layout.activity_consulates_places);
         Log.d(TAG, "En el onCreate de park places");
 
-        lv = (ListView) findViewById(R.id.listview_parks);
+        lv = (ListView) findViewById(R.id.listview_consulates);
 
     }
 
@@ -55,7 +55,7 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
         mCurrentLocation = location;
         Log.d(TAG, "En el onLocationChange: " + location.getLatitude() + ", " + location.getLongitude());
         //getPlaces(location.getLatitude(), location.getLongitude());
-        getParks(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        getConsulates(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
     }
 
     @Override
@@ -76,9 +76,9 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
     @Override
     protected void onStart() {
         super.onStart();
-        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(ParkPlaces.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(ConsulatePlaces.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-            ActivityCompat.requestPermissions(ParkPlaces.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMIS_GPS_FINE);
+            ActivityCompat.requestPermissions(ConsulatePlaces.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMIS_GPS_FINE);
             Log.d(TAG, "En el onStart , start location");
         } else {
 
@@ -115,7 +115,7 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
         }
     }
 
-    public void getParks(double latitude, double longitude) {
+    public void getConsulates(double latitude, double longitude) {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -132,9 +132,9 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
         DataMadrid dm = retrofit.create(DataMadrid.class);
 
-        Log.d(TAG, "En getPlaces");
+        Log.d(TAG, "En getConsulates");
 
-        dm.getPlaces(latitude, longitude,1000).enqueue(new Callback<PlacesResponse>() {
+        dm.getConsulates(latitude, longitude,5000).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
@@ -142,11 +142,11 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
                 Log.d(TAG, "Valor de response code " + String.valueOf(response.code()));
                 if (response.body() != null && !mPlaces.isEmpty()) {
-                    mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_parks, mPlaces);
+                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_consulates,mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {
-                    Log.d(TAG, "Response: " + response.body().graph.size());
+
                 }
 
             }

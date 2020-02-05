@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ParkPlaces">
+    tools:context=".ConsulatePlaces">
 
     <ListView
-        android:id="@+id/listview_parks"
+        android:id="@+id/listview_consulates"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
 

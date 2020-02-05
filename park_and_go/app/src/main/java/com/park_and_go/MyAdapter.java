@@ -5,14 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MyAdapter extends BaseAdapter {
 
     private Context mContext;
     private int layout;
-    private ArrayList<PlacesResponse.Places> mPlaces;
+    private List<PlacesResponse.Places> mPlaces;
+
+    public MyAdapter(Context mContext, int layout, List<PlacesResponse.Places> mPlaces) {
+        this.mContext = mContext;
+        this.layout = layout;
+        this.mPlaces = mPlaces;
+    }
 
     @Override
     public int getCount() {
@@ -37,11 +45,15 @@ public class MyAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            v = layoutInflater.inflate(R.layout.list_places, null);
+            v = layoutInflater.inflate(R.layout.list_parks, null);
         } else {
             v = convertView;
         }
 
+        ImageView icon = (ImageView) v.findViewById(R.id.parkImage);
+
+        TextView title = (TextView) v.findViewById(R.id.name);
+        title.setText(mPlaces.get(i).title);
 
         return v;
     }

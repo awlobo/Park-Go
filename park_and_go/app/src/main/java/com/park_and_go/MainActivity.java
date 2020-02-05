@@ -1,21 +1,17 @@
 package com.park_and_go;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
-import android.util.Patterns;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -81,6 +77,17 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(intent);
 
         }
+        if (id == R.id.menu_aparcamientos){
+            Intent intent = new Intent(MainActivity.this, ParkPlaces.class);
+            startActivity(intent);
+
+        }
+        if (id == R.id.menu_embajadas){
+            Intent intent = new Intent(MainActivity.this, ConsulatePlaces.class);
+            startActivity(intent);
+
+        }
+
         return false;
     }
 }
