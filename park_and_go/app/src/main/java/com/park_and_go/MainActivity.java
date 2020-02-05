@@ -16,7 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener{
+        NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -72,17 +72,17 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
 
-        if (id == R.id.menu_transporte){
+        if (id == R.id.menu_transporte) {
             Intent intent = new Intent(MainActivity.this, TransporteCompartido.class);
             startActivity(intent);
 
         }
-        if (id == R.id.menu_aparcamientos){
+        if (id == R.id.menu_aparcamientos) {
             Intent intent = new Intent(MainActivity.this, ParkPlaces.class);
             startActivity(intent);
 
         }
-        if (id == R.id.menu_embajadas){
+        if (id == R.id.menu_embajadas) {
             Intent intent = new Intent(MainActivity.this, ConsulatePlaces.class);
             startActivity(intent);
 
