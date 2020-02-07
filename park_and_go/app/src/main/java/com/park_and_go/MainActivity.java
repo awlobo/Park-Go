@@ -3,6 +3,8 @@ package com.park_and_go;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,12 +23,14 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // CREA UN TOOLBAR NUEVO, NECESARIO PARA PODER USAR EL MENU LATERAL
+        /* CREA UN TOOLBAR NUEVO, NECESARIO PARA PODER USAR EL MENU LATERAL*/
         setToolBar();
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navview);
