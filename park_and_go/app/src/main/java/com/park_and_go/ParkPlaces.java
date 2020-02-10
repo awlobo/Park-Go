@@ -15,6 +15,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,6 +33,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
     private final String TAG = getClass().getSimpleName();
+    private final String LATITUDE = "LATITUDE";
+    private final String LONGITUDE = "LONGITUD";
     private static final Integer PERMIS_GPS_FINE = 1;
     private LocationManager mLocManager;
     private List<PlacesResponse.Places> mPlaces;
@@ -47,6 +51,15 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
         lv = (ListView) findViewById(R.id.listview_parks);
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                Intent intent = new Intent(ParkPlaces.this,MapsActivity.class);
+                intent.putExtra(LATITUDE,mPlaces.get(i).location.latitude);
+                intent.putExtra(LONGITUDE,mPlaces.get(i).location.longitude);
+                startActivityForResult(intent,1);
+            }
+        });
     }
 
     @Override
