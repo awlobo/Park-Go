@@ -18,11 +18,14 @@
         android:roundIcon="@drawable/logo_sin_titulo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".FiltrosPlaces"></activity>
         <activity android:name=".Splash_screen">
-<!--            android:theme="@style/SplahTheme"-->
+
+            <!-- android:theme="@style/SplahTheme" -->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -44,8 +47,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".MainActivity"/>
-
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
