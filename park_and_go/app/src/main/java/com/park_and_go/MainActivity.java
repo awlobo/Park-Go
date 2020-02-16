@@ -95,6 +95,12 @@ public class MainActivity extends AppCompatActivity implements
 
         }
 
+        if (id == R.id.menu_favoritos) {
+            Intent intent = new Intent(MainActivity.this, FavoritosPlaces.class);
+            startActivity(intent);
+
+        }
+
 
         return false;
     }

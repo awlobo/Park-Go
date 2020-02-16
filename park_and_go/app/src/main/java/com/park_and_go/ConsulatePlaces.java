@@ -15,6 +15,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,7 +51,30 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
 
         lv = (ListView) findViewById(R.id.listview_consulates);
 
+        lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                // OPCIONES QUE APARECEN CUANDO MANTIENES PULSADO
+                menu.add(0, 1, 0, "Añadir Favorito");
+            }
+        });
+
     }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        switch (item.getItemId()) {
+            case 1:
+//                mPlaces.remove(info.position);
+                Toast.makeText(ConsulatePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
+                mAdapter.notifyDataSetChanged();
+                break;
+        }
+        return true;
+    }
+
 
     @Override
     public void onLocationChanged(Location location) {

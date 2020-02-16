@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/logo_sin_titulo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FiltrosPlaces"></activity>
+        <activity android:name=".FavoritosPlaces"></activity>
+        <activity android:name=".FiltrosPlaces" />
         <activity android:name=".Splash_screen">
 
             <!-- android:theme="@style/SplahTheme" -->
