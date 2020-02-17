@@ -1,4 +1,4 @@
-package com.park_and_go;
+package com.park_and_go.common;
 
 public class Favorito {
 

@@ -18,9 +18,15 @@
         android:roundIcon="@drawable/logo_sin_titulo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FavoritosPlaces"></activity>
-        <activity android:name=".FiltrosPlaces" />
-        <activity android:name=".Splash_screen">
+
+        <service
+            android:name=".services.GpsService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".activities.FavoritosPlaces"></activity>
+        <activity android:name=".activities.FiltrosPlaces" />
+        <activity android:name=".assets.Splash_screen">
 
             <!-- android:theme="@style/SplahTheme" -->
 
@@ -30,9 +36,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ConsulatePlaces" />
-        <activity android:name=".TransporteCompartido" />
-        <activity android:name=".ParkPlaces" />
+        <activity android:name=".activities.ConsulatePlaces" />
+        <activity android:name=".activities.TransporteCompartido" />
+        <activity android:name=".activities.ParkPlaces" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -48,7 +54,8 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"/>
+
     </application>
 
 </manifest>

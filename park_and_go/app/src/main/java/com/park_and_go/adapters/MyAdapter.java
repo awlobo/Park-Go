@@ -1,4 +1,4 @@
-package com.park_and_go;
+package com.park_and_go.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.park_and_go.R;
+import com.park_and_go.common.PlacesResponse;
 
 import java.util.List;
 
@@ -51,6 +54,7 @@ public class MyAdapter extends BaseAdapter {
         }
 
         ImageView icon = (ImageView) v.findViewById(R.id.parkImage);
+        icon.setImageResource(R.drawable.car);
         TextView title = (TextView) v.findViewById(R.id.name);
         title.setText(mPlaces.get(i).title);
 

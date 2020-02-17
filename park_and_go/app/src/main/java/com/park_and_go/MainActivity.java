@@ -16,9 +16,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
+import com.park_and_go.activities.ConsulatePlaces;
+import com.park_and_go.activities.FavoritosPlaces;
+import com.park_and_go.activities.FiltrosPlaces;
+import com.park_and_go.activities.ParkPlaces;
+import com.park_and_go.activities.TransporteCompartido;
+import com.park_and_go.common.Favorito;
 
 import java.io.FileReader;
 import java.io.IOException;

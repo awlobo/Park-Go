@@ -1,4 +1,4 @@
-package com.park_and_go;
+package com.park_and_go.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +24,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.park_and_go.common.DataMadrid;
+import com.park_and_go.adapters.MyAdapter;
+import com.park_and_go.R;
+import com.park_and_go.common.Favorito;
+import com.park_and_go.common.PlacesResponse;
 
 import java.io.FileWriter;
 import java.io.IOException;

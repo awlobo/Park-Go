@@ -1,40 +1,61 @@
 package com.park_and_go;
 
-import androidx.fragment.app.FragmentActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.fragment.app.FragmentActivity;
+
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.park_and_go.common.PlacesResponse;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private final String TAG = getClass().getSimpleName();
     private final String LATITUDE = "LATITUDE";
     private final String LONGITUDE = "LONGITUD";
-    private  Double mLatitude,mLongitude;
+    private final String TITLE = "TITLE";
+    private ArrayList<PlacesResponse.Places> mPlaces;
+    private boolean option;
+    private Double mLatitude, mLongitude;
+    private String mTitle;
     private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         Intent intent = getIntent();
 
-        if(intent!=null){
-            mLatitude = intent.getDoubleExtra(LATITUDE,0.0);
-            mLongitude = intent.getDoubleExtra(LONGITUDE,0.0);
-            Log.d(TAG, "New location: " + mLatitude+ "-" + mLongitude);
-        }
+        result(intent);
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    public void result(Intent data){
+        option = data.getBooleanExtra("OPTION",true);
+        if(option){
+            mPlaces = data.getParcelableArrayListExtra("ARRAY");
+            option = true;
+            Log.d(TAG, "requestcode = 1 ");
+        }else{
+            Log.d(TAG, "requestcode = 2 ");
+            mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
+            mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
+            mTitle = data.getStringExtra(TITLE);
+        }
     }
 
 
@@ -51,14 +72,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        LatLng loc = new LatLng(mLatitude,mLongitude);
+        if (option) {
+            for (PlacesResponse.Places p : mPlaces) {
+                LatLng loc = new LatLng(p.location.latitude, p.location.longitude);
+                mMap.addMarker(new MarkerOptions().position(loc).title(p.title));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+                CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(loc, 16);
+                mMap.moveCamera(camera);
+                mMap.setMyLocationEnabled(true);
+            }
+        } else {
+            Log.d(TAG, "New location: " + mLatitude + "-" + mLongitude);
+            LatLng loc = new LatLng(mLatitude, mLongitude);
+            mMap.addMarker(new MarkerOptions().position(loc).title(mTitle));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+            CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(loc, 16);
+            mMap.moveCamera(camera);
+            mMap.setMyLocationEnabled(true);
+        }
+    }
 
-        mMap.addMarker(new MarkerOptions().position(loc).title("Marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mMap.setMyLocationEnabled(true);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 10) {
+            mPlaces = data.getParcelableArrayListExtra("ARRAY");
+            option = true;
+            Log.d(TAG, "requestcode = 1 ");
+        } else if (requestCode == 20) {
+            Log.d(TAG, "requestcode = 2 ");
+            mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
+            mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
+            mTitle = data.getStringExtra(TITLE);
+        } else {
+            Log.d(TAG, "Algo salio mal");
+        }
     }
 }

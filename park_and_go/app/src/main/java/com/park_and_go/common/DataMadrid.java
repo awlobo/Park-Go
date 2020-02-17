@@ -1,4 +1,6 @@
-package com.park_and_go;
+package com.park_and_go.common;
+
+import com.park_and_go.common.PlacesResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

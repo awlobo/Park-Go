@@ -1,11 +1,13 @@
-package com.park_and_go;
+package com.park_and_go.assets;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
+
+import com.park_and_go.MainActivity;
+import com.park_and_go.R;
 
 public class Splash_screen extends AppCompatActivity {
 
