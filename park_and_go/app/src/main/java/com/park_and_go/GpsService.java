@@ -7,16 +7,14 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import androidx.annotation.Nullable;
-
 public class GpsService extends Service implements LocationListener {
+    public GpsService() {
+    }
 
-    private Intent intent= null;
-
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        // TODO: Return the communication channel to the service.
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override

@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -35,12 +36,13 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
     private final String TAG = getClass().getSimpleName();
     private final String LATITUDE = "LATITUDE";
     private final String LONGITUDE = "LONGITUD";
+    private final String TITLE = "TITLE";
     private static final Integer PERMIS_GPS_FINE = 1;
     private LocationManager mLocManager;
-    private List<PlacesResponse.Places> mPlaces;
+    private ArrayList<PlacesResponse.Places> mPlaces;
     private Location mCurrentLocation;
-    private MyAdapter mAdapter=null;
-    private ListView lv=null;
+    private MyAdapter mAdapter = null;
+    private ListView lv = null;
 
 
     @Override
@@ -54,10 +56,23 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                Intent intent = new Intent(ParkPlaces.this,MapsActivity.class);
-                intent.putExtra(LATITUDE,mPlaces.get(i).location.latitude);
-                intent.putExtra(LONGITUDE,mPlaces.get(i).location.longitude);
-                startActivityForResult(intent,1);
+                boolean option;
+                Intent intent = new Intent(ParkPlaces.this, MapsActivity.class);
+                if (i == 0) {
+                    option= true;
+                    intent.putExtra("OPTION",option);
+                    intent.putParcelableArrayListExtra("ARRAY",mPlaces);
+                    startActivityForResult(intent, 10);
+                }
+                else if(i>0) {
+                    option = false;
+                    Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
+                    intent.putExtra(LATITUDE, mPlaces.get(i).location.latitude);
+                    intent.putExtra(LONGITUDE, mPlaces.get(i).location.longitude);
+                    intent.putExtra(TITLE,mPlaces.get(i).title);
+                    intent.putExtra("OPTION",option);
+                    startActivityForResult(intent, 20);
+                }
             }
         });
     }
@@ -83,7 +98,7 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-        Log.d(TAG, "En el onProviderDisabled" );
+        Log.d(TAG, "En el onProviderDisabled");
     }
 
     @Override
@@ -147,7 +162,7 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
         Log.d(TAG, "En getPlaces");
 
-        dm.getPlaces(latitude, longitude,1000).enqueue(new Callback<PlacesResponse>() {
+        dm.getPlaces(latitude, longitude, 1000).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
