@@ -80,7 +80,7 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
                             .setPrettyPrinting()
                             .create();
                     PlacesResponse.Places p = mPlaces.get(info.position);
-                    Favorito f = new Favorito(p.title, p.location.latitude, p.location.longitude);
+                    Favorito f = new Favorito(p.title, Favorito.Tipos.CONSULADO,p.location.latitude, p.location.longitude);
                     mFavs.add(f);
                     gson.toJson(mFavs, writer);
 

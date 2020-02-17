@@ -23,7 +23,7 @@ public class FavoritosPlaces extends AppCompatActivity {
     private ListView lv;
     private final String LATITUDE = "LATITUDE";
     private final String LONGITUDE = "LONGITUD";
-    private MyAdapter mAdapter = null;
+    private FavoritosAdapter mAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +33,17 @@ public class FavoritosPlaces extends AppCompatActivity {
         lv = findViewById(R.id.listaFavoritos);
 
         if (!MainActivity.mFavs.isEmpty()) {
-//            mAdapter = new MyAdapter(FavoritosPlaces.this, R.layout.list_favoritos, MainActivity.mFavs);
-//            lv.setAdapter(mAdapter);
-//            mAdapter.notifyDataSetChanged();
+            mAdapter = new FavoritosAdapter(FavoritosPlaces.this, R.layout.list_favoritos, MainActivity.mFavs);
+            lv.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
         }
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 Intent intent = new Intent(FavoritosPlaces.this, MapsActivity.class);
-//                intent.putExtra(LATITUDE, MainActivity.mFavs.get(i).location.latitude);
-//                intent.putExtra(LONGITUDE, MainActivity.mFavs.get(i).location.longitude);
+                intent.putExtra(LATITUDE, MainActivity.mFavs.get(i).getLatitude());
+                intent.putExtra(LONGITUDE, MainActivity.mFavs.get(i).getLongitude());
                 startActivityForResult(intent, 1);
             }
         });

@@ -3,16 +3,29 @@ package com.park_and_go;
 public class Favorito {
 
     private String title;
+    private Tipos tipo;
     private Double latitude;
     private Double longitude;
+    public enum Tipos{
+        CONSULADO, OCIO, PARKING;
+    }
 
     public Favorito() {
     }
 
-    public Favorito(String title, Double latitude, Double longitude) {
+    public Favorito(String title, Tipos tipo, Double latitude, Double longitude) {
         this.title = title;
+        this.tipo = tipo;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Tipos getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipos tipo) {
+        this.tipo = tipo;
     }
 
     public String getTitle() {
