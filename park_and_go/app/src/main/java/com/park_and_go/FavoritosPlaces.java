@@ -10,12 +10,22 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+
+import static com.park_and_go.MainActivity.mFavs;
 
 public class FavoritosPlaces extends AppCompatActivity {
 
@@ -47,5 +57,40 @@ public class FavoritosPlaces extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+
+        lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                // OPCIONES QUE APARECEN CUANDO MANTIENES PULSADO
+                menu.add(0, 1, 0, "Borrar Favorito");
+            }
+        });
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        switch (item.getItemId()) {
+            case 1:
+                try {
+                    Writer writer = new FileWriter(getFilesDir() + "/fav.json");
+                    Gson gson = new GsonBuilder()
+                            .setPrettyPrinting()
+                            .create();
+                    Favorito f = mFavs.get(info.position);
+                    mFavs.remove(f);
+                    gson.toJson(mFavs, writer);
+
+                    Toast.makeText(FavoritosPlaces.this, "Borrado correctamente", Toast.LENGTH_SHORT).show();
+                    mAdapter.notifyDataSetChanged();
+
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+        return true;
     }
 }
