@@ -1,4 +1,4 @@
-package com.park_and_go;
+package com.park_and_go.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.park_and_go.Favorito.Tipos;
+import com.park_and_go.R;
+import com.park_and_go.common.Favorito;
+import com.park_and_go.common.Favorito.Tipos;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.park_and_go;
+package com.park_and_go.services;
 
 import android.app.Service;
 import android.content.Intent;

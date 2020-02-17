@@ -1,4 +1,4 @@
-package com.park_and_go;
+package com.park_and_go.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,7 +14,7 @@ public class PlacesResponse {
     @Expose
     public final ArrayList<Places> graph = null;
 
-    static class Places implements Parcelable {
+    public static class Places implements Parcelable {
 
         public String title = null;
         public MyLocation location = null;

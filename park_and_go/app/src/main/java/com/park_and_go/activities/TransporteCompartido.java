@@ -1,4 +1,4 @@
-package com.park_and_go;
+package com.park_and_go.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.park_and_go.R;
 
 public class TransporteCompartido extends AppCompatActivity {
 
