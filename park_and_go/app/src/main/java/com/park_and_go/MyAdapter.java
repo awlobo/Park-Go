@@ -51,7 +51,6 @@ public class MyAdapter extends BaseAdapter {
         }
 
         ImageView icon = (ImageView) v.findViewById(R.id.parkImage);
-
         TextView title = (TextView) v.findViewById(R.id.name);
         title.setText(mPlaces.get(i).title);
 

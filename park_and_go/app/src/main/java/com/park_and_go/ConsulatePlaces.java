@@ -22,6 +22,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -32,6 +38,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.park_and_go.MainActivity.mFavs;
+
 public class ConsulatePlaces extends AppCompatActivity implements LocationListener {
     private final String TAG = getClass().getSimpleName();
     private Context mContext = this;
@@ -39,9 +47,8 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
     private LocationManager mLocManager;
     private List<PlacesResponse.Places> mPlaces;
     private Location mCurrentLocation;
-    private MyAdapter mAdapter=null;
-    private ListView lv=null;
-
+    private MyAdapter mAdapter = null;
+    private ListView lv = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +74,23 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
 
         switch (item.getItemId()) {
             case 1:
-//                mPlaces.remove(info.position);
-                Toast.makeText(ConsulatePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
-                mAdapter.notifyDataSetChanged();
+                try {
+                    Writer writer = new FileWriter(getFilesDir() + "/fav.json");
+                    Gson gson = new GsonBuilder()
+                            .setPrettyPrinting()
+                            .create();
+                    PlacesResponse.Places p = mPlaces.get(info.position);
+                    Favorito f = new Favorito(p.title, p.location.latitude, p.location.longitude);
+                    mFavs.add(f);
+                    gson.toJson(mFavs, writer);
+
+                    Toast.makeText(ConsulatePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
+                    mAdapter.notifyDataSetChanged();
+
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
         return true;
@@ -97,7 +118,7 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
 
     @Override
     public void onProviderDisabled(String provider) {
-        Log.d(TAG, "En el onProviderDisabled" );
+        Log.d(TAG, "En el onProviderDisabled");
     }
 
     @Override
@@ -161,7 +182,7 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
 
         Log.d(TAG, "En getConsulates");
 
-        dm.getConsulates(latitude, longitude,5000).enqueue(new Callback<PlacesResponse>() {
+        dm.getConsulates(latitude, longitude, 5000).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
@@ -169,13 +190,12 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
 
                 Log.d(TAG, "Valor de response code " + String.valueOf(response.code()));
                 if (response.body() != null && !mPlaces.isEmpty()) {
-                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_consulates,mPlaces);
+                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_consulates, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {
 
                 }
-
             }
 
             @Override

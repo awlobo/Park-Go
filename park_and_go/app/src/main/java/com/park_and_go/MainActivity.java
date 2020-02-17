@@ -3,6 +3,7 @@ package com.park_and_go;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,12 +15,24 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    public static List<Favorito> mFavs = new ArrayList<>();
 
 
     @Override
@@ -49,7 +62,25 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(callIntent);
             }
         });
+        leerFavoritos();
 
+    }
+
+    private void leerFavoritos() {
+        try {
+            Reader reader = new FileReader(getFilesDir() + "/fav.json");
+            Gson gson = new Gson();
+
+            Type types = new TypeToken<ArrayList<Favorito>>() {
+            }.getType();
+            mFavs = gson.fromJson(reader, types);
+
+            Log.d("PRUEBA", String.valueOf(mFavs.size()));
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setToolBar() {
@@ -98,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.menu_favoritos) {
             Intent intent = new Intent(MainActivity.this, FavoritosPlaces.class);
             startActivity(intent);
-
         }
 
 

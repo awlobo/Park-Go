@@ -19,7 +19,7 @@ public class PlacesResponse {
     }
 
     public class MyLocation {
-        public final Double latitude = null;
-        public final Double longitude = null;
+        public Double latitude = null;
+        public Double longitude = null;
     }
 }

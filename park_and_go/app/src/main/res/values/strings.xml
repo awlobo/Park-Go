@@ -22,4 +22,5 @@
     <string name="distancia_metros">Distancia máxima (en metros)</string>
     <string name="ir">Ir</string>
     <string name="guardar">Guardar</string>
+    <string name="nombre_de_lugar_favorito">NOMBRE DE LUGAR FAVORITO</string>
 </resources>
