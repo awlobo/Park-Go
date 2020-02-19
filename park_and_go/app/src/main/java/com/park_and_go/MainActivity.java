@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private List<Favorito> mFavs = new ArrayList<>();
+    public static List<Favorito> mFavs = new ArrayList<>();
 
 
     @Override

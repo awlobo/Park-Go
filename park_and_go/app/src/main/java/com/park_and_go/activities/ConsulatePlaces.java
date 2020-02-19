@@ -1,10 +1,5 @@
 package com.park_and_go.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -22,12 +17,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.park_and_go.R;
+import com.park_and_go.adapters.MyAdapter;
 import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
-import com.park_and_go.adapters.MyAdapter;
-import com.park_and_go.R;
 import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
@@ -86,7 +86,7 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
                             .setPrettyPrinting()
                             .create();
                     PlacesResponse.Places p = mPlaces.get(info.position);
-                    Favorito f = new Favorito(p.title, Constants.CONSULADO,p.location.latitude, p.location.longitude);
+                    Favorito f = new Favorito(p.title, Constants.CONSULADO, p.location.latitude, p.location.longitude);
                     mFavs.add(f);
                     gson.toJson(mFavs, writer);
 
