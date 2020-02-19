@@ -81,7 +81,6 @@
         android:gravity="center|bottom"
         android:orientation="horizontal">
 
-
         <Button
             android:id="@+id/buttonIr"
             android:layout_width="match_parent"
@@ -89,13 +88,6 @@
             android:layout_weight="1"
             android:text="@string/ir" />
 
-        <Button
-            android:id="@+id/buttonGuardarPrefs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/guardar" />
     </LinearLayout>
-
 
 </LinearLayout>

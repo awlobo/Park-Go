@@ -1,14 +1,17 @@
 package com.park_and_go.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.park_and_go.R;
 
@@ -36,20 +39,44 @@ public class FiltrosPlaces extends AppCompatActivity {
         sE = findViewById(R.id.embajadasSwitch);
         eT = findViewById(R.id.editText);
 
-        Button bGuardar = findViewById(R.id.buttonGuardarPrefs);
-        bGuardar.setOnClickListener(new View.OnClickListener() {
+        sP.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-
-                // For save
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 prefsEditor.putBoolean(KEY_PARK, sP.isChecked());
+                prefsEditor.commit();
+            }
+        });
+
+        sO.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 prefsEditor.putBoolean(KEY_OCIO, sO.isChecked());
+                prefsEditor.commit();
+            }
+        });
+
+        sE.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 prefsEditor.putBoolean(KEY_EMBA, sE.isChecked());
+                prefsEditor.commit();
+            }
+        });
+
+        eT.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 prefsEditor.putString(KEY_DIST, String.valueOf(eT.getText()));
                 prefsEditor.commit();
-                Toast.makeText(FiltrosPlaces.this, "Preferences saved",Toast.LENGTH_SHORT).show();
             }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
         PersistData();

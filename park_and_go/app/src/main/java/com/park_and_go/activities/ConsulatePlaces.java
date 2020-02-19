@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
 import com.park_and_go.adapters.MyAdapter;
 import com.park_and_go.R;
@@ -85,7 +86,7 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
                             .setPrettyPrinting()
                             .create();
                     PlacesResponse.Places p = mPlaces.get(info.position);
-                    Favorito f = new Favorito(p.title, Favorito.Tipos.CONSULADO,p.location.latitude, p.location.longitude);
+                    Favorito f = new Favorito(p.title, Constants.CONSULADO,p.location.latitude, p.location.longitude);
                     mFavs.add(f);
                     gson.toJson(mFavs, writer);
 

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.park_and_go.R;
+import com.park_and_go.assets.Constants;
 import com.park_and_go.common.Favorito;
 import com.park_and_go.common.Favorito.Tipos;
 
@@ -55,9 +56,9 @@ public class FavoritosAdapter extends BaseAdapter {
 
         ImageView icon =(ImageView) v.findViewById(R.id.favImage);
 
-        if (mFavoritos.get(i).getTipo() == Tipos.CONSULADO) {
+        if (mFavoritos.get(i).getTipo().equals(Constants.CONSULADO)) {
             icon.setImageResource(R.drawable.consulate);
-        } else if (mFavoritos.get(i).getTipo() == Tipos.OCIO) {
+        } else if (mFavoritos.get(i).getTipo().equals(Constants.OCIO)) {
             icon.setImageResource(R.drawable.location);
         } else {
             icon.setImageResource(R.drawable.car);

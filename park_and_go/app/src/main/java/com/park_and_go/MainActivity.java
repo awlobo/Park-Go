@@ -3,7 +3,7 @@ package com.park_and_go;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +22,7 @@ import com.park_and_go.activities.FavoritosPlaces;
 import com.park_and_go.activities.FiltrosPlaces;
 import com.park_and_go.activities.ParkPlaces;
 import com.park_and_go.activities.TransporteCompartido;
+import com.park_and_go.assets.Constants;
 import com.park_and_go.common.Favorito;
 
 import java.io.FileReader;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    public static List<Favorito> mFavs = new ArrayList<>();
+    private List<Favorito> mFavs = new ArrayList<>();
 
 
     @Override
@@ -78,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements
             Type types = new TypeToken<ArrayList<Favorito>>() {
             }.getType();
             mFavs = gson.fromJson(reader, types);
-
-            Log.d("PRUEBA", String.valueOf(mFavs.size()));
 
             reader.close();
         } catch (IOException e) {
@@ -127,11 +126,11 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.menu_filtrar) {
             Intent intent = new Intent(MainActivity.this, FiltrosPlaces.class);
             startActivity(intent);
-
         }
 
         if (id == R.id.menu_favoritos) {
-            Intent intent = new Intent(MainActivity.this, FavoritosPlaces.class);
+            Intent intent = new Intent(this, FavoritosPlaces.class);
+            intent.putParcelableArrayListExtra(Constants.ARRAYLIST, (ArrayList<? extends Parcelable>) mFavs);
             startActivity(intent);
         }
 

@@ -13,6 +13,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.park_and_go.assets.Constants;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void result(Intent data){
         option = data.getBooleanExtra("OPTION",true);
         if(option){
-            mPlaces = data.getParcelableArrayListExtra("ARRAY");
+            mPlaces = data.getParcelableArrayListExtra(Constants.ARRAYLIST);
             option = true;
             Log.d(TAG, "requestcode = 1 ");
         }else{
@@ -97,7 +98,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 10) {
-            mPlaces = data.getParcelableArrayListExtra("ARRAY");
+            mPlaces = data.getParcelableArrayListExtra(Constants.ARRAYLIST);
             option = true;
             Log.d(TAG, "requestcode = 1 ");
         } else if (requestCode == 20) {
