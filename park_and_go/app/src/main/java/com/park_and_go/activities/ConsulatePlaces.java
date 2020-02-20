@@ -22,8 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
 import com.park_and_go.assets.Constants;
@@ -31,9 +29,6 @@ import com.park_and_go.common.DataMadrid;
 import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -43,8 +38,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.park_and_go.MainActivity.mFavs;
 
 public class ConsulatePlaces extends AppCompatActivity implements LocationListener {
     private final String TAG = getClass().getSimpleName();
@@ -60,15 +53,14 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consulates_places);
+
         Log.d(TAG, "En el onCreate de park places");
 
-        lv = (ListView) findViewById(R.id.listview_consulates);
-
+        lv = findViewById(R.id.listview_consulates);
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                // OPCIONES QUE APARECEN CUANDO MANTIENES PULSADO
-                menu.add(0, 1, 0, "Añadir Favorito");
+                menu.add(0, 1, 0, Constants.ADD_FAV);
             }
         });
 
@@ -78,26 +70,11 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        switch (item.getItemId()) {
-            case 1:
-                try {
-                    Writer writer = new FileWriter(getFilesDir() + "/fav.json");
-                    Gson gson = new GsonBuilder()
-                            .setPrettyPrinting()
-                            .create();
-                    PlacesResponse.Places p = mPlaces.get(info.position);
-                    Favorito f = new Favorito(p.title, Constants.CONSULADO, p.location.latitude, p.location.longitude);
-                    mFavs.add(f);
-                    gson.toJson(mFavs, writer);
-
-                    Toast.makeText(ConsulatePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
-                    mAdapter.notifyDataSetChanged();
-
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
+        if (item.getItemId() == 1) {
+            PlacesResponse.Places p = mPlaces.get(info.position);
+            Favorito.writeFav(getFilesDir() + "/fav.json", p, Constants.CONSULADO);
+            mAdapter.notifyDataSetChanged();
+            Toast.makeText(ConsulatePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
         }
         return true;
     }
@@ -135,7 +112,6 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
             ActivityCompat.requestPermissions(ConsulatePlaces.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMIS_GPS_FINE);
             Log.d(TAG, "En el onStart , start location");
         } else {
-
             Toast.makeText(getApplicationContext(), "[LOCATION] Permission granted in the past!", Toast.LENGTH_SHORT).show();
             startLocation();
         }

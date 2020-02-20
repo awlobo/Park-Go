@@ -3,6 +3,22 @@ package com.park_and_go.common;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.park_and_go.assets.Constants;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+import static com.park_and_go.activities.FavoritosPlaces.mFavs;
+
+
 public class Favorito implements Parcelable {
 
     private String title;
@@ -21,10 +37,6 @@ public class Favorito implements Parcelable {
         dest.writeString(tipo);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
-    }
-
-    public enum Tipos {
-        CONSULADO, OCIO, PARKING;
     }
 
     public static final Parcelable.Creator<Favorito> CREATOR =
@@ -52,6 +64,48 @@ public class Favorito implements Parcelable {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    public static void writeFav(String file, PlacesResponse.Places p, String tipo) {
+        try {
+            Writer writer = new FileWriter(file);
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
+
+            Favorito f = new Favorito(p.title, tipo, p.location.latitude, p.location.longitude);
+            mFavs.add(f);
+            gson.toJson(mFavs, writer);
+
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void readFav(String file) {
+        try {
+            Reader reader = new FileReader(file);
+            Gson gson = new Gson();
+            Type types = new TypeToken<ArrayList<Favorito>>() {
+            }.getType();
+            mFavs = gson.fromJson(reader, types);
+            reader.close();
+
+            boolean encontrado = false;
+            for (Favorito fav : mFavs) {
+                if (fav.getTitle().equals(Constants.TODOS)) {
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado && mFavs.size() != 0) {
+                mFavs.add(0, new Favorito(Constants.TODOS, Constants.TODOS, 0.0, 0.0));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public String getTipo() {
         return tipo;

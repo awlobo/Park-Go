@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.park_and_go.R;
 import com.park_and_go.assets.Constants;
 import com.park_and_go.common.Favorito;
-import com.park_and_go.common.Favorito.Tipos;
 
 import java.util.List;
 
@@ -48,23 +47,29 @@ public class FavoritosAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
             v = layoutInflater.inflate(R.layout.list_favoritos, null);
         } else {
             v = convertView;
         }
 
-        ImageView icon =(ImageView) v.findViewById(R.id.favImage);
+        ImageView icon = v.findViewById(R.id.favImage);
+        TextView title = v.findViewById(R.id.favName);
 
-        if (mFavoritos.get(i).getTipo().equals(Constants.CONSULADO)) {
-            icon.setImageResource(R.drawable.consulate);
-        } else if (mFavoritos.get(i).getTipo().equals(Constants.OCIO)) {
-            icon.setImageResource(R.drawable.location);
-        } else {
-            icon.setImageResource(R.drawable.car);
+        switch (mFavoritos.get(i).getTipo()) {
+            case Constants.CONSULADO:
+                icon.setImageResource(R.drawable.consulate);
+                break;
+            case Constants.OCIO:
+                icon.setImageResource(R.drawable.location);
+                break;
+            case Constants.PARKING:
+                icon.setImageResource(R.drawable.car);
+                break;
+            default:
+                icon.setImageResource(R.drawable.location);
+                break;
         }
 
-        TextView title = v.findViewById(R.id.favName);
         title.setText(mFavoritos.get(i).getTitle());
 
         return v;

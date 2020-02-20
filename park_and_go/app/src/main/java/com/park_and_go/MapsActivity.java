@@ -45,13 +45,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
-    public void result(Intent data){
-        option = data.getBooleanExtra("OPTION",true);
-        if(option){
+    public void result(Intent data) {
+        option = data.getBooleanExtra("OPTION", true);
+        if (option) {
             mPlaces = data.getParcelableArrayListExtra(Constants.ARRAYLIST);
             option = true;
             Log.d(TAG, "requestcode = 1 ");
-        }else{
+        } else {
             Log.d(TAG, "requestcode = 2 ");
             mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
             mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
