@@ -18,13 +18,14 @@
         android:roundIcon="@drawable/logo_sin_titulo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.TheatrePlaces"></activity>
 
         <service
             android:name=".services.GpsService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
-        <activity android:name=".activities.FavoritosPlaces"></activity>
+        <activity android:name=".activities.FavoritosPlaces" />
         <activity android:name=".activities.FiltrosPlaces" />
         <activity android:name=".assets.Splash_screen">
 
@@ -54,8 +55,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".MainActivity"/>
-
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

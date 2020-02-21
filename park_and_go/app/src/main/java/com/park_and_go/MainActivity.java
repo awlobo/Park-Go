@@ -18,6 +18,7 @@ import com.park_and_go.activities.ConsulatePlaces;
 import com.park_and_go.activities.FavoritosPlaces;
 import com.park_and_go.activities.FiltrosPlaces;
 import com.park_and_go.activities.ParkPlaces;
+import com.park_and_go.activities.TheatrePlaces;
 import com.park_and_go.activities.TransporteCompartido;
 
 public class MainActivity extends AppCompatActivity implements
@@ -83,6 +84,11 @@ public class MainActivity extends AppCompatActivity implements
         }
         if (id == R.id.menu_aparcamientos) {
             Intent intent = new Intent(MainActivity.this, ParkPlaces.class);
+            startActivity(intent);
+
+        }
+        if (id == R.id.menu_teatros) {
+            Intent intent = new Intent(MainActivity.this, TheatrePlaces.class);
             startActivity(intent);
 
         }

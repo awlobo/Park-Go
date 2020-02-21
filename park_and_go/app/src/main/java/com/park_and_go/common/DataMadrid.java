@@ -1,7 +1,5 @@
 package com.park_and_go.common;
 
-import com.park_and_go.common.PlacesResponse;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -19,4 +17,10 @@ public interface DataMadrid {
     Call<PlacesResponse> getConsulates(@Query("latitud") double latitude,
                                        @Query("longitud") double longitude,
                                        @Query("distancia") int distance);
+
+    @Headers("Accept: application/geo+json")
+    @GET("/egob/catalogo/208862-7650046-ocio_salas.json")
+    Call<PlacesResponse> getTheatres(@Query("latitud") double latitude,
+                                     @Query("longitud") double longitude,
+                                     @Query("distancia") int distance);
 }

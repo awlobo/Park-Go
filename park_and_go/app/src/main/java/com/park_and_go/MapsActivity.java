@@ -13,7 +13,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.park_and_go.assets.Constants;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -45,13 +44,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
-    public void result(Intent data) {
-        option = data.getBooleanExtra("OPTION", true);
-        if (option) {
-            mPlaces = data.getParcelableArrayListExtra(Constants.ARRAYLIST);
+    public void result(Intent data){
+        option = data.getBooleanExtra("OPTION",true);
+        if(option){
+            mPlaces = data.getParcelableArrayListExtra("ARRAY");
             option = true;
             Log.d(TAG, "requestcode = 1 ");
-        } else {
+        }else{
             Log.d(TAG, "requestcode = 2 ");
             mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
             mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
@@ -90,24 +89,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(loc, 16);
             mMap.moveCamera(camera);
             mMap.setMyLocationEnabled(true);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 10) {
-            mPlaces = data.getParcelableArrayListExtra(Constants.ARRAYLIST);
-            option = true;
-            Log.d(TAG, "requestcode = 1 ");
-        } else if (requestCode == 20) {
-            Log.d(TAG, "requestcode = 2 ");
-            mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
-            mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
-            mTitle = data.getStringExtra(TITLE);
-        } else {
-            Log.d(TAG, "Algo salio mal");
         }
     }
 }

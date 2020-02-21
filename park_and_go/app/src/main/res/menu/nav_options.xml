@@ -19,7 +19,7 @@
                     android:icon="@drawable/location"
                     android:title="@string/aparcamientos_publicos" />
                 <item
-                    android:id="@+id/menu_ocio"
+                    android:id="@+id/menu_teatros"
                     android:icon="@drawable/location"
                     android:title="@string/ocio" />
                 <item
