@@ -24,8 +24,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
+import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
 import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
@@ -33,6 +35,7 @@ import com.park_and_go.common.PlacesResponse;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -47,10 +50,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TheatrePlaces extends AppCompatActivity implements LocationListener {
     private final String TAG = getClass().getSimpleName();
-    private Context mContext = this;
+    private final String LATITUDE = "LATITUDE";
+    private final String LONGITUDE = "LONGITUD";
+    private final String ALL_ITEMS="ALL";
+    private final String TITLE = "TITLE";
+    private final String OPTION="OPTION";
     private static final Integer PERMIS_GPS_FINE = 1;
     private LocationManager mLocManager;
-    private List<PlacesResponse.Places> mPlaces;
+    private ArrayList<PlacesResponse.Places> mPlaces;
     private Location mCurrentLocation;
     private MyAdapter mAdapter = null;
     private ListView lv = null;
@@ -59,9 +66,8 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_theatre_places);
-        Log.d(TAG, "En el onCreate de park places");
 
-        lv = (ListView) findViewById(R.id.listview_consulates);
+        lv = (ListView) findViewById(R.id.listview_theatres);
 
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
@@ -71,43 +77,46 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
             }
         });
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                boolean option;
+                Intent intent = new Intent(TheatrePlaces.this, MapsActivity.class);
+                if (i == 0) {
+                    option= true;
+                    intent.putExtra(OPTION,option);
+                    intent.putParcelableArrayListExtra(ALL_ITEMS,mPlaces);
+                    startActivity(intent);
+                }
+                else if(i>0) {
+                    option = false;
+                    intent.putExtra(LATITUDE, mPlaces.get(i).location.latitude);
+                    intent.putExtra(LONGITUDE, mPlaces.get(i).location.longitude);
+                    intent.putExtra(TITLE,mPlaces.get(i).title);
+                    intent.putExtra("OPTION",option);
+                    startActivity(intent);
+                }
+            }
+        });
     }
-//
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//
-//        switch (item.getItemId()) {
-//            case 1:
-//                try {
-//                    Writer writer = new FileWriter(getFilesDir() + "/fav.json");
-//                    Gson gson = new GsonBuilder()
-//                            .setPrettyPrinting()
-//                            .create();
-//                    PlacesResponse.Places p = mPlaces.get(info.position);
-//                    Favorito f = new Favorito(p.title, Favorito.Tipos.CONSULADO,p.location.latitude, p.location.longitude);
-//                    mFavs.add(f);
-//                    gson.toJson(mFavs, writer);
-//
-//                    Toast.makeText(TheatrePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
-//                    mAdapter.notifyDataSetChanged();
-//
-//                    writer.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
-//        }
-//        return true;
-//    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        if (item.getItemId() == 1) {
+            PlacesResponse.Places p = mPlaces.get(info.position);
+            Favorito.writeFav(getFilesDir() + "/fav.json", p, Constants.THEATRE);
+            mAdapter.notifyDataSetChanged();
+            Toast.makeText(TheatrePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
 
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG, "New location: " + location.getLatitude() + "-" + location.getLongitude() + ", " + location.getAltitude());
         mCurrentLocation = location;
-        Log.d(TAG, "En el onLocationChange: " + location.getLatitude() + ", " + location.getLongitude());
-        //getPlaces(location.getLatitude(), location.getLongitude());
         getTheatres(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
     }
 
@@ -132,7 +141,6 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
         if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(TheatrePlaces.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
             ActivityCompat.requestPermissions(TheatrePlaces.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMIS_GPS_FINE);
-            Log.d(TAG, "En el onStart , start location");
         } else {
 
             Toast.makeText(getApplicationContext(), "[LOCATION] Permission granted in the past!", Toast.LENGTH_SHORT).show();
@@ -185,17 +193,16 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
 
         DataMadrid dm = retrofit.create(DataMadrid.class);
 
-        Log.d(TAG, "En getConsulates");
-
         dm.getTheatres(latitude, longitude, 5000).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
+                int code=3;
+
                 mPlaces = response.body().graph;
 
-                Log.d(TAG, "Valor de response code " + String.valueOf(response.code()));
                 if (response.body() != null && !mPlaces.isEmpty()) {
-                    mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_consulates, mPlaces);
+                    mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_consulates, mPlaces,code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

@@ -15,15 +15,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.adapters.MyAdapter;
 import com.park_and_go.R;
+import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -57,6 +62,12 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
         Log.d(TAG, "En el onCreate de park places");
 
         lv = (ListView) findViewById(R.id.listview_parks);
+        lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                menu.add(0, 1, 0, Constants.ADD_FAV);
+            }
+        });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,11 +94,23 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
     }
 
     @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        if (item.getItemId() == 1) {
+            PlacesResponse.Places p = mPlaces.get(info.position);
+            Favorito.writeFav(getFilesDir() + "/fav.json", p, Constants.CONSULADO);
+            mAdapter.notifyDataSetChanged();
+            Toast.makeText(ParkPlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
+
+    @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "New location: " + location.getLatitude() + "-" + location.getLongitude() + ", " + location.getAltitude());
         mCurrentLocation = location;
         Log.d(TAG, "En el onLocationChange: " + location.getLatitude() + ", " + location.getLongitude());
-        //getPlaces(location.getLatitude(), location.getLongitude());
         getParks(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
     }
 
@@ -171,11 +194,13 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
+                int code=1;
+
                 mPlaces = response.body().graph;
 
                 Log.d(TAG, "Valor de response code " + String.valueOf(response.code()));
                 if (response.body() != null && !mPlaces.isEmpty()) {
-                    mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_parks, mPlaces);
+                    mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_parks, mPlaces,code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

@@ -21,7 +21,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final String TAG = getClass().getSimpleName();
     private final String LATITUDE = "LATITUDE";
     private final String LONGITUDE = "LONGITUD";
+    private final String ALL_ITEMS="ALL";
     private final String TITLE = "TITLE";
+    private final String OPTION="OPTION";
     private ArrayList<PlacesResponse.Places> mPlaces;
     private boolean option;
     private Double mLatitude, mLongitude;
@@ -45,13 +47,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void result(Intent data){
-        option = data.getBooleanExtra("OPTION",true);
+        option = data.getBooleanExtra(OPTION,true);
         if(option){
-            mPlaces = data.getParcelableArrayListExtra("ARRAY");
+            mPlaces = data.getParcelableArrayListExtra(ALL_ITEMS);
             option = true;
-            Log.d(TAG, "requestcode = 1 ");
         }else{
-            Log.d(TAG, "requestcode = 2 ");
             mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
             mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
             mTitle = data.getStringExtra(TITLE);

@@ -1,6 +1,7 @@
 package com.park_and_go.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +19,13 @@ public class MyAdapter extends BaseAdapter {
     private Context mContext;
     private int layout;
     private List<PlacesResponse.Places> mPlaces;
+    private int code;
 
-    public MyAdapter(Context mContext, int layout, List<PlacesResponse.Places> mPlaces) {
+    public MyAdapter(Context mContext, int layout, List<PlacesResponse.Places> mPlaces, int code) {
         this.mContext = mContext;
         this.layout = layout;
         this.mPlaces = mPlaces;
+        this.code = code;
     }
 
     @Override
@@ -53,8 +56,22 @@ public class MyAdapter extends BaseAdapter {
             v = convertView;
         }
 
+        Log.d("MyAdapter","Valor de code: "+code);
+
         ImageView icon = (ImageView) v.findViewById(R.id.parkImage);
-        icon.setImageResource(R.drawable.car);
+
+        switch (code) {
+            case 1:
+                icon.setImageResource(R.drawable.car);
+                break;
+            case 2:
+                Log.d("MyAdapter","imagen consulates");
+                icon.setImageResource(R.drawable.consulate);
+                break;
+            case 3:
+                icon.setImageResource(R.drawable.car);
+                break;
+        }
         TextView title = (TextView) v.findViewById(R.id.name);
         title.setText(mPlaces.get(i).title);
 
