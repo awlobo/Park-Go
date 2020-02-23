@@ -29,6 +29,7 @@ import static com.park_and_go.assets.Constants.ARRAYLIST;
 import static com.park_and_go.assets.Constants.FAV;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.MILOC;
+import static com.park_and_go.assets.Constants.SNIPPET;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private final String TAG = getClass().getSimpleName();
@@ -44,6 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean miLoc;
     private Double mLatitude, mLongitude;
     private String mTitle;
+    private String mSnip;
     private GoogleMap mMap;
     private Location location;
 
@@ -83,6 +85,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
             mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
             mTitle = data.getStringExtra(TITLE);
+            mSnip = data.getStringExtra(SNIPPET);
         }
     }
 
@@ -114,7 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             Log.d(TAG, "New location: " + mLatitude + "-" + mLongitude);
             LatLng loc = new LatLng(mLatitude, mLongitude);
-            mMap.addMarker(new MarkerOptions().position(loc).title(mTitle));
+            mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mTitle));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
             CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(loc, 16);
             mMap.moveCamera(camera);

@@ -25,6 +25,7 @@ public class Constants {
     public static final String FAV = "fav";
     public static final String MILOC = "mi_localizacion";
     public static final String LOCATION = "location";
+    public static final String SNIPPET = "snippet";
 
 
 }

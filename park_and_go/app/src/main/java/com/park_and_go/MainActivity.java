@@ -45,6 +45,7 @@ import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.LONGITUDE;
 import static com.park_and_go.assets.Constants.OPTION;
+import static com.park_and_go.assets.Constants.SNIPPET;
 import static com.park_and_go.assets.Constants.TITLE;
 
 public class MainActivity extends AppCompatActivity implements
@@ -152,27 +153,27 @@ public class MainActivity extends AppCompatActivity implements
 
         } else if (id == R.id.menu_aparcamientos) {
             Intent intent = new Intent(MainActivity.this, ParkPlaces.class);
-            intent.putExtra(LOCATION,location);
+            intent.putExtra(LOCATION, location);
             startActivity(intent);
 
         } else if (id == R.id.menu_teatros) {
             Intent intent = new Intent(MainActivity.this, TheatrePlaces.class);
-            intent.putExtra(LOCATION,location);
+            intent.putExtra(LOCATION, location);
             startActivity(intent);
 
         } else if (id == R.id.menu_embajadas) {
             Intent intent = new Intent(MainActivity.this, ConsulatePlaces.class);
-            intent.putExtra(LOCATION,location);
+            intent.putExtra(LOCATION, location);
             startActivity(intent);
 
         } else if (id == R.id.menu_filtrar) {
             Intent intent = new Intent(MainActivity.this, FiltrosPlaces.class);
-            intent.putExtra(LOCATION,location);
+            intent.putExtra(LOCATION, location);
             startActivity(intent);
 
         } else if (id == R.id.menu_favoritos) {
             Intent intent = new Intent(this, FavoritosPlaces.class);
-            intent.putExtra(LOCATION,location);
+            intent.putExtra(LOCATION, location);
             startActivity(intent);
 
         } else if (id == R.id.menu_guardar_aparcamiento) {
@@ -191,13 +192,12 @@ public class MainActivity extends AppCompatActivity implements
 //                carPlaces = new PlacesResponse.Places("Your car", new MyLocation(carLocation.getLatitude(), carLocation.getLongitude()), distance);
                 Log.d("PRUEBA", String.valueOf(distance) + " metros.");
 
-                Toast.makeText(this,"Estás a " + distance + " de tu coche.", Toast.LENGTH_LONG);
                 Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                intent.putExtra(OPTION,false);
-
+                intent.putExtra(OPTION, false);
                 intent.putExtra(LATITUDE, carLocation.getLatitude());
                 intent.putExtra(LONGITUDE, carLocation.getLongitude());
                 intent.putExtra(TITLE, "My car");
+                intent.putExtra(SNIPPET, "Distancia: " + distance +" metros.");
                 startActivity(intent);
             }
         }
