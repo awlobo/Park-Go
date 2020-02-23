@@ -12,6 +12,8 @@ public class Constants {
     public static final String BORRAR = "Borrar favorito";
     public static final String BORRAR_CORRECTO = "Borrado correctamente";
     public static final String ADD_FAV = "Añadir Favorito";
+    public static final String INTENT_LOCALIZATION_ACTION = "location-event-position";
+    public static final String KEY_MESSAGE = "message";
 
 
 

@@ -1,15 +1,20 @@
 package com.park_and_go;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -20,12 +25,14 @@ import com.park_and_go.activities.FiltrosPlaces;
 import com.park_and_go.activities.ParkPlaces;
 import com.park_and_go.activities.TheatrePlaces;
 import com.park_and_go.activities.TransporteCompartido;
+import com.park_and_go.services.GpsService;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView mNavigationView;
+    Intent mServiceIntent;
 
 
     @Override
@@ -53,6 +60,39 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(callIntent);
             }
         });
+
+        if (PackageManager.PERMISSION_GRANTED !=
+                ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1);
+
+        } else {
+            startService();
+        }
+
+
+    }
+
+    public void startService() {
+        mServiceIntent = new Intent(getApplicationContext(), GpsService.class);
+        startService(mServiceIntent);
+//        stopService(mServiceIntent);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(), "GPS Permission granted!", Toast.LENGTH_SHORT).show();
+                startService();
+            } else {
+                Toast.makeText(getApplicationContext(), "Permission denied by user!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 
