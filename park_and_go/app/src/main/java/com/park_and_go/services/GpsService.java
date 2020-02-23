@@ -22,6 +22,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.park_and_go.R;
 import com.park_and_go.assets.Constants;
 
+import static com.park_and_go.assets.Constants.LOCATION;
+
 public class GpsService extends Service implements LocationListener {
 
     private final String TAG = getClass().getSimpleName();
@@ -117,7 +119,8 @@ public class GpsService extends Service implements LocationListener {
         mCurrentLocation = location;
 
         Intent intent = new Intent(Constants.INTENT_LOCALIZATION_ACTION);
-        intent.putExtra(Constants.KEY_MESSAGE, "New Location");
+        intent.putExtra(LOCATION, location);
+        //intent.putExtra(Constants.KEY_MESSAGE, "New Location");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

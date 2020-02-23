@@ -40,13 +40,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.park_and_go.assets.Constants.*;
+
 public class ConsulatePlaces extends AppCompatActivity implements LocationListener {
     private final String TAG = getClass().getSimpleName();
-    private final String LATITUDE = "LATITUDE";
-    private final String LONGITUDE = "LONGITUD";
-    private final String ALL_ITEMS="ALL";
-    private final String TITLE = "TITLE";
-    private final String OPTION="OPTION";
+
     private static final Integer PERMIS_GPS_FINE = 1;
     private LocationManager mLocManager;
     private ArrayList<PlacesResponse.Places> mPlaces;
@@ -73,18 +71,17 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
                 boolean option;
                 Intent intent = new Intent(ConsulatePlaces.this, MapsActivity.class);
                 if (i == 0) {
-                    option= true;
-                    intent.putExtra(OPTION,option);
-                    intent.putParcelableArrayListExtra(ALL_ITEMS,mPlaces);
+                    option = true;
+                    intent.putExtra(OPTION, option);
+                    intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
                     startActivity(intent);
-                }
-                else if(i>0) {
+                } else if (i > 0) {
                     option = false;
                     Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
                     intent.putExtra(LATITUDE, mPlaces.get(i).location.latitude);
                     intent.putExtra(LONGITUDE, mPlaces.get(i).location.longitude);
-                    intent.putExtra(TITLE,mPlaces.get(i).title);
-                    intent.putExtra("OPTION",option);
+                    intent.putExtra(TITLE, mPlaces.get(i).title);
+                    intent.putExtra(OPTION, option);
                     startActivity(intent);
                 }
             }
@@ -187,12 +184,12 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
-                int code=2;
+                int code = 2;
 
                 mPlaces = response.body().graph;
 
                 if (response.body() != null && !mPlaces.isEmpty()) {
-                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_consulates, mPlaces,code);
+                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_consulates, mPlaces, code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

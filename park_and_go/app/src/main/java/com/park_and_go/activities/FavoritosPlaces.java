@@ -1,6 +1,7 @@
 package com.park_and_go.activities;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.ContextMenu;
@@ -26,12 +27,21 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.park_and_go.assets.Constants.FAV;
+import static com.park_and_go.assets.Constants.LATITUDE;
+import static com.park_and_go.assets.Constants.LOCATION;
+import static com.park_and_go.assets.Constants.LONGITUDE;
+import static com.park_and_go.assets.Constants.MILOC;
+import static com.park_and_go.assets.Constants.OPTION;
+import static com.park_and_go.assets.Constants.TITLE;
+
 public class FavoritosPlaces extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
     private ListView lv;
     private FavoritosAdapter mAdapter = null;
     public static List<Favorito> mFavs = new ArrayList<>();
+    Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +51,8 @@ public class FavoritosPlaces extends AppCompatActivity {
         lv = findViewById(R.id.listaFavoritos);
 
         Favorito.readFav(getFilesDir() + "/fav.json");
+        Intent intent = getIntent();
+        location = intent.getParcelableExtra(LOCATION);
 
 //        ProgressDialog pd = new ProgressDialog(ConsulatePlaces.this);
 //        pd.setMessage("loading");
@@ -59,8 +71,20 @@ public class FavoritosPlaces extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 Intent intent = new Intent(FavoritosPlaces.this, MapsActivity.class);
-                intent.putParcelableArrayListExtra(Constants.ARRAYLIST, (ArrayList<? extends Parcelable>) mFavs);
-                startActivityForResult(intent, 7);
+                if (i != 0) {
+                    intent.putExtra(OPTION, false);
+                    intent.putExtra(LATITUDE, mFavs.get(i).getLatitude());
+                    intent.putExtra(LONGITUDE, mFavs.get(i).getLongitude());
+                    intent.putExtra(TITLE, mFavs.get(i).getTitle());
+                } else {
+                    intent.putExtra(OPTION, true);
+                    intent.putExtra(FAV, true);
+                    intent.putParcelableArrayListExtra(Constants.ARRAYLIST, (ArrayList<? extends Parcelable>) mFavs);
+                }
+                intent.putExtra(MILOC, true);
+                intent.putExtra(LOCATION, location);
+
+                startActivity(intent);
             }
         });
 
