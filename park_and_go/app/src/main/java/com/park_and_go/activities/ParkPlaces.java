@@ -99,7 +99,7 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
-            Favorito.writeFav(getFilesDir() + "/fav.json", p, Constants.CONSULADO);
+            Favorito.writeFav(getFilesDir() + "/fav.json", p, Constants.PARKING);
             mAdapter.notifyDataSetChanged();
             Toast.makeText(ParkPlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
         }

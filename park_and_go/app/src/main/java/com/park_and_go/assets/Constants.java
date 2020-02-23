@@ -3,7 +3,7 @@ package com.park_and_go.assets;
 public class Constants {
 
     public static final String CONSULADO = "consulado";
-    public static final String THEATRE = "consulado";
+    public static final String THEATRE = "teatros";
     public static final String OCIO = "ocio";
     public static final String PARKING = "parking";
     public static final String TODOS = "Todos";

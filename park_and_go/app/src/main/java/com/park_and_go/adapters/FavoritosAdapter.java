@@ -59,7 +59,7 @@ public class FavoritosAdapter extends BaseAdapter {
             case Constants.CONSULADO:
                 icon.setImageResource(R.drawable.consulate);
                 break;
-            case Constants.OCIO:
+            case Constants.THEATRE:
                 icon.setImageResource(R.drawable.location);
                 break;
             case Constants.PARKING:
