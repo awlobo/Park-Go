@@ -75,18 +75,17 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
                 boolean option;
                 Intent intent = new Intent(ParkPlaces.this, MapsActivity.class);
                 if (i == 0) {
-                    option= true;
-                    intent.putExtra("OPTION",option);
-                    intent.putParcelableArrayListExtra("ARRAY",mPlaces);
+                    option = true;
+                    intent.putExtra("OPTION", option);
+                    intent.putParcelableArrayListExtra("ARRAY", mPlaces);
                     startActivityForResult(intent, 10);
-                }
-                else if(i>0) {
+                } else if (i > 0) {
                     option = false;
                     Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
                     intent.putExtra(LATITUDE, mPlaces.get(i).location.latitude);
                     intent.putExtra(LONGITUDE, mPlaces.get(i).location.longitude);
-                    intent.putExtra(TITLE,mPlaces.get(i).title);
-                    intent.putExtra("OPTION",option);
+                    intent.putExtra(TITLE, mPlaces.get(i).title);
+                    intent.putExtra("OPTION", option);
                     startActivityForResult(intent, 20);
                 }
             }
@@ -194,19 +193,18 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
-                int code=1;
+                int code = 1;
 
                 mPlaces = response.body().graph;
 
                 Log.d(TAG, "Valor de response code " + String.valueOf(response.code()));
                 if (response.body() != null && !mPlaces.isEmpty()) {
-                    mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_parks, mPlaces,code);
+                    mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_consulates, mPlaces, code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {
                     Log.d(TAG, "Response: " + response.body().graph.size());
                 }
-
             }
 
             @Override

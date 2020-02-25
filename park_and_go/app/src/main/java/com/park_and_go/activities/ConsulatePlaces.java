@@ -193,7 +193,7 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {
-
+                    Log.d(TAG, "Response: " + response.body().graph.size());
                 }
             }
 

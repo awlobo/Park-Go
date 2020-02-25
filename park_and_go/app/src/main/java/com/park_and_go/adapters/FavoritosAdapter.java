@@ -57,16 +57,16 @@ public class FavoritosAdapter extends BaseAdapter {
 
         switch (mFavoritos.get(i).getTipo()) {
             case Constants.CONSULADO:
-                icon.setImageResource(R.drawable.consulate);
+                icon.setImageResource(R.drawable.embajada);
                 break;
             case Constants.THEATRE:
-                icon.setImageResource(R.drawable.location);
+                icon.setImageResource(R.drawable.ocio);
                 break;
             case Constants.PARKING:
-                icon.setImageResource(R.drawable.car);
+                icon.setImageResource(R.drawable.carcolor);
                 break;
             default:
-                icon.setImageResource(R.drawable.location);
+                icon.setImageResource(R.drawable.todos);
                 break;
         }
 

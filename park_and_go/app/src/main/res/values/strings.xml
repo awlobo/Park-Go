@@ -20,7 +20,11 @@
     <string name="motosharing">Motosharing</string>
     <string name="filtrar_busqueda">Filtrar búsqueda</string>
     <string name="distancia_metros">Distancia máxima (en metros)</string>
-    <string name="ir">Ir</string>
+    <string name="ir">Filtrar</string>
     <string name="guardar">Guardar</string>
     <string name="nombre_de_lugar_favorito">NOMBRE DE LUGAR FAVORITO</string>
+    <string name="teatros">TEATROS</string>
+    <string name="consulados_y_embajadas">CONSULADOS Y EMBAJADAS</string>
+    <string name="parkings_pUblicos">PARKINGS PÚBLICOS</string>
+    <string name="gestion_parking">Gestión parking</string>
 </resources>

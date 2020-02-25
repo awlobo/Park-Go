@@ -51,28 +51,28 @@ public class MyAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            v = layoutInflater.inflate(R.layout.list_parks, null);
+            v = layoutInflater.inflate(R.layout.list_consulates, null);
         } else {
             v = convertView;
         }
 
-        Log.d("MyAdapter","Valor de code: "+code);
+        Log.d("MyAdapter", "Valor de code: " + code);
 
-        ImageView icon = (ImageView) v.findViewById(R.id.parkImage);
+        ImageView icon = v.findViewById(R.id.image);
 
         switch (code) {
             case 1:
-                icon.setImageResource(R.drawable.car);
+                icon.setImageResource(R.drawable.carcolor);
                 break;
             case 2:
-                Log.d("MyAdapter","imagen consulates");
-                icon.setImageResource(R.drawable.consulate);
+                Log.d("MyAdapter", "imagen consulates");
+                icon.setImageResource(R.drawable.embajada);
                 break;
             case 3:
-                icon.setImageResource(R.drawable.car);
+                icon.setImageResource(R.drawable.ocio);
                 break;
         }
-        TextView title = (TextView) v.findViewById(R.id.name);
+        TextView title = v.findViewById(R.id.name);
         title.setText(mPlaces.get(i).title);
 
         return v;

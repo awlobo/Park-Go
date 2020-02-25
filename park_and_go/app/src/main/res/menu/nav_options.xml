@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/menu_guardar_aparcamiento"
-            android:icon="@drawable/location"
-            android:title="@string/guardar_aparcamiento" />
-        <item
-            android:id="@+id/menu_recuperar_aparcamiento"
-            android:icon="@drawable/car"
-            android:title="@string/mi_coche" />
+        <item android:title="@string/gestion_parking">
+            <menu>
+                <item
+                    android:id="@+id/menu_guardar_aparcamiento"
+                    android:icon="@drawable/loc"
+                    android:title="@string/guardar_aparcamiento" />
+                <item
+                    android:id="@+id/menu_recuperar_aparcamiento"
+                    android:icon="@drawable/car"
+                    android:title="@string/mi_coche" />
+            </menu>
+        </item>
+
     </group>
 
     <group android:id="@+id/separator" android:checkableBehavior="single">
@@ -16,15 +21,15 @@
             <menu>
                 <item
                     android:id="@+id/menu_aparcamientos"
-                    android:icon="@drawable/location"
+                    android:icon="@drawable/parking"
                     android:title="@string/aparcamientos_publicos" />
                 <item
                     android:id="@+id/menu_teatros"
-                    android:icon="@drawable/location"
+                    android:icon="@drawable/ocio2"
                     android:title="@string/ocio" />
                 <item
                     android:id="@+id/menu_embajadas"
-                    android:icon="@drawable/location"
+                    android:icon="@drawable/consulate"
                     android:title="@string/embajadas_y_consulados" />
                 <item
                     android:id="@+id/menu_todo"
@@ -32,14 +37,14 @@
                     android:title="@string/todo" />
                 <item
                     android:id="@+id/menu_filtrar"
-                    android:icon="@drawable/location"
+                    android:icon="@drawable/filter"
                     android:title="@string/filtrar" />
             </menu>
         </item>
 
         <item
             android:id="@+id/menu_transporte"
-            android:icon="@drawable/car"
+            android:icon="@drawable/scooter"
             android:title="@string/transporte_compartido" />
         <item
             android:id="@+id/menu_favoritos"

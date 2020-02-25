@@ -52,9 +52,9 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
     private final String TAG = getClass().getSimpleName();
     private final String LATITUDE = "LATITUDE";
     private final String LONGITUDE = "LONGITUD";
-    private final String ALL_ITEMS="ALL";
+    private final String ALL_ITEMS = "ALL";
     private final String TITLE = "TITLE";
-    private final String OPTION="OPTION";
+    private final String OPTION = "OPTION";
     private static final Integer PERMIS_GPS_FINE = 1;
     private LocationManager mLocManager;
     private ArrayList<PlacesResponse.Places> mPlaces;
@@ -83,17 +83,16 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
                 boolean option;
                 Intent intent = new Intent(TheatrePlaces.this, MapsActivity.class);
                 if (i == 0) {
-                    option= true;
-                    intent.putExtra(OPTION,option);
-                    intent.putParcelableArrayListExtra(ALL_ITEMS,mPlaces);
+                    option = true;
+                    intent.putExtra(OPTION, option);
+                    intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
                     startActivity(intent);
-                }
-                else if(i>0) {
+                } else if (i > 0) {
                     option = false;
                     intent.putExtra(LATITUDE, mPlaces.get(i).location.latitude);
                     intent.putExtra(LONGITUDE, mPlaces.get(i).location.longitude);
-                    intent.putExtra(TITLE,mPlaces.get(i).title);
-                    intent.putExtra("OPTION",option);
+                    intent.putExtra(TITLE, mPlaces.get(i).title);
+                    intent.putExtra("OPTION", option);
                     startActivity(intent);
                 }
             }
@@ -197,16 +196,16 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
-                int code=3;
+                int code = 3;
 
                 mPlaces = response.body().graph;
 
                 if (response.body() != null && !mPlaces.isEmpty()) {
-                    mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_consulates, mPlaces,code);
+                    mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_consulates, mPlaces, code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {
-
+                    Log.d(TAG, "Response: " + response.body().graph.size());
                 }
             }
 
