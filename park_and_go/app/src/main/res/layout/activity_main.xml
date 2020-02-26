@@ -7,39 +7,46 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/content_frame"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
-
-        <ImageView
-            android:layout_width="285dp"
+        <LinearLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="1dp"
-            app:srcCompat="@drawable/logo" />
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/llamar"
-            android:textSize="12pt" />
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar" />
 
-        <Button
-            android:id="@+id/numTel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/_112"
-            android:textSize="18pt" />
+            <ImageView
+                android:layout_width="285dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="1dp"
+                android:contentDescription="@string/logo"
+                app:srcCompat="@drawable/logo" />
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/llamar"
+                android:textSize="12pt" />
+
+            <Button
+                android:id="@+id/numTel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/_112"
+                android:textSize="18pt" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navview"
@@ -48,7 +55,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/header_navigation_drawer"
-        app:menu="@menu/nav_options"/>
+        app:menu="@menu/nav_options" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
 
