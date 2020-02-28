@@ -22,8 +22,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
@@ -32,11 +30,7 @@ import com.park_and_go.common.DataMadrid;
 import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -45,6 +39,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.park_and_go.assets.Constants.PARKING;
+import static com.park_and_go.assets.Constants.THEATRE;
 
 //import static com.park_and_go.MainActivity.mFavs;
 
@@ -192,7 +189,7 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
 
         DataMadrid dm = retrofit.create(DataMadrid.class);
 
-        dm.getTheatres(latitude, longitude, 5000).enqueue(new Callback<PlacesResponse>() {
+        dm.getTheatres(latitude, longitude, 1000).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
@@ -201,7 +198,15 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
                 mPlaces = response.body().graph;
 
                 if (response.body() != null && !mPlaces.isEmpty()) {
-                    mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_consulates, mPlaces, code);
+                    for (int i = 0; i < mPlaces.size(); i++) {
+                        Location location = new Location("");
+                        location.setLatitude(mPlaces.get(i).location.latitude);
+                        location.setLongitude(mPlaces.get(i).location.longitude);
+                        float distance = mCurrentLocation.distanceTo(location);
+                        mPlaces.get(i).distance = distance;
+                        mPlaces.get(i).setTipo(THEATRE);
+                    }
+                    mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_places, mPlaces, code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

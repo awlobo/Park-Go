@@ -1,7 +1,6 @@
 package com.park_and_go.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.park_and_go.R;
+import com.park_and_go.assets.Constants;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.List;
@@ -48,31 +48,31 @@ public class MyAdapter extends BaseAdapter {
 
         View v = null;
 
+
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            v = layoutInflater.inflate(R.layout.list_consulates, null);
+            v = layoutInflater.inflate(R.layout.list_places, null);
         } else {
             v = convertView;
         }
 
-        Log.d("MyAdapter", "Valor de code: " + code);
-
         ImageView icon = v.findViewById(R.id.image);
-
-        switch (code) {
-            case 1:
+        TextView title = v.findViewById(R.id.name);
+        switch (mPlaces.get(i).getTipo()) {
+            case Constants
+                    .PARKING:
                 icon.setImageResource(R.drawable.carcolor);
                 break;
-            case 2:
-                Log.d("MyAdapter", "imagen consulates");
+            case Constants
+                    .CONSULADO:
                 icon.setImageResource(R.drawable.embajada);
                 break;
-            case 3:
+            case Constants
+                    .THEATRE:
                 icon.setImageResource(R.drawable.ocio);
                 break;
         }
-        TextView title = v.findViewById(R.id.name);
+
         title.setText(mPlaces.get(i).title);
 
         return v;

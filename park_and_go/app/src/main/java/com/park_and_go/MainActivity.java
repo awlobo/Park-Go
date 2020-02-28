@@ -178,27 +178,34 @@ public class MainActivity extends AppCompatActivity implements
 
         } else if (id == R.id.menu_guardar_aparcamiento) {
             SharedPreferences.Editor prefsEditor = mPrefs.edit();
-            prefsEditor.putFloat(Constants.MY_CAR_LAT, (float) location.getLatitude());
-            prefsEditor.putFloat(Constants.MY_CAR_LON, (float) location.getLongitude());
-            prefsEditor.commit();
-            Toast.makeText(this, "Aparcamiento guardado correctamente", Toast.LENGTH_LONG).show();
+            if (mPrefs.contains(Constants.MY_CAR_LAT) && mPrefs.contains(Constants.MY_CAR_LON)) {
+                prefsEditor.putFloat(Constants.MY_CAR_LAT, (float) location.getLatitude());
+                prefsEditor.putFloat(Constants.MY_CAR_LON, (float) location.getLongitude());
+                prefsEditor.commit();
+                Toast.makeText(this, "Aparcamiento guardado correctamente", Toast.LENGTH_LONG).show();
+            }
 
         } else if (id == R.id.menu_recuperar_aparcamiento) {
             if (mPrefs != null) {
                 carLocation = new Location("carLoc");
-                carLocation.setLatitude(mPrefs.getFloat(Constants.MY_CAR_LAT, 0));
-                carLocation.setLongitude(mPrefs.getFloat(Constants.MY_CAR_LON, 0));
-                float distance = location.distanceTo(carLocation);
-//                carPlaces = new PlacesResponse.Places("Your car", new MyLocation(carLocation.getLatitude(), carLocation.getLongitude()), distance);
-                Log.d("PRUEBA", String.valueOf(distance) + " metros.");
+                if (mPrefs.contains(Constants.MY_CAR_LAT) && mPrefs.contains(Constants.MY_CAR_LON)) {
+                    carLocation.setLatitude(mPrefs.getFloat(Constants.MY_CAR_LAT, 0));
+                    carLocation.setLongitude(mPrefs.getFloat(Constants.MY_CAR_LON, 0));
+                    float distance = location.distanceTo(carLocation);
+                    //                carPlaces = new PlacesResponse.Places("Your car", new MyLocation(carLocation.getLatitude(), carLocation.getLongitude()), distance);
+                    Log.d("PRUEBA", String.valueOf(distance) + " metros.");
+                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                    intent.putExtra(OPTION, false);
+                    intent.putExtra(LATITUDE, carLocation.getLatitude());
+                    intent.putExtra(LONGITUDE, carLocation.getLongitude());
+                    intent.putExtra(TITLE, "My car");
+                    intent.putExtra(SNIPPET, "Distancia: " + distance + " metros.");
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "No has guardado aparcamiento", Toast.LENGTH_LONG).show();
+                }
 
-                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                intent.putExtra(OPTION, false);
-                intent.putExtra(LATITUDE, carLocation.getLatitude());
-                intent.putExtra(LONGITUDE, carLocation.getLongitude());
-                intent.putExtra(TITLE, "My car");
-                intent.putExtra(SNIPPET, "Distancia: " + distance +" metros.");
-                startActivity(intent);
+
             }
         }
 

@@ -180,7 +180,7 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
 
         DataMadrid dm = retrofit.create(DataMadrid.class);
 
-        dm.getConsulates(latitude, longitude, 5000).enqueue(new Callback<PlacesResponse>() {
+        dm.getConsulates(latitude, longitude, 1000).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
@@ -189,7 +189,15 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
                 mPlaces = response.body().graph;
 
                 if (response.body() != null && !mPlaces.isEmpty()) {
-                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_consulates, mPlaces, code);
+                    for (int i = 0; i < mPlaces.size(); i++) {
+                        Location location = new Location("");
+                        location.setLatitude(mPlaces.get(i).location.latitude);
+                        location.setLongitude(mPlaces.get(i).location.longitude);
+                        float distance = mCurrentLocation.distanceTo(location);
+                        mPlaces.get(i).distance = distance;
+                        mPlaces.get(i).setTipo(CONSULADO);
+                    }
+                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_places, mPlaces, code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

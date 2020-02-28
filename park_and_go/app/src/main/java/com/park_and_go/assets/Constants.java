@@ -2,9 +2,9 @@ package com.park_and_go.assets;
 
 public class Constants {
 
-    public static final String CONSULADO = "consulado";
+    public static final String CONSULADO = "consulados";
     public static final String THEATRE = "teatros";
-    public static final String PARKING = "parking";
+    public static final String PARKING = "parkings";
     public static final String TODOS = "Todos";
     public static final String ARRAYLIST = "array_places";
     public static final String PLACE = "place";
@@ -23,6 +23,7 @@ public class Constants {
     public static final String MILOC = "mi_localizacion";
     public static final String LOCATION = "location";
     public static final String SNIPPET = "snippet";
+    public static final String DISTANCIA = "distancia";
 
 
 }

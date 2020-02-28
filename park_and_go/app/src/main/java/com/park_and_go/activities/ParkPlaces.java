@@ -19,7 +19,6 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,6 +40,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.park_and_go.assets.Constants.CONSULADO;
+import static com.park_and_go.assets.Constants.PARKING;
+
 public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
     private final String TAG = getClass().getSimpleName();
@@ -61,7 +63,7 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
         setContentView(R.layout.activity_park_places);
         Log.d(TAG, "En el onCreate de park places");
 
-        lv = (ListView) findViewById(R.id.listview_parks);
+        lv = findViewById(R.id.listview_parks);
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -199,7 +201,15 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
                 Log.d(TAG, "Valor de response code " + String.valueOf(response.code()));
                 if (response.body() != null && !mPlaces.isEmpty()) {
-                    mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_consulates, mPlaces, code);
+                    for (int i = 0; i < mPlaces.size(); i++) {
+                        Location location = new Location("");
+                        location.setLatitude(mPlaces.get(i).location.latitude);
+                        location.setLongitude(mPlaces.get(i).location.longitude);
+                        float distance = mCurrentLocation.distanceTo(location);
+                        mPlaces.get(i).distance = distance;
+                        mPlaces.get(i).setTipo(PARKING);
+                    }
+                    mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_places, mPlaces, code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

@@ -32,10 +32,6 @@
                     android:icon="@drawable/consulate"
                     android:title="@string/embajadas_y_consulados" />
                 <item
-                    android:id="@+id/menu_todo"
-                    android:icon="@drawable/location"
-                    android:title="@string/todo" />
-                <item
                     android:id="@+id/menu_filtrar"
                     android:icon="@drawable/filter"
                     android:title="@string/filtrar" />

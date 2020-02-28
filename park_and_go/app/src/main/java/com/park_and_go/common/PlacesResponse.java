@@ -19,6 +19,7 @@ public class PlacesResponse {
         public String title = null;
         public MyLocation location = null;
         public Float distance = null;
+        private String tipo;
 
         public Places(String title, MyLocation location, Float distance) {
             this.title = title;
@@ -29,6 +30,14 @@ public class PlacesResponse {
         public Places(Parcel in) {
             title = in.readString();
             location = (MyLocation) in.readParcelable(MyLocation.class.getClassLoader());
+        }
+
+        public void setTipo(String tipo) {
+            this.tipo = tipo;
+        }
+
+        public String getTipo() {
+            return tipo;
         }
 
         @Override
