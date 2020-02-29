@@ -56,7 +56,7 @@ public class FiltrosPlaces extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 prefsEditor.putBoolean(KEY_PARK, sP.isChecked());
-                prefsEditor.commit();
+                prefsEditor.apply();
             }
         });
 
@@ -65,7 +65,7 @@ public class FiltrosPlaces extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 prefsEditor.putBoolean(KEY_OCIO, sO.isChecked());
-                prefsEditor.commit();
+                prefsEditor.apply();
             }
         });
 
@@ -74,7 +74,7 @@ public class FiltrosPlaces extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 prefsEditor.putBoolean(KEY_EMBA, sE.isChecked());
-                prefsEditor.commit();
+                prefsEditor.apply();
             }
         });
 
@@ -82,12 +82,14 @@ public class FiltrosPlaces extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 prefsEditor.putString(KEY_DIST, String.valueOf(eT.getText()));
-                prefsEditor.commit();
+                prefsEditor.apply();
             }
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
         });
 
         ir.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +109,6 @@ public class FiltrosPlaces extends AppCompatActivity {
     }
 
     private void PersistData() {
-
         if (mPrefs != null) {
             sP.setChecked(mPrefs.getBoolean(KEY_PARK, false));
             sO.setChecked(mPrefs.getBoolean(KEY_OCIO, false));

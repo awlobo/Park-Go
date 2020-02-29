@@ -139,7 +139,6 @@ public class FilteredPlaces extends AppCompatActivity {
         dm.getConsulates(latitude, longitude, mDistancia).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
-                int code = 2;
                 mPlacesEmbajadas = response.body().graph;
                 Log.d(TAG, "Valor de response code " + response.code());
                 if (response.body() != null && !mPlacesEmbajadas.isEmpty()) {
@@ -154,7 +153,7 @@ public class FilteredPlaces extends AppCompatActivity {
                     }
                     mPlaces.addAll(mPlacesEmbajadas);
                     PlacesResponse.Places.ordenarDistancia(mPlaces);
-                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces, code);
+                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {
@@ -185,7 +184,6 @@ public class FilteredPlaces extends AppCompatActivity {
         dm.getTheatres(latitude, longitude, mDistancia).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
-                int code = 3;
                 mPlacesTeatros = response.body().graph;
                 Log.d(TAG, "Valor de response code " + response.code());
                 if (response.body() != null && !mPlacesTeatros.isEmpty()) {
@@ -201,7 +199,7 @@ public class FilteredPlaces extends AppCompatActivity {
 
                     mPlaces.addAll(mPlacesTeatros);
                     PlacesResponse.Places.ordenarDistancia(mPlaces);
-                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces, code);
+                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {
@@ -234,7 +232,6 @@ public class FilteredPlaces extends AppCompatActivity {
         dm.getPlaces(latitude, longitude, mDistancia).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
-                int code = 1;
                 mPlacesParkings = response.body().graph;
                 Log.d(TAG, "Valor de response code " + response.code());
                 if (response.body() != null && !mPlacesParkings.isEmpty()) {
@@ -250,7 +247,7 @@ public class FilteredPlaces extends AppCompatActivity {
 
                     mPlaces.addAll(mPlacesParkings);
                     PlacesResponse.Places.ordenarDistancia(mPlaces);
-                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces, code);
+                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

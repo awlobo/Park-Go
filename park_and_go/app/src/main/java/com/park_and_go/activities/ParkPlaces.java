@@ -194,9 +194,8 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
         dm.getPlaces(latitude, longitude, 1000).enqueue(new Callback<PlacesResponse>() {
             @Override
-            public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
-                int code = 1;
+            public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
                 mPlaces = response.body().graph;
 
@@ -210,7 +209,7 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
                         mPlaces.get(i).distance = distance;
                         mPlaces.get(i).setTipo(PARKING);
                     }
-                    mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_places, mPlaces, code);
+                    mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

@@ -6,9 +6,7 @@ public class Constants {
     public static final String EMBAJADA = "Embajada";
     public static final String THEATRE = "Teatro";
     public static final String PARKING = "Parking";
-    public static final String TODOS = "Todos";
     public static final String ARRAYLIST = "array_places";
-    public static final String PLACE = "place";
     public static final String BORRAR = "Borrar favorito";
     public static final String BORRAR_CORRECTO = "Borrado correctamente";
     public static final String ADD_FAV = "Añadir Favorito";
@@ -22,11 +20,9 @@ public class Constants {
     public static final String TITLE = "TITLE";
     public static final String OPTION = "OPTION";
     public static final String FAV = "fav";
-    public static final String MILOC = "mi_localizacion";
     public static final String LOCATION = "location";
     public static final String SNIPPET = "snippet";
     public static final String DISTANCIA = "distancia";
     public static final String URL_FAV = "/fav.json";
-
 
 }

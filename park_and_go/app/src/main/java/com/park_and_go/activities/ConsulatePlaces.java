@@ -96,7 +96,7 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
             PlacesResponse.Places p = mPlaces.get(info.position);
             FavoritosPlaces.writeFav(getFilesDir() + "/fav.json", p, Constants.CONSULADO);
             mAdapter.notifyDataSetChanged();
-            Toast.makeText(ConsulatePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ConsulatePlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
         }
         return true;
     }
@@ -182,9 +182,6 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
         dm.getConsulates(latitude, longitude, 1000).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
-
-                int code = 2;
-
                 mPlaces = response.body().graph;
 
                 if (response.body() != null && !mPlaces.isEmpty()) {
@@ -192,11 +189,10 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
                         Location location = new Location("");
                         location.setLatitude(mPlaces.get(i).location.latitude);
                         location.setLongitude(mPlaces.get(i).location.longitude);
-                        float distance = mCurrentLocation.distanceTo(location);
-                        mPlaces.get(i).distance = distance;
+                        mPlaces.get(i).distance = mCurrentLocation.distanceTo(location);
                         mPlaces.get(i).setTipo(CONSULADO);
                     }
-                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_places, mPlaces, code);
+                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

@@ -191,8 +191,6 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
-                int code = 3;
-
                 mPlaces = response.body().graph;
 
                 if (response.body() != null && !mPlaces.isEmpty()) {
@@ -204,7 +202,7 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
                         mPlaces.get(i).distance = distance;
                         mPlaces.get(i).setTipo(THEATRE);
                     }
-                    mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_places, mPlaces, code);
+                    mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

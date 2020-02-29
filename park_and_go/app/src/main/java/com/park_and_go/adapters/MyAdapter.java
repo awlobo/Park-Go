@@ -19,13 +19,11 @@ public class MyAdapter extends BaseAdapter {
     private Context mContext;
     private int layout;
     private List<PlacesResponse.Places> mPlaces;
-    private int code;
 
-    public MyAdapter(Context mContext, int layout, List<PlacesResponse.Places> mPlaces, int code) {
+    public MyAdapter(Context mContext, int layout, List<PlacesResponse.Places> mPlaces) {
         this.mContext = mContext;
         this.layout = layout;
         this.mPlaces = mPlaces;
-        this.code = code;
     }
 
     @Override
@@ -47,8 +45,6 @@ public class MyAdapter extends BaseAdapter {
     public View getView(int i, View convertView, ViewGroup parent) {
 
         View v = null;
-
-
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = layoutInflater.inflate(R.layout.list_places, null);
@@ -58,25 +54,20 @@ public class MyAdapter extends BaseAdapter {
 
         ImageView icon = v.findViewById(R.id.image);
         TextView title = v.findViewById(R.id.name);
-        TextView distancia = v.findViewById(R.id.dista);
+        TextView distance = v.findViewById(R.id.dista);
         switch (mPlaces.get(i).getTipo()) {
-            case Constants
-                    .PARKING:
+            case Constants.PARKING:
                 icon.setImageResource(R.drawable.carcolor);
                 break;
-            case Constants
-                    .CONSULADO:
+            case Constants.CONSULADO:
                 icon.setImageResource(R.drawable.embajada);
                 break;
-            case Constants
-                    .THEATRE:
+            case Constants.THEATRE:
                 icon.setImageResource(R.drawable.ocio);
                 break;
         }
         title.setText(mPlaces.get(i).title);
-        distancia.setText(mContext.getString(R.string.metros,mPlaces.get(i).distance));
-
-
+        distance.setText(mContext.getString(R.string.metros, mPlaces.get(i).distance));
         return v;
     }
 }

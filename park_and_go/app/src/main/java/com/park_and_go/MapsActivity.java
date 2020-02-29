@@ -3,11 +3,9 @@ package com.park_and_go;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -20,23 +18,18 @@ import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
 
-import static com.park_and_go.assets.Constants.ARRAYLIST;
-import static com.park_and_go.assets.Constants.FAV;
+import static com.park_and_go.assets.Constants.ALL_ITEMS;
+import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
-import static com.park_and_go.assets.Constants.MILOC;
+import static com.park_and_go.assets.Constants.LONGITUDE;
+import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.SNIPPET;
+import static com.park_and_go.assets.Constants.TITLE;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private final String TAG = getClass().getSimpleName();
-    private final String LATITUDE = "LATITUDE";
-    private final String LONGITUDE = "LONGITUD";
-    private final String ALL_ITEMS = "ALL";
-    private final String TITLE = "TITLE";
-    private final String OPTION = "OPTION";
     private ArrayList<PlacesResponse.Places> mPlaces;
     private boolean option;
-    private boolean fav;
-    private boolean miLoc;
     private Double mLatitude, mLongitude;
     private String mTitle;
     private String mSnip;
@@ -53,7 +46,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
     }
 
     public void result(Intent data) {
@@ -81,14 +76,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for (PlacesResponse.Places p : mPlaces) {
                 LatLng loc = new LatLng(p.location.latitude, p.location.longitude);
                 mMap.addMarker(new MarkerOptions().position(loc).title(p.title));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc,13));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 13));
                 mMap.setMyLocationEnabled(true);
             }
 
         } else {
             LatLng loc = new LatLng(mLatitude, mLongitude);
             mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mTitle));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc,16));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 16));
             mMap.setMyLocationEnabled(true);
         }
 

@@ -66,7 +66,7 @@ public class FavoritosPlaces extends AppCompatActivity {
         pd.show();
         PlacesResponse.Places.ordenarDistancia(mFavsPlaces);
         if (mFavsPlaces != null && !mFavsPlaces.isEmpty()) {
-            mAdapter = new MyAdapter(FavoritosPlaces.this, R.layout.list_places, mFavsPlaces, 1);
+            mAdapter = new MyAdapter(FavoritosPlaces.this, R.layout.list_places, mFavsPlaces);
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         } else {
