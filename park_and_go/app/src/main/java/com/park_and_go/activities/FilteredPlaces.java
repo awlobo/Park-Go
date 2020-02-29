@@ -1,5 +1,7 @@
 package com.park_and_go.activities;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;

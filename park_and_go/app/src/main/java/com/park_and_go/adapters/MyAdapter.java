@@ -1,6 +1,7 @@
 package com.park_and_go.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.park_and_go.R;
 import com.park_and_go.assets.Constants;
 import com.park_and_go.common.PlacesResponse;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class MyAdapter extends BaseAdapter {

@@ -1,11 +1,17 @@
 package com.park_and_go;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -14,6 +20,8 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.park_and_go.assets.Constants;
+import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -23,12 +31,15 @@ import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.LONGITUDE;
 import static com.park_and_go.assets.Constants.OPTION;
+import static com.park_and_go.assets.Constants.MILOC;
+import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.SNIPPET;
 import static com.park_and_go.assets.Constants.TITLE;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private final String TAG = getClass().getSimpleName();
     private ArrayList<PlacesResponse.Places> mPlaces;
+    private PlacesResponse.Places mPlaceAlone;
     private boolean option;
     private Double mLatitude, mLongitude;
     private String mTitle;
@@ -59,10 +70,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (option) {
             mPlaces = data.getParcelableArrayListExtra(ALL_ITEMS);
         } else {
-            mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
-            mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
-            mTitle = data.getStringExtra(TITLE);
-            mSnip = data.getStringExtra(SNIPPET);
+//            mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
+//            mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
+//            mTitle = data.getStringExtra(TITLE);
+//            mSnip = data.getStringExtra(SNIPPET);
+            mPlaceAlone = data.getParcelableExtra(PLACES);
         }
     }
 
@@ -81,9 +93,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
         } else {
-            LatLng loc = new LatLng(mLatitude, mLongitude);
+            LatLng loc = new LatLng(mPlaceAlone.location.latitude, mPlaceAlone.location.longitude);
             mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mTitle));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 16));
+            Log.d(TAG, "New location: " + mLatitude + "-" + mLongitude);
+
+            mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mPlaceAlone.title));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+            CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(loc, 16);
+            mMap.moveCamera(camera);
             mMap.setMyLocationEnabled(true);
         }
 
