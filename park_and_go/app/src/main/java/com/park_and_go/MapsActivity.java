@@ -1,26 +1,21 @@
 package com.park_and_go;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.park_and_go.assets.Constants;
-import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -39,7 +34,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final String TITLE = "TITLE";
     private final String OPTION = "OPTION";
     private ArrayList<PlacesResponse.Places> mPlaces;
-    private ArrayList<Favorito> mFavs;
     private boolean option;
     private boolean fav;
     private boolean miLoc;
@@ -57,7 +51,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = getIntent();
         result(intent);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -65,22 +58,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void result(Intent data) {
         option = data.getBooleanExtra(OPTION, true);
-        fav = data.getBooleanExtra(FAV, false);
-        miLoc = data.getBooleanExtra(MILOC, false);
-
-        if (miLoc) {
+        if (data.getExtras() != null && data.getExtras().containsKey(LOCATION)) {
             location = data.getParcelableExtra(LOCATION);
         }
-
         if (option) {
-            if (fav) {
-                mFavs = data.getParcelableArrayListExtra(ARRAYLIST);
-
-            } else {
-                mPlaces = data.getParcelableArrayListExtra(ALL_ITEMS);
-                option = true;
-            }
-
+            mPlaces = data.getParcelableArrayListExtra(ALL_ITEMS);
         } else {
             mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
             mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
@@ -92,44 +74,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        UiSettings mapUiSettings = mMap.getUiSettings();
+        mapUiSettings.setZoomControlsEnabled(true);
 
         if (option) {
-            if (fav) {
-                for (Favorito f : mFavs) {
-                    LatLng loc = new LatLng(f.getLatitude(), f.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(loc).title(f.getTitle()));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
-                    CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(loc, 16);
-                    mMap.moveCamera(camera);
-                    mMap.setMyLocationEnabled(true);
-                }
-
-            } else {
-                for (PlacesResponse.Places p : mPlaces) {
-                    LatLng loc = new LatLng(p.location.latitude, p.location.longitude);
-                    mMap.addMarker(new MarkerOptions().position(loc).title(p.title));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
-                    CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(loc, 16);
-                    mMap.moveCamera(camera);
-                    mMap.setMyLocationEnabled(true);
-                }
+            for (PlacesResponse.Places p : mPlaces) {
+                LatLng loc = new LatLng(p.location.latitude, p.location.longitude);
+                mMap.addMarker(new MarkerOptions().position(loc).title(p.title));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc,13));
+                mMap.setMyLocationEnabled(true);
             }
+
         } else {
-            Log.d(TAG, "New location: " + mLatitude + "-" + mLongitude);
             LatLng loc = new LatLng(mLatitude, mLongitude);
             mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mTitle));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
-            CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(loc, 16);
-            mMap.moveCamera(camera);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc,16));
             mMap.setMyLocationEnabled(true);
         }
 
         if (location != null) {
+            LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .title("Your location")
+                    .title(getString(R.string.your_location))
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 13));
         }
     }
-
 }

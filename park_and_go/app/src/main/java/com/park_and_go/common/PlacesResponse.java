@@ -7,6 +7,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class PlacesResponse {
 
@@ -30,6 +33,16 @@ public class PlacesResponse {
         public Places(Parcel in) {
             title = in.readString();
             location = (MyLocation) in.readParcelable(MyLocation.class.getClassLoader());
+        }
+
+        public static void ordenarDistancia(List<Places> listaDesordenada){
+            Comparator<Places> compareByDistance = new Comparator<Places>() {
+                @Override
+                public int compare(Places o1, Places o2) {
+                    return o1.distance.compareTo(o2.distance);
+                }
+            };
+            Collections.sort(listaDesordenada, compareByDistance);
         }
 
         public void setTipo(String tipo) {

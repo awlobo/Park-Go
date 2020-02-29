@@ -27,7 +27,6 @@ import com.park_and_go.common.DataMadrid;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.adapters.MyAdapter;
 import com.park_and_go.R;
-import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -40,8 +39,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.park_and_go.assets.Constants.CONSULADO;
+import static com.park_and_go.assets.Constants.ARRAYLIST;
+import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PARKING;
+import static com.park_and_go.assets.Constants.URL_FAV;
 
 public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
@@ -78,8 +79,8 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
                 Intent intent = new Intent(ParkPlaces.this, MapsActivity.class);
                 if (i == 0) {
                     option = true;
-                    intent.putExtra("OPTION", option);
-                    intent.putParcelableArrayListExtra("ARRAY", mPlaces);
+                    intent.putExtra(OPTION, option);
+                    intent.putParcelableArrayListExtra(ARRAYLIST, mPlaces);
                     startActivityForResult(intent, 10);
                 } else if (i > 0) {
                     option = false;
@@ -100,9 +101,9 @@ public class ParkPlaces extends AppCompatActivity implements LocationListener {
 
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
-            Favorito.writeFav(getFilesDir() + "/fav.json", p, Constants.PARKING);
+            FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, Constants.PARKING);
             mAdapter.notifyDataSetChanged();
-            Toast.makeText(ParkPlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ParkPlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
         }
         return true;
     }

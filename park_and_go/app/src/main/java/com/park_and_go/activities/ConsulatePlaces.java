@@ -27,7 +27,6 @@ import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
 import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
-import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -95,7 +94,7 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
 
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
-            Favorito.writeFav(getFilesDir() + "/fav.json", p, Constants.CONSULADO);
+            FavoritosPlaces.writeFav(getFilesDir() + "/fav.json", p, Constants.CONSULADO);
             mAdapter.notifyDataSetChanged();
             Toast.makeText(ConsulatePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
         }

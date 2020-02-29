@@ -1,7 +1,5 @@
 package com.park_and_go.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
@@ -14,12 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
 import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
-import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -32,14 +31,17 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.park_and_go.assets.Constants.ARRAYLIST;
+import static com.park_and_go.assets.Constants.ALL_ITEMS;
 import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.DISTANCIA;
+import static com.park_and_go.assets.Constants.EMBAJADA;
 import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.LONGITUDE;
+import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PARKING;
 import static com.park_and_go.assets.Constants.THEATRE;
+import static com.park_and_go.assets.Constants.URL_FAV;
 
 public class FilteredPlaces extends AppCompatActivity {
 
@@ -52,9 +54,6 @@ public class FilteredPlaces extends AppCompatActivity {
     private Location mCurrentLocation;
     private MyAdapter mAdapter = null;
     private ListView lv = null;
-    private boolean mEmbajada;
-    private boolean mParking;
-    private boolean mTeatro;
     private int mDistancia;
 
     @Override
@@ -64,9 +63,9 @@ public class FilteredPlaces extends AppCompatActivity {
 
         Intent intent = getIntent();
         mCurrentLocation = intent.getParcelableExtra(LOCATION);
-        mParking = intent.getBooleanExtra(PARKING, false);
-        mTeatro = intent.getBooleanExtra(THEATRE, false);
-        mEmbajada = intent.getBooleanExtra(CONSULADO, false);
+        boolean mParking = intent.getBooleanExtra(PARKING, false);
+        boolean mTeatro = intent.getBooleanExtra(THEATRE, false);
+        boolean mEmbajada = intent.getBooleanExtra(CONSULADO, false);
         mDistancia = intent.getIntExtra(DISTANCIA, 500);
 
         lv = findViewById(R.id.lvFiltered);
@@ -74,61 +73,52 @@ public class FilteredPlaces extends AppCompatActivity {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
                 menu.add(0, 1, 0, Constants.ADD_FAV);
-            }
-        });
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                boolean option;
-                Intent intent = new Intent(FilteredPlaces.this, MapsActivity.class);
-                if (i == 0) {
-                    option = true;
-                    intent.putExtra("OPTION", option);
-                    intent.putParcelableArrayListExtra(ARRAYLIST, mPlaces);
-                    startActivity(intent);
-                } else if (i > 0) {
-                    option = false;
-                    intent.putExtra(LATITUDE, mPlaces.get(i).location.latitude);
-                    intent.putExtra(LONGITUDE, mPlaces.get(i).location.longitude);
-                    intent.putExtra(Constants.TITLE, mPlaces.get(i).title);
-                    intent.putExtra("OPTION", option);
-                    startActivity(intent);
-                }
+                menu.add(0, 2, 1, Constants.MOSTRAR_TODOS);
             }
         });
 
         if (mEmbajada) {
             getEmbajadas(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         }
-
         if (mTeatro) {
             getTeatros(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         }
-
         if (mParking) {
             getParkings(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         }
 
-        Log.d("PRUEBA", String.valueOf(mPlaces.size()));
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                Intent intent = new Intent(FilteredPlaces.this, MapsActivity.class);
+                intent.putExtra(LATITUDE, mPlaces.get(i).location.latitude);
+                intent.putExtra(LONGITUDE, mPlaces.get(i).location.longitude);
+                intent.putExtra(Constants.TITLE, mPlaces.get(i).title);
+                intent.putExtra(OPTION, false);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
-            if (p.title.contains("Aparcamiento")) {
-                Favorito.writeFav(getFilesDir() + "/fav.json", p, Constants.PARKING);
-            } else if (p.title.contains("Consulado") || p.title.contains("Embajada")) {
-                Favorito.writeFav(getFilesDir() + "/fav.json", p, CONSULADO);
+            if (p.title.contains(PARKING)) {
+                FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, PARKING);
+            } else if (p.title.contains(CONSULADO) || p.title.contains(EMBAJADA)) {
+                FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, CONSULADO);
             } else {
-                Favorito.writeFav(getFilesDir() + "/fav.json", p, THEATRE);
+                FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, THEATRE);
             }
-
             mAdapter.notifyDataSetChanged();
-            Toast.makeText(FilteredPlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(FilteredPlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == 2) {
+            Intent intent = new Intent(FilteredPlaces.this, MapsActivity.class);
+            intent.putExtra(OPTION, true);
+            intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
+            startActivity(intent);
         }
         return true;
     }
@@ -163,6 +153,7 @@ public class FilteredPlaces extends AppCompatActivity {
                         mPlacesEmbajadas.get(i).setTipo(CONSULADO);
                     }
                     mPlaces.addAll(mPlacesEmbajadas);
+                    PlacesResponse.Places.ordenarDistancia(mPlaces);
                     mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces, code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
@@ -209,6 +200,7 @@ public class FilteredPlaces extends AppCompatActivity {
                     }
 
                     mPlaces.addAll(mPlacesTeatros);
+                    PlacesResponse.Places.ordenarDistancia(mPlaces);
                     mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces, code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
@@ -257,7 +249,7 @@ public class FilteredPlaces extends AppCompatActivity {
                     }
 
                     mPlaces.addAll(mPlacesParkings);
-
+                    PlacesResponse.Places.ordenarDistancia(mPlaces);
                     mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces, code);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();

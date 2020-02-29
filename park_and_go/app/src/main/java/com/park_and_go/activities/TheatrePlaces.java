@@ -27,7 +27,6 @@ import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
 import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
-import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.park_and_go.assets.Constants.PARKING;
 import static com.park_and_go.assets.Constants.THEATRE;
 
 //import static com.park_and_go.MainActivity.mFavs;
@@ -102,7 +100,7 @@ public class TheatrePlaces extends AppCompatActivity implements LocationListener
 
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
-            Favorito.writeFav(getFilesDir() + "/fav.json", p, Constants.THEATRE);
+            FavoritosPlaces.writeFav(getFilesDir() + "/fav.json", p, Constants.THEATRE);
             mAdapter.notifyDataSetChanged();
             Toast.makeText(TheatrePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
         }

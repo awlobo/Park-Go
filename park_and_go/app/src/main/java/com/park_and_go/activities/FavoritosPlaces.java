@@ -1,5 +1,6 @@
 package com.park_and_go.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -15,33 +16,39 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
-import com.park_and_go.adapters.FavoritosAdapter;
+import com.park_and_go.adapters.MyAdapter;
 import com.park_and_go.assets.Constants;
-import com.park_and_go.common.Favorito;
+import com.park_and_go.common.PlacesResponse;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.park_and_go.assets.Constants.FAV;
+import static com.park_and_go.assets.Constants.ALL_ITEMS;
+import static com.park_and_go.assets.Constants.BORRAR;
 import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.LONGITUDE;
-import static com.park_and_go.assets.Constants.MILOC;
+import static com.park_and_go.assets.Constants.MOSTRAR_TODOS;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.TITLE;
+import static com.park_and_go.assets.Constants.URL_FAV;
 
 public class FavoritosPlaces extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
     private ListView lv;
-    private FavoritosAdapter mAdapter = null;
-    public static List<Favorito> mFavs = new ArrayList<>();
-    Location location;
+    private MyAdapter mAdapter = null;
+    public static List<PlacesResponse.Places> mFavsPlaces = new ArrayList<>();
+    Location myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,40 +57,32 @@ public class FavoritosPlaces extends AppCompatActivity {
 
         lv = findViewById(R.id.listaFavoritos);
 
-        Favorito.readFav(getFilesDir() + "/fav.json");
+        readFav(getFilesDir() + URL_FAV);
         Intent intent = getIntent();
-        location = intent.getParcelableExtra(LOCATION);
+        myLocation = intent.getParcelableExtra(LOCATION);
 
-//        ProgressDialog pd = new ProgressDialog(ConsulatePlaces.this);
-//        pd.setMessage("loading");
-//        pd.show();
-//        pd.dismiss();
-
-        if (mFavs != null && !mFavs.isEmpty()) {
-            mAdapter = new FavoritosAdapter(FavoritosPlaces.this, R.layout.list_favoritos, mFavs);
+        ProgressDialog pd = new ProgressDialog(FavoritosPlaces.this);
+        pd.setMessage("loading");
+        pd.show();
+        PlacesResponse.Places.ordenarDistancia(mFavsPlaces);
+        if (mFavsPlaces != null && !mFavsPlaces.isEmpty()) {
+            mAdapter = new MyAdapter(FavoritosPlaces.this, R.layout.list_places, mFavsPlaces, 1);
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(this, "No existen favoritos", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.no_favs, Toast.LENGTH_LONG).show();
         }
+        pd.dismiss();
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 Intent intent = new Intent(FavoritosPlaces.this, MapsActivity.class);
-                if (i != 0) {
-                    intent.putExtra(OPTION, false);
-                    intent.putExtra(LATITUDE, mFavs.get(i).getLatitude());
-                    intent.putExtra(LONGITUDE, mFavs.get(i).getLongitude());
-                    intent.putExtra(TITLE, mFavs.get(i).getTitle());
-                } else {
-                    intent.putExtra(OPTION, true);
-                    intent.putExtra(FAV, true);
-                    intent.putParcelableArrayListExtra(Constants.ARRAYLIST, (ArrayList<? extends Parcelable>) mFavs);
-                }
-                intent.putExtra(MILOC, true);
-                intent.putExtra(LOCATION, location);
-
+                intent.putExtra(LOCATION, myLocation);
+                intent.putExtra(LATITUDE, mFavsPlaces.get(i).location.latitude);
+                intent.putExtra(LONGITUDE, mFavsPlaces.get(i).location.longitude);
+                intent.putExtra(TITLE, mFavsPlaces.get(i).title);
+                intent.putExtra(OPTION, false);
                 startActivity(intent);
             }
         });
@@ -91,7 +90,8 @@ public class FavoritosPlaces extends AppCompatActivity {
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                menu.add(0, 1, 0, Constants.BORRAR);
+                menu.add(0, 1, 0, BORRAR);
+                menu.add(0, 2, 1, MOSTRAR_TODOS);
             }
         });
     }
@@ -99,25 +99,52 @@ public class FavoritosPlaces extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
         if (item.getItemId() == 1) {
             try {
                 Writer writer = new FileWriter(getFilesDir() + "/fav.json");
-                Gson gson = new GsonBuilder()
-                        .setPrettyPrinting()
-                        .create();
-                Favorito f = mFavs.get(info.position);
-                mFavs.remove(f);
-                gson.toJson(mFavs, writer);
-
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                PlacesResponse.Places p = mFavsPlaces.get(info.position);
+                mFavsPlaces.remove(p);
+                gson.toJson(mFavsPlaces, writer);
                 Toast.makeText(FavoritosPlaces.this, Constants.BORRAR_CORRECTO, Toast.LENGTH_SHORT).show();
                 mAdapter.notifyDataSetChanged();
-
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else if (item.getItemId() == 2) {
+            Intent intent = new Intent(FavoritosPlaces.this, MapsActivity.class);
+            intent.putExtra(OPTION, true);
+            intent.putExtra(LOCATION, myLocation);
+            intent.putParcelableArrayListExtra(ALL_ITEMS, (ArrayList<? extends Parcelable>) mFavsPlaces);
+            startActivity(intent);
         }
         return true;
+    }
+
+    public static void writeFav(String file, PlacesResponse.Places p, String tipo) {
+        try {
+            Writer writer = new FileWriter(file);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            p.setTipo(tipo);
+            mFavsPlaces.add(p);
+            gson.toJson(mFavsPlaces, writer);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void readFav(String file) {
+        try {
+            Reader reader = new FileReader(file);
+            Gson gson = new Gson();
+            Type types = new TypeToken<ArrayList<PlacesResponse.Places>>() {
+            }.getType();
+            mFavsPlaces = gson.fromJson(reader, types);
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

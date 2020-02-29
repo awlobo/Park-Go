@@ -58,6 +58,7 @@ public class MyAdapter extends BaseAdapter {
 
         ImageView icon = v.findViewById(R.id.image);
         TextView title = v.findViewById(R.id.name);
+        TextView distancia = v.findViewById(R.id.dista);
         switch (mPlaces.get(i).getTipo()) {
             case Constants
                     .PARKING:
@@ -72,8 +73,9 @@ public class MyAdapter extends BaseAdapter {
                 icon.setImageResource(R.drawable.ocio);
                 break;
         }
-
         title.setText(mPlaces.get(i).title);
+        distancia.setText(mContext.getString(R.string.metros,mPlaces.get(i).distance));
+
 
         return v;
     }
