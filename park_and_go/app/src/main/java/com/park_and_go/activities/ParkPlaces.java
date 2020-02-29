@@ -17,7 +17,6 @@ import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
 import com.park_and_go.common.DataMadrid;
-import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -32,19 +31,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.park_and_go.assets.Constants.ADD_FAV;
 import static com.park_and_go.assets.Constants.ALL_ITEMS;
-import static com.park_and_go.assets.Constants.DISTANCIA;
-import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
-import static com.park_and_go.assets.Constants.LONGITUDE;
-import static com.park_and_go.assets.Constants.OPTION;
-import static com.park_and_go.assets.Constants.ARRAYLIST;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PARKING;
-import static com.park_and_go.assets.Constants.URL_FAV;
 import static com.park_and_go.assets.Constants.PLACES;
-import static com.park_and_go.assets.Constants.TITLE;
+import static com.park_and_go.assets.Constants.URL_FAV;
 
-public class ParkPlaces extends AppCompatActivity{
+public class ParkPlaces extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
     private ArrayList<PlacesResponse.Places> mPlaces;
@@ -63,7 +56,7 @@ public class ParkPlaces extends AppCompatActivity{
 
         mCurrentLocation = location.getParcelableExtra(LOCATION);
 
-        getParks(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
+        getParks(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
 
         lv = (ListView) findViewById(R.id.listview_parks);
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -86,7 +79,7 @@ public class ParkPlaces extends AppCompatActivity{
                 } else if (i > 0) {
                     option = false;
                     Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
-                    intent.putExtra(PLACES,mPlaces.get(i));
+                    intent.putExtra(PLACES, mPlaces.get(i));
                     intent.putExtra(OPTION, option);
                     startActivity(intent);
                 }
@@ -101,13 +94,12 @@ public class ParkPlaces extends AppCompatActivity{
 
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
-            FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, Constants.PARKING);
+            FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, PARKING);
             mAdapter.notifyDataSetChanged();
             Toast.makeText(ParkPlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
         }
         return true;
     }
-
 
 
     public void getParks(double latitude, double longitude) {

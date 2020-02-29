@@ -30,7 +30,6 @@ import static com.park_and_go.assets.Constants.KEY_PREFERENCES;
 import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.LONGITUDE;
-import static com.park_and_go.assets.Constants.MILOC;
 import static com.park_and_go.assets.Constants.NOTIFICATION_MESSAGE;
 import static com.park_and_go.assets.Constants.NOTIFICATION_TITLE;
 import static com.park_and_go.assets.Constants.OPTION;

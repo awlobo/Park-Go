@@ -21,7 +21,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.park_and_go.assets.Constants;
-import com.park_and_go.common.Favorito;
 import com.park_and_go.common.PlacesResponse;
 
 import java.util.ArrayList;
@@ -31,7 +30,6 @@ import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.LONGITUDE;
 import static com.park_and_go.assets.Constants.OPTION;
-import static com.park_and_go.assets.Constants.MILOC;
 import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.SNIPPET;
 import static com.park_and_go.assets.Constants.TITLE;
