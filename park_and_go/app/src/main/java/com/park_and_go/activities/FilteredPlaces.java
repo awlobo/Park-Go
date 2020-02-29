@@ -149,7 +149,6 @@ public class FilteredPlaces extends AppCompatActivity {
         dm.getConsulates(latitude, longitude, mDistancia).enqueue(new Callback<PlacesResponse>() {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
-                int code = 2;
                 mPlacesEmbajadas = response.body().graph;
                 Log.d(TAG, "Valor de response code " + response.code());
                 if (response.body() != null && !mPlacesEmbajadas.isEmpty()) {
@@ -163,7 +162,7 @@ public class FilteredPlaces extends AppCompatActivity {
                         mPlacesEmbajadas.get(i).setTipo(CONSULADO);
                     }
                     mPlaces.addAll(mPlacesEmbajadas);
-                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces, code);
+                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {
@@ -209,7 +208,7 @@ public class FilteredPlaces extends AppCompatActivity {
                     }
 
                     mPlaces.addAll(mPlacesTeatros);
-                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces, code);
+                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {
@@ -258,7 +257,7 @@ public class FilteredPlaces extends AppCompatActivity {
 
                     mPlaces.addAll(mPlacesParkings);
 
-                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces, code);
+                    mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

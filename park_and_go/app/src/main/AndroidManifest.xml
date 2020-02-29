@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/logo_sin_titulo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.FilteredPlaces"></activity>
+        <activity android:name=".activities.WebTransporteCompartido"></activity>
+        <activity android:name=".activities.FilteredPlaces" />
         <activity android:name=".activities.TheatrePlaces" />
 
         <service

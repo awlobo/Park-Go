@@ -21,15 +21,18 @@ public class PlacesResponse {
         public Float distance = null;
         private String tipo;
 
-        public Places(String title, MyLocation location, Float distance) {
+        public Places(String title, MyLocation location, Float distance,String tipo) {
             this.title = title;
             this.location = location;
             this.distance = distance;
+            this.tipo=tipo;
         }
 
         public Places(Parcel in) {
             title = in.readString();
             location = (MyLocation) in.readParcelable(MyLocation.class.getClassLoader());
+            distance = in.readFloat();
+            tipo=in.readString();
         }
 
         public void setTipo(String tipo) {
@@ -49,6 +52,8 @@ public class PlacesResponse {
         public void writeToParcel(Parcel parcel, int flags) {
             parcel.writeString(title);
             parcel.writeParcelable(location, flags);
+            parcel.writeFloat(distance);
+            parcel.writeString(tipo);
         }
 
         public static final Parcelable.Creator<Places> CREATOR =

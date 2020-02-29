@@ -1,14 +1,8 @@
 package com.park_and_go.activities;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -17,10 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
@@ -40,22 +31,29 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.park_and_go.assets.Constants.*;
+import static com.park_and_go.assets.Constants.ALL_ITEMS;
+import static com.park_and_go.assets.Constants.LOCATION;
+import static com.park_and_go.assets.Constants.OPTION;
+import static com.park_and_go.assets.Constants.PLACES;
 
-public class ConsulatePlaces extends AppCompatActivity implements LocationListener {
+public class ConsulatePlaces extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
-
-    private static final Integer PERMIS_GPS_FINE = 1;
-    private LocationManager mLocManager;
     private ArrayList<PlacesResponse.Places> mPlaces;
-    private Location mCurrentLocation;
     private MyAdapter mAdapter = null;
+    private Location mCurrentLocation;
     private ListView lv = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consulates_places);
+
+        Intent location = getIntent();
+
+        mCurrentLocation = location.getParcelableExtra(LOCATION);
+
+        getConsulates(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
 
         lv = findViewById(R.id.listview_consulates);
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -78,9 +76,7 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
                 } else if (i > 0) {
                     option = false;
                     Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
-                    intent.putExtra(LATITUDE, mPlaces.get(i).location.latitude);
-                    intent.putExtra(LONGITUDE, mPlaces.get(i).location.longitude);
-                    intent.putExtra(TITLE, mPlaces.get(i).title);
+                    intent.putExtra(PLACES,mPlaces.get(i));
                     intent.putExtra(OPTION, option);
                     startActivity(intent);
                 }
@@ -100,67 +96,6 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
             Toast.makeText(ConsulatePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
         }
         return true;
-    }
-
-
-    @Override
-    public void onLocationChanged(Location location) {
-        mCurrentLocation = location;
-        getConsulates(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(ConsulatePlaces.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-            ActivityCompat.requestPermissions(ConsulatePlaces.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMIS_GPS_FINE);
-        } else {
-            Toast.makeText(getApplicationContext(), "[LOCATION] Permission granted in the past!", Toast.LENGTH_SHORT).show();
-            startLocation();
-        }
-    }
-
-    @SuppressWarnings({"MissingPermission"})
-    private void startLocation() {
-        mLocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(callGPSSettingIntent);
-
-        } else {
-            mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 300, this);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getApplicationContext(), "[LOCATION] Permission granted!", Toast.LENGTH_SHORT).show();
-                startLocation();
-            } else {
-                Toast.makeText(getApplicationContext(), "[LOCATION] Permission denied!", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     public void getConsulates(double latitude, double longitude) {
@@ -184,8 +119,6 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
-                int code = 2;
-
                 mPlaces = response.body().graph;
 
                 if (response.body() != null && !mPlaces.isEmpty()) {
@@ -195,9 +128,9 @@ public class ConsulatePlaces extends AppCompatActivity implements LocationListen
                         location.setLongitude(mPlaces.get(i).location.longitude);
                         float distance = mCurrentLocation.distanceTo(location);
                         mPlaces.get(i).distance = distance;
-                        mPlaces.get(i).setTipo(CONSULADO);
+                        mPlaces.get(i).setTipo(Constants.CONSULADO);
                     }
-                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_places, mPlaces, code);
+                    mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {

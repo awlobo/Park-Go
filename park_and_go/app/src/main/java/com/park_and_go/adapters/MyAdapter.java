@@ -1,6 +1,7 @@
 package com.park_and_go.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.park_and_go.R;
 import com.park_and_go.assets.Constants;
 import com.park_and_go.common.PlacesResponse;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class MyAdapter extends BaseAdapter {
@@ -19,13 +21,12 @@ public class MyAdapter extends BaseAdapter {
     private Context mContext;
     private int layout;
     private List<PlacesResponse.Places> mPlaces;
-    private int code;
+    private DecimalFormat df = new DecimalFormat("#.#");
 
-    public MyAdapter(Context mContext, int layout, List<PlacesResponse.Places> mPlaces, int code) {
+    public MyAdapter(Context mContext, int layout, List<PlacesResponse.Places> mPlaces) {
         this.mContext = mContext;
         this.layout = layout;
         this.mPlaces = mPlaces;
-        this.code = code;
     }
 
     @Override
@@ -73,7 +74,7 @@ public class MyAdapter extends BaseAdapter {
                 break;
         }
 
-        title.setText(mPlaces.get(i).title);
+        title.setText(mPlaces.get(i).title+"\n"+Constants.DISTANCIA+": "+df.format(mPlaces.get(i).distance));
 
         return v;
     }

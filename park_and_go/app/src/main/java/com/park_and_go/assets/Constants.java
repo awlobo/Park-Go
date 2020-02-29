@@ -5,6 +5,7 @@ public class Constants {
     public static final String CONSULADO = "consulados";
     public static final String THEATRE = "teatros";
     public static final String PARKING = "parkings";
+    public static final String DISTANCIA = "distancia";
     public static final String TODOS = "Todos";
     public static final String ARRAYLIST = "array_places";
     public static final String PLACE = "place";
@@ -16,6 +17,7 @@ public class Constants {
     public static final String MY_CAR_LON = "my_car_lon";
     public static final String LATITUDE = "LATITUDE";
     public static final String LONGITUDE = "LONGITUD";
+    public static final String PLACES = "PLACES";
     public static final String ALL_ITEMS = "ALL";
     public static final String TITLE = "TITLE";
     public static final String OPTION = "OPTION";
@@ -23,7 +25,10 @@ public class Constants {
     public static final String MILOC = "mi_localizacion";
     public static final String LOCATION = "location";
     public static final String SNIPPET = "snippet";
-    public static final String DISTANCIA = "distancia";
-
-
+    public static final String SERVER_DOWN ="ERROR DE CONEXION";
+    public static final String KEY_NOTIFICATION="AROUND";
+    public static final String KEY_PREFERENCES="PREFERENCES_LOCATION_CAR";
+    public static final String NOTIFICATION_TITLE="Alerta de proximidad!!";
+    public static final String NOTIFICATION_MESSAGE="Su vehiculo se encuentra a ";
+    public static final String URL_WEBVIEW="URL";
 }

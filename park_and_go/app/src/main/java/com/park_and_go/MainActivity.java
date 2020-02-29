@@ -1,6 +1,7 @@
 package com.park_and_go;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,13 +34,9 @@ import com.park_and_go.activities.ParkPlaces;
 import com.park_and_go.activities.TheatrePlaces;
 import com.park_and_go.activities.TransporteCompartido;
 import com.park_and_go.assets.Constants;
-import com.park_and_go.common.MyLocation;
-import com.park_and_go.common.PlacesResponse;
 import com.park_and_go.services.GpsService;
 
-import java.util.ArrayList;
-
-import static com.park_and_go.assets.Constants.FAV;
+import static com.park_and_go.assets.Constants.KEY_PREFERENCES;
 import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.LONGITUDE;
@@ -85,7 +81,9 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        mPrefs = getPreferences(MODE_PRIVATE);
+        mPrefs = getSharedPreferences(KEY_PREFERENCES,MODE_PRIVATE);
+
+//        mPrefs= getPreferences(MODE_PRIVATE);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(Constants.INTENT_LOCALIZATION_ACTION));

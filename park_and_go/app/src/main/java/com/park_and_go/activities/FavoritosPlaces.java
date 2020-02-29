@@ -54,11 +54,6 @@ public class FavoritosPlaces extends AppCompatActivity {
         Intent intent = getIntent();
         location = intent.getParcelableExtra(LOCATION);
 
-//        ProgressDialog pd = new ProgressDialog(ConsulatePlaces.this);
-//        pd.setMessage("loading");
-//        pd.show();
-//        pd.dismiss();
-
         if (mFavs != null && !mFavs.isEmpty()) {
             mAdapter = new FavoritosAdapter(FavoritosPlaces.this, R.layout.list_favoritos, mFavs);
             lv.setAdapter(mAdapter);

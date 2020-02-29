@@ -29,6 +29,7 @@ import static com.park_and_go.assets.Constants.ARRAYLIST;
 import static com.park_and_go.assets.Constants.FAV;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.MILOC;
+import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.SNIPPET;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -39,6 +40,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final String TITLE = "TITLE";
     private final String OPTION = "OPTION";
     private ArrayList<PlacesResponse.Places> mPlaces;
+    private PlacesResponse.Places mPlaceAlone;
     private ArrayList<Favorito> mFavs;
     private boolean option;
     private boolean fav;
@@ -82,10 +84,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
         } else {
-            mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
-            mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
-            mTitle = data.getStringExtra(TITLE);
-            mSnip = data.getStringExtra(SNIPPET);
+//            mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
+//            mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
+//            mTitle = data.getStringExtra(TITLE);
+//            mSnip = data.getStringExtra(SNIPPET);
+            mPlaceAlone = data.getParcelableExtra(PLACES);
         }
     }
 
@@ -116,8 +119,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         } else {
             Log.d(TAG, "New location: " + mLatitude + "-" + mLongitude);
-            LatLng loc = new LatLng(mLatitude, mLongitude);
-            mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mTitle));
+            LatLng loc = new LatLng(mPlaceAlone.location.latitude, mPlaceAlone.location.longitude);
+            mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mPlaceAlone.title));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
             CameraUpdate camera = CameraUpdateFactory.newLatLngZoom(loc, 16);
             mMap.moveCamera(camera);
