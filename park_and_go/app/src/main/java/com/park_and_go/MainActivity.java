@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        mPrefs = getSharedPreferences(KEY_PREFERENCES,MODE_PRIVATE);
+        mPrefs = getSharedPreferences(KEY_PREFERENCES, MODE_PRIVATE);
 
 //        mPrefs= getPreferences(MODE_PRIVATE);
 
@@ -176,12 +176,10 @@ public class MainActivity extends AppCompatActivity implements
 
         } else if (id == R.id.menu_guardar_aparcamiento) {
             SharedPreferences.Editor prefsEditor = mPrefs.edit();
-            if (mPrefs.contains(Constants.MY_CAR_LAT) && mPrefs.contains(Constants.MY_CAR_LON)) {
-                prefsEditor.putFloat(Constants.MY_CAR_LAT, (float) location.getLatitude());
-                prefsEditor.putFloat(Constants.MY_CAR_LON, (float) location.getLongitude());
-                prefsEditor.commit();
-                Toast.makeText(this, "Aparcamiento guardado correctamente", Toast.LENGTH_LONG).show();
-            }
+            prefsEditor.putFloat(Constants.MY_CAR_LAT, (float) location.getLatitude());
+            prefsEditor.putFloat(Constants.MY_CAR_LON, (float) location.getLongitude());
+            prefsEditor.commit();
+            Toast.makeText(this, "Aparcamiento guardado correctamente", Toast.LENGTH_LONG).show();
 
         } else if (id == R.id.menu_recuperar_aparcamiento) {
             if (mPrefs != null) {

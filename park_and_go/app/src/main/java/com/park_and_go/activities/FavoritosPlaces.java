@@ -39,6 +39,7 @@ import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.LONGITUDE;
 import static com.park_and_go.assets.Constants.MOSTRAR_TODOS;
 import static com.park_and_go.assets.Constants.OPTION;
+import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.TITLE;
 import static com.park_and_go.assets.Constants.URL_FAV;
 
@@ -79,9 +80,7 @@ public class FavoritosPlaces extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 Intent intent = new Intent(FavoritosPlaces.this, MapsActivity.class);
                 intent.putExtra(LOCATION, myLocation);
-                intent.putExtra(LATITUDE, mFavsPlaces.get(i).location.latitude);
-                intent.putExtra(LONGITUDE, mFavsPlaces.get(i).location.longitude);
-                intent.putExtra(TITLE, mFavsPlaces.get(i).title);
+                intent.putExtra(PLACES, mFavsPlaces.get(i));
                 intent.putExtra(OPTION, false);
                 startActivity(intent);
             }

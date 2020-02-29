@@ -42,6 +42,7 @@ import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.LONGITUDE;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PARKING;
+import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.THEATRE;
 import static com.park_and_go.assets.Constants.URL_FAV;
 
@@ -68,7 +69,7 @@ public class FilteredPlaces extends AppCompatActivity {
         boolean mParking = intent.getBooleanExtra(PARKING, false);
         boolean mTeatro = intent.getBooleanExtra(THEATRE, false);
         boolean mEmbajada = intent.getBooleanExtra(CONSULADO, false);
-        mDistancia = intent.getIntExtra(DISTANCIA, 500);
+        mDistancia = intent.getIntExtra(DISTANCIA, 1000);
 
         lv = findViewById(R.id.lvFiltered);
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -93,10 +94,9 @@ public class FilteredPlaces extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 Intent intent = new Intent(FilteredPlaces.this, MapsActivity.class);
-                intent.putExtra(LATITUDE, mPlaces.get(i).location.latitude);
-                intent.putExtra(LONGITUDE, mPlaces.get(i).location.longitude);
-                intent.putExtra(Constants.TITLE, mPlaces.get(i).title);
+                intent.putExtra(LOCATION, mCurrentLocation);
                 intent.putExtra(OPTION, false);
+                intent.putExtra(PLACES, mPlaces.get(i));
                 startActivity(intent);
             }
         });
@@ -119,6 +119,7 @@ public class FilteredPlaces extends AppCompatActivity {
         } else if (item.getItemId() == 2) {
             Intent intent = new Intent(FilteredPlaces.this, MapsActivity.class);
             intent.putExtra(OPTION, true);
+            intent.putExtra(LOCATION, mCurrentLocation);
             intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
             startActivity(intent);
         }

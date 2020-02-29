@@ -36,6 +36,7 @@ import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PLACES;
+import static com.park_and_go.assets.Constants.URL_FAV;
 
 public class ConsulatePlaces extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
@@ -64,26 +65,19 @@ public class ConsulatePlaces extends AppCompatActivity {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
                 menu.add(0, 1, 0, Constants.ADD_FAV);
+                menu.add(0, 2, 1, Constants.MOSTRAR_TODOS);
             }
         });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                boolean option;
                 Intent intent = new Intent(ConsulatePlaces.this, MapsActivity.class);
-                if (i == 0) {
-                    option = true;
-                    intent.putExtra(OPTION, option);
-                    intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
-                    startActivity(intent);
-                } else if (i > 0) {
-                    option = false;
-                    Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
-                    intent.putExtra(PLACES,mPlaces.get(i));
-                    intent.putExtra(OPTION, option);
-                    startActivity(intent);
-                }
+                Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
+                intent.putExtra(PLACES, mPlaces.get(i));
+                intent.putExtra(OPTION, false);
+                intent.putExtra(LOCATION, mCurrentLocation);
+                startActivity(intent);
             }
         });
 
@@ -95,9 +89,15 @@ public class ConsulatePlaces extends AppCompatActivity {
 
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
-            FavoritosPlaces.writeFav(getFilesDir() + "/fav.json", p, Constants.CONSULADO);
+            FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, Constants.CONSULADO);
             mAdapter.notifyDataSetChanged();
             Toast.makeText(ConsulatePlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == 2) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra(OPTION, true);
+            intent.putExtra(LOCATION, mCurrentLocation);
+            intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
+            startActivity(intent);
         }
         return true;
     }
@@ -133,6 +133,7 @@ public class ConsulatePlaces extends AppCompatActivity {
                         mPlaces.get(i).distance = mCurrentLocation.distanceTo(location);
                         mPlaces.get(i).setTipo(CONSULADO);
                     }
+                    PlacesResponse.Places.ordenarDistancia(mPlaces);
                     mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();

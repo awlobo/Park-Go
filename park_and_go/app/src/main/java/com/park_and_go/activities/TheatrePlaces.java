@@ -54,33 +54,25 @@ public class TheatrePlaces extends AppCompatActivity {
 
         mCurrentLocation = location.getParcelableExtra(LOCATION);
 
-        getTheatres(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
+        getTheatres(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         lv = (ListView) findViewById(R.id.listview_theatres);
 
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                // OPCIONES QUE APARECEN CUANDO MANTIENES PULSADO
                 menu.add(0, 1, 0, "Añadir Favorito");
+                menu.add(0, 2, 1, Constants.MOSTRAR_TODOS);
             }
         });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                boolean option;
                 Intent intent = new Intent(TheatrePlaces.this, MapsActivity.class);
-                if (i == 0) {
-                    option = true;
-                    intent.putExtra(OPTION, option);
-                    intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
-                    startActivity(intent);
-                } else if (i > 0) {
-                    option = false;
-                    intent.putExtra(PLACES,mPlaces.get(i));
-                    intent.putExtra(OPTION, option);
-                    startActivity(intent);
-                }
+                intent.putExtra(PLACES, mPlaces.get(i));
+                intent.putExtra(LOCATION, mCurrentLocation);
+                intent.putExtra(OPTION, false);
+                startActivity(intent);
             }
         });
     }
@@ -94,7 +86,13 @@ public class TheatrePlaces extends AppCompatActivity {
             PlacesResponse.Places p = mPlaces.get(info.position);
             FavoritosPlaces.writeFav(getFilesDir() + "/fav.json", p, Constants.THEATRE);
             mAdapter.notifyDataSetChanged();
-            Toast.makeText(TheatrePlaces.this, "Añadido correctamente a favoritos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TheatrePlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == 2) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra(OPTION, true);
+            intent.putExtra(LOCATION, mCurrentLocation);
+            intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
+            startActivity(intent);
         }
         return true;
     }
@@ -131,6 +129,7 @@ public class TheatrePlaces extends AppCompatActivity {
                         mPlaces.get(i).distance = distance;
                         mPlaces.get(i).setTipo(THEATRE);
                     }
+                    PlacesResponse.Places.ordenarDistancia(mPlaces);
                     mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();

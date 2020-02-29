@@ -8,7 +8,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,7 +20,6 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.park_and_go.MainActivity;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.assets.Constants;
@@ -56,7 +54,7 @@ public class GpsService extends Service implements LocationListener {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "Servicio creado");
-        mPref = getSharedPreferences(KEY_PREFERENCES,MODE_PRIVATE);
+        mPref = getSharedPreferences(KEY_PREFERENCES, MODE_PRIVATE);
     }
 
     private void createNotificationChannel() {
@@ -78,8 +76,6 @@ public class GpsService extends Service implements LocationListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        // Set Foreground service
-
         createNotificationChannel();
         Notification notification = new NotificationCompat.Builder(this, "1")
                 .setContentTitle("Location Service Activated")
@@ -98,11 +94,9 @@ public class GpsService extends Service implements LocationListener {
     @SuppressWarnings({"MissingPermission"})
     private void startLocation() {
         mLocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
         if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(callGPSSettingIntent);
-
         } else {
             mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 300, this);
         }
@@ -129,20 +123,19 @@ public class GpsService extends Service implements LocationListener {
         Log.d(TAG, "new location");
 
         mCurrentLocation = location;
-
         mMyCarLocation = new Location(location);
-        Log.d(TAG, "Location: "+location.getLongitude());
+        Log.d(TAG, "Location: " + location.getLongitude());
 
         mMyCarLocation.setLatitude(mPref.getFloat(Constants.MY_CAR_LAT, 0));
         mMyCarLocation.setLongitude(mPref.getFloat(Constants.MY_CAR_LON, 0));
 
-        Log.d(TAG, "My car Location: "+mMyCarLocation.getLongitude());
+        Log.d(TAG, "My car Location: " + mMyCarLocation.getLongitude());
 
-        Log.d(TAG, "Location despues del coche: "+location.getLongitude());
+        Log.d(TAG, "Location despues del coche: " + location.getLongitude());
 
-        Log.d(TAG, "Distancia entre ambos: "+location.distanceTo(mMyCarLocation));
+        Log.d(TAG, "Distancia entre ambos: " + location.distanceTo(mMyCarLocation));
 
-        if(location.distanceTo(mMyCarLocation)<200){
+        if (location.distanceTo(mMyCarLocation) < 500) {
             showNotification();
         }
 
@@ -150,7 +143,7 @@ public class GpsService extends Service implements LocationListener {
         intent.putExtra(LOCATION, mCurrentLocation);
         //intent.putExtra(Constants.KEY_MESSAGE, "New Location");
 
-        Log.d(TAG, "Current Location: "+mCurrentLocation.getLongitude());
+        Log.d(TAG, "Current Location: " + mCurrentLocation.getLongitude());
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -192,17 +185,15 @@ public class GpsService extends Service implements LocationListener {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         //Igual que un intent pero para mandar a posteriori, a diferencia del intent que se ejecuta al momento
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_dialog_alert)
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.car)
                 .setContentTitle(NOTIFICATION_TITLE)
-                .setContentText(NOTIFICATION_MESSAGE+mPref.getFloat(Constants.MY_CAR_LAT, 0))
+                .setContentText(NOTIFICATION_MESSAGE + mPref.getFloat(Constants.MY_CAR_LAT, 0))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
-        notificationManager.notify(1,builder.build());
+        notificationManager.notify(1, builder.build());
     }
 }

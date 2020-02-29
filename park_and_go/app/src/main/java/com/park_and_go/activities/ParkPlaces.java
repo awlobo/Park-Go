@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
+import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
 import com.park_and_go.common.PlacesResponse;
 
@@ -63,26 +64,19 @@ public class ParkPlaces extends AppCompatActivity {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
                 menu.add(0, 1, 0, ADD_FAV);
+                menu.add(0, 2, 1, Constants.MOSTRAR_TODOS);
             }
         });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                boolean option;
                 Intent intent = new Intent(ParkPlaces.this, MapsActivity.class);
-                if (i == 0) {
-                    option = true;
-                    intent.putExtra(OPTION, option);
-                    intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
-                    startActivity(intent);
-                } else if (i > 0) {
-                    option = false;
-                    Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
-                    intent.putExtra(PLACES, mPlaces.get(i));
-                    intent.putExtra(OPTION, option);
-                    startActivity(intent);
-                }
+                Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
+                intent.putExtra(PLACES, mPlaces.get(i));
+                intent.putExtra(OPTION, false);
+                intent.putExtra(LOCATION, mCurrentLocation);
+                startActivity(intent);
             }
 
         });
@@ -97,6 +91,12 @@ public class ParkPlaces extends AppCompatActivity {
             FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, PARKING);
             mAdapter.notifyDataSetChanged();
             Toast.makeText(ParkPlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == 2) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra(OPTION, true);
+            intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
+            intent.putExtra(LOCATION, mCurrentLocation);
+            startActivity(intent);
         }
         return true;
     }
@@ -137,6 +137,7 @@ public class ParkPlaces extends AppCompatActivity {
                         mPlaces.get(i).distance = distance;
                         mPlaces.get(i).setTipo(PARKING);
                     }
+                    PlacesResponse.Places.ordenarDistancia(mPlaces);
                     mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
