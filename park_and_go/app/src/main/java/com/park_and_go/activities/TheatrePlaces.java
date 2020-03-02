@@ -60,8 +60,8 @@ public class TheatrePlaces extends AppCompatActivity {
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                menu.add(0, 1, 0, "Añadir Favorito");
-                menu.add(0, 2, 1, Constants.MOSTRAR_TODOS);
+                menu.add(0, 1, 0, R.string.add_fav);
+                menu.add(0, 2, 1, R.string.mostrar_todo);
             }
         });
 

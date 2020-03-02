@@ -1,7 +1,6 @@
 package com.park_and_go;
 
 import android.Manifest;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -34,15 +32,16 @@ import com.park_and_go.activities.ParkPlaces;
 import com.park_and_go.activities.TheatrePlaces;
 import com.park_and_go.activities.TransporteCompartido;
 import com.park_and_go.assets.Constants;
+import com.park_and_go.common.MyLocation;
+import com.park_and_go.common.PlacesResponse;
 import com.park_and_go.services.GpsService;
 
 import static com.park_and_go.assets.Constants.KEY_PREFERENCES;
-import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
-import static com.park_and_go.assets.Constants.LONGITUDE;
+import static com.park_and_go.assets.Constants.MY_CAR;
 import static com.park_and_go.assets.Constants.OPTION;
-import static com.park_and_go.assets.Constants.SNIPPET;
-import static com.park_and_go.assets.Constants.TITLE;
+import static com.park_and_go.assets.Constants.PARKING;
+import static com.park_and_go.assets.Constants.PLACES;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
@@ -50,8 +49,8 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout drawerLayout;
     private NavigationView mNavigationView;
     private Intent mServiceIntent;
-    Location location;
-    Location carLocation;
+    Location mCurrentLocation;
+    Location mCarLocation;
     SharedPreferences mPrefs;
 
 
@@ -60,17 +59,17 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /* CREA UN TOOLBAR NUEVO, NECESARIO PARA PODER USAR EL MENU LATERAL*/
+        /* CONFIGURACION TOOLBAR */
         setToolBar();
         drawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.navview);
 
-        // CONFIGURACION BOTONES MENU LATERAL
+        /* CONFIGURACION BOTONES MENU LATERAL */
         if (mNavigationView != null) {
             mNavigationView.setNavigationItemSelectedListener(this);
         }
 
-        // BOTON PARA LLAMAR AL 112
+        /* BOTON PARA LLAMAR AL 112 */
         Button emergencias = findViewById(R.id.numTel);
         emergencias.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         mPrefs = getSharedPreferences(KEY_PREFERENCES, MODE_PRIVATE);
-
 //        mPrefs= getPreferences(MODE_PRIVATE);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
@@ -99,9 +97,7 @@ public class MainActivity extends AppCompatActivity implements
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            location = intent.getParcelableExtra(LOCATION);
-            Log.d("PRUEBA", "BroadcastReceiver::Got message: " + location.getLongitude());
+            mCurrentLocation = intent.getParcelableExtra(LOCATION);
         }
     };
 
@@ -116,10 +112,10 @@ public class MainActivity extends AppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getApplicationContext(), "GPS Permission granted!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.gps_granted, Toast.LENGTH_SHORT).show();
                 startService();
             } else {
-                Toast.makeText(getApplicationContext(), "Permission denied by user!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.gps_denied, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -151,61 +147,54 @@ public class MainActivity extends AppCompatActivity implements
 
         } else if (id == R.id.menu_aparcamientos) {
             Intent intent = new Intent(MainActivity.this, ParkPlaces.class);
-            intent.putExtra(LOCATION, location);
+            intent.putExtra(LOCATION, mCurrentLocation);
             startActivity(intent);
 
         } else if (id == R.id.menu_teatros) {
             Intent intent = new Intent(MainActivity.this, TheatrePlaces.class);
-            intent.putExtra(LOCATION, location);
+            intent.putExtra(LOCATION, mCurrentLocation);
             startActivity(intent);
 
         } else if (id == R.id.menu_embajadas) {
             Intent intent = new Intent(MainActivity.this, ConsulatePlaces.class);
-            intent.putExtra(LOCATION, location);
+            intent.putExtra(LOCATION, mCurrentLocation);
             startActivity(intent);
 
         } else if (id == R.id.menu_filtrar) {
             Intent intent = new Intent(MainActivity.this, FiltrosPlaces.class);
-            intent.putExtra(LOCATION, location);
+            intent.putExtra(LOCATION, mCurrentLocation);
             startActivity(intent);
 
         } else if (id == R.id.menu_favoritos) {
             Intent intent = new Intent(this, FavoritosPlaces.class);
-            intent.putExtra(LOCATION, location);
+            intent.putExtra(LOCATION, mCurrentLocation);
             startActivity(intent);
 
         } else if (id == R.id.menu_guardar_aparcamiento) {
             SharedPreferences.Editor prefsEditor = mPrefs.edit();
-            prefsEditor.putFloat(Constants.MY_CAR_LAT, (float) location.getLatitude());
-            prefsEditor.putFloat(Constants.MY_CAR_LON, (float) location.getLongitude());
-            prefsEditor.commit();
-            Toast.makeText(this, "Aparcamiento guardado correctamente", Toast.LENGTH_LONG).show();
+            prefsEditor.putFloat(Constants.MY_CAR_LAT, (float) mCurrentLocation.getLatitude());
+            prefsEditor.putFloat(Constants.MY_CAR_LON, (float) mCurrentLocation.getLongitude());
+            prefsEditor.apply();
+            Toast.makeText(this, R.string.aparcamiento_guardado, Toast.LENGTH_LONG).show();
 
         } else if (id == R.id.menu_recuperar_aparcamiento) {
             if (mPrefs != null) {
-                carLocation = new Location("carLoc");
+                mCarLocation = new Location(MY_CAR);
                 if (mPrefs.contains(Constants.MY_CAR_LAT) && mPrefs.contains(Constants.MY_CAR_LON)) {
-                    carLocation.setLatitude(mPrefs.getFloat(Constants.MY_CAR_LAT, 0));
-                    carLocation.setLongitude(mPrefs.getFloat(Constants.MY_CAR_LON, 0));
-                    float distance = location.distanceTo(carLocation);
-                    //                carPlaces = new PlacesResponse.Places("Your car", new MyLocation(carLocation.getLatitude(), carLocation.getLongitude()), distance);
-                    Log.d("PRUEBA", String.valueOf(distance) + " metros.");
-                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                    mCarLocation.setLatitude(mPrefs.getFloat(Constants.MY_CAR_LAT, 0));
+                    mCarLocation.setLongitude(mPrefs.getFloat(Constants.MY_CAR_LON, 0));
+                    float distance = mCurrentLocation.distanceTo(mCarLocation);
+                    PlacesResponse.Places carPlace = new PlacesResponse.Places(MY_CAR, new MyLocation(mCarLocation.getLatitude(), mCarLocation.getLongitude()), distance, PARKING);
+                    Intent intent = new Intent(this, MapsActivity.class);
                     intent.putExtra(OPTION, false);
-                    intent.putExtra(LATITUDE, carLocation.getLatitude());
-                    intent.putExtra(LONGITUDE, carLocation.getLongitude());
-                    intent.putExtra(TITLE, "My car");
-                    intent.putExtra(SNIPPET, "Distancia: " + distance + " metros.");
+                    intent.putExtra(PLACES, carPlace);
+                    intent.putExtra(LOCATION, mCurrentLocation);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(this, "No has guardado aparcamiento", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.aparcamiento_noguardado, Toast.LENGTH_LONG).show();
                 }
-
-
             }
         }
-
-
         return false;
     }
 }

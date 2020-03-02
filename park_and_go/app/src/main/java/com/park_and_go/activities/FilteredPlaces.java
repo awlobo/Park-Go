@@ -1,10 +1,7 @@
 package com.park_and_go.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -19,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
-import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
 import com.park_and_go.common.PlacesResponse;
 
@@ -37,9 +33,7 @@ import static com.park_and_go.assets.Constants.ALL_ITEMS;
 import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.DISTANCIA;
 import static com.park_and_go.assets.Constants.EMBAJADA;
-import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
-import static com.park_and_go.assets.Constants.LONGITUDE;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PARKING;
 import static com.park_and_go.assets.Constants.PLACES;
@@ -49,7 +43,6 @@ import static com.park_and_go.assets.Constants.URL_FAV;
 public class FilteredPlaces extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
-    private LocationManager mLocManager;
     private ArrayList<PlacesResponse.Places> mPlaces = new ArrayList<>();
     private ArrayList<PlacesResponse.Places> mPlacesEmbajadas;
     private ArrayList<PlacesResponse.Places> mPlacesParkings;
@@ -75,8 +68,8 @@ public class FilteredPlaces extends AppCompatActivity {
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                menu.add(0, 1, 0, Constants.ADD_FAV);
-                menu.add(0, 2, 1, Constants.MOSTRAR_TODOS);
+                menu.add(0, 1, 0, R.string.add_fav);
+                menu.add(0, 2, 1, R.string.mostrar_todo);
             }
         });
 
@@ -150,8 +143,7 @@ public class FilteredPlaces extends AppCompatActivity {
                         Location location = new Location("");
                         location.setLatitude(mPlacesEmbajadas.get(i).location.latitude);
                         location.setLongitude(mPlacesEmbajadas.get(i).location.longitude);
-                        float distance = mCurrentLocation.distanceTo(location);
-                        mPlacesEmbajadas.get(i).distance = distance;
+                        mPlacesEmbajadas.get(i).distance = mCurrentLocation.distanceTo(location);
                         mPlacesEmbajadas.get(i).setTipo(CONSULADO);
                     }
                     mPlaces.addAll(mPlacesEmbajadas);
@@ -195,8 +187,7 @@ public class FilteredPlaces extends AppCompatActivity {
                         Location location = new Location("");
                         location.setLatitude(mPlacesTeatros.get(i).location.latitude);
                         location.setLongitude(mPlacesTeatros.get(i).location.longitude);
-                        float distance = mCurrentLocation.distanceTo(location);
-                        mPlacesTeatros.get(i).distance = distance;
+                        mPlacesTeatros.get(i).distance = mCurrentLocation.distanceTo(location);
                         mPlacesTeatros.get(i).setTipo(THEATRE);
                     }
 
@@ -205,11 +196,8 @@ public class FilteredPlaces extends AppCompatActivity {
                     mAdapter = new MyAdapter(FilteredPlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
-                } else {
-                    Log.d(TAG, "Response: " + response.body().graph.size());
                 }
 
-                Log.d("PRUEBA", String.valueOf(mPlaces.size()));
             }
 
             @Override
@@ -243,8 +231,7 @@ public class FilteredPlaces extends AppCompatActivity {
                         Location location = new Location("");
                         location.setLatitude(mPlacesParkings.get(i).location.latitude);
                         location.setLongitude(mPlacesParkings.get(i).location.longitude);
-                        float distance = mCurrentLocation.distanceTo(location);
-                        mPlacesParkings.get(i).distance = distance;
+                        mPlacesParkings.get(i).distance = mCurrentLocation.distanceTo(location);
                         mPlacesParkings.get(i).setTipo(PARKING);
                     }
 

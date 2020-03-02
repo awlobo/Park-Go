@@ -21,7 +21,6 @@ import com.park_and_go.common.PlacesResponse;
 import java.util.ArrayList;
 
 import static com.park_and_go.assets.Constants.ALL_ITEMS;
-import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PARKING;
@@ -63,10 +62,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (option) {
             mPlaces = data.getParcelableArrayListExtra(ALL_ITEMS);
         } else {
-//            mLatitude = data.getDoubleExtra(LATITUDE, 0.0);
-//            mLongitude = data.getDoubleExtra(LONGITUDE, 0.0);
-//            mTitle = data.getStringExtra(TITLE);
-//            mSnip = data.getStringExtra(SNIPPET);
             mPlaceAlone = data.getParcelableExtra(PLACES);
         }
     }
@@ -91,11 +86,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for (PlacesResponse.Places p : mPlaces) {
                 if (limit < 10) {
                     LatLng loc = new LatLng(p.location.latitude, p.location.longitude);
-                    if(p.getTipo().equals(THEATRE)){
+                    if (p.getTipo().equals(THEATRE)) {
                         mMap.addMarker(new MarkerOptions().position(loc).title(p.title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                    }else if(p.getTipo().equals(PARKING)){
+                    } else if (p.getTipo().equals(PARKING)) {
                         mMap.addMarker(new MarkerOptions().position(loc).title(p.title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    }else{
+                    } else {
                         mMap.addMarker(new MarkerOptions().position(loc).title(p.title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     }
 //                    mMap.addMarker(new MarkerOptions().position(loc).title(p.title));
@@ -110,12 +105,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng loc = new LatLng(mPlaceAlone.location.latitude, mPlaceAlone.location.longitude);
             mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mTitle));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 16));
-            Log.d(TAG, "New location: " + mLatitude + "-" + mLongitude);
-            if(mPlaceAlone.getTipo().equals(THEATRE)){
+            if (mPlaceAlone.getTipo().equals(THEATRE)) {
                 mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mPlaceAlone.title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-            }else if(mPlaceAlone.getTipo().equals(PARKING)){
+            } else if (mPlaceAlone.getTipo().equals(PARKING)) {
                 mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mPlaceAlone.title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            }else{
+            } else {
                 mMap.addMarker(new MarkerOptions().position(loc).snippet(mSnip).title(mPlaceAlone.title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
             }
             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
@@ -123,7 +117,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(camera);
             mMap.setMyLocationEnabled(true);
         }
-
-
     }
 }

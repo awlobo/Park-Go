@@ -8,7 +8,8 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.park_and_go.R;
-import com.park_and_go.assets.Constants;
+
+import static com.park_and_go.assets.Constants.URL_WEBVIEW;
 
 public class TransporteCompartido extends AppCompatActivity {
 
@@ -36,7 +37,7 @@ public class TransporteCompartido extends AppCompatActivity {
         muving.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://www.muving.com/");
+                intent.putExtra(URL_WEBVIEW, "https://www.muving.com/");
                 startActivity(intent);
             }
         });
@@ -44,7 +45,7 @@ public class TransporteCompartido extends AppCompatActivity {
         coup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://joincoup.com/es/madrid");
+                intent.putExtra(URL_WEBVIEW, "https://joincoup.com/es/madrid");
                 startActivity(intent);
             }
         });
@@ -52,7 +53,7 @@ public class TransporteCompartido extends AppCompatActivity {
         ecool.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://www.ecooltra.com/es/");
+                intent.putExtra(URL_WEBVIEW, "https://www.ecooltra.com/es/");
                 startActivity(intent);
             }
         });
@@ -60,7 +61,7 @@ public class TransporteCompartido extends AppCompatActivity {
         movo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://movo.me/es/");
+                intent.putExtra(URL_WEBVIEW, "https://movo.me/es/");
                 startActivity(intent);
             }
         });
@@ -68,7 +69,7 @@ public class TransporteCompartido extends AppCompatActivity {
         zity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://zitycar.es/");
+                intent.putExtra(URL_WEBVIEW, "https://zitycar.es/");
                 startActivity(intent);
             }
         });
@@ -76,7 +77,7 @@ public class TransporteCompartido extends AppCompatActivity {
         wible.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://www.wible.es/");
+                intent.putExtra(URL_WEBVIEW, "https://www.wible.es/");
                 startActivity(intent);
             }
         });
@@ -84,7 +85,7 @@ public class TransporteCompartido extends AppCompatActivity {
         emov.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://www.emov.eco/");
+                intent.putExtra(URL_WEBVIEW, "https://www.emov.eco/");
                 startActivity(intent);
             }
         });
@@ -92,7 +93,7 @@ public class TransporteCompartido extends AppCompatActivity {
         rentroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://rentandrollmadrid.com/alquiler-de-bicicletas/");
+                intent.putExtra(URL_WEBVIEW, "https://rentandrollmadrid.com/alquiler-de-bicicletas/");
                 startActivity(intent);
             }
         });
@@ -100,7 +101,7 @@ public class TransporteCompartido extends AppCompatActivity {
         bicimad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://www.bicimad.com/");
+                intent.putExtra(URL_WEBVIEW, "https://www.bicimad.com/");
                 startActivity(intent);
             }
         });
@@ -108,7 +109,7 @@ public class TransporteCompartido extends AppCompatActivity {
         jump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://www.jump.com/es/es-es/cities/madrid/");
+                intent.putExtra(URL_WEBVIEW, "https://www.jump.com/es/es-es/cities/madrid/");
                 startActivity(intent);
             }
         });
@@ -116,7 +117,7 @@ public class TransporteCompartido extends AppCompatActivity {
         lime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://www.li.me/es/");
+                intent.putExtra(URL_WEBVIEW, "https://www.li.me/es/");
                 startActivity(intent);
             }
         });
@@ -124,7 +125,7 @@ public class TransporteCompartido extends AppCompatActivity {
         wind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://www.wind.co/spain");
+                intent.putExtra(URL_WEBVIEW, "https://www.wind.co/spain");
                 startActivity(intent);
             }
         });
@@ -132,7 +133,7 @@ public class TransporteCompartido extends AppCompatActivity {
         voi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.putExtra(Constants.URL_WEBVIEW, "https://www.voiscooters.com/es/");
+                intent.putExtra(URL_WEBVIEW, "https://www.voiscooters.com/es/");
                 startActivity(intent);
             }
         });

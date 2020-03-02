@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
-import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
 import com.park_and_go.common.PlacesResponse;
 
@@ -30,7 +29,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.park_and_go.assets.Constants.ADD_FAV;
 import static com.park_and_go.assets.Constants.ALL_ITEMS;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.OPTION;
@@ -63,8 +61,8 @@ public class ParkPlaces extends AppCompatActivity {
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                menu.add(0, 1, 0, ADD_FAV);
-                menu.add(0, 2, 1, Constants.MOSTRAR_TODOS);
+                menu.add(0, 1, 0, R.string.add_fav);
+                menu.add(0, 2, 1, R.string.mostrar_todo);
             }
         });
 

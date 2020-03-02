@@ -33,4 +33,16 @@
     <string name="fav_correcto">Añadido correctamente a favoritos</string>
     <string name="no_favs">No existen favoritos</string>
     <string name="your_location">Your location</string>
+    <string name="distancia_coche">Su vehiculo se encuentra a %1$.0f metros</string>
+    <string name="alerta_proximidad">Alerta de proximidad !!</string>
+    <string name="borrado_correcto">Borrado correctamente</string>
+    <string name="borrar_fav">Borrar favorito</string>
+    <string name="mostrar_todo">Mostrar todo</string>
+    <string name="add_fav">Añadir Favorito</string>
+    <string name="location_activated">Location Service Activated</string>
+    <string name="gps_granted">GPS Permission granted!</string>
+    <string name="gps_denied">Permission denied by user!</string>
+    <string name="aparcamiento_guardado">Aparcamiento guardado correctamente</string>
+    <string name="aparcamiento_noguardado">No has guardado aparcamiento</string>
+    <string name="cargando">cargando</string>
 </resources>

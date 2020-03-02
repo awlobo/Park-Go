@@ -23,16 +23,23 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.assets.Constants;
+import com.park_and_go.common.MyLocation;
+import com.park_and_go.common.PlacesResponse;
 
+import static com.park_and_go.assets.Constants.CHANNEL_CARLOCATION;
+import static com.park_and_go.assets.Constants.CHANNEL_DESCRIPTION;
+import static com.park_and_go.assets.Constants.CHANNEL_ID;
+import static com.park_and_go.assets.Constants.CHANNEL_ID_PERMANENTE;
+import static com.park_and_go.assets.Constants.CHANNEL_NAME;
+import static com.park_and_go.assets.Constants.CHANNEL_PERMANENTE;
 import static com.park_and_go.assets.Constants.KEY_PREFERENCES;
-import static com.park_and_go.assets.Constants.LATITUDE;
 import static com.park_and_go.assets.Constants.LOCATION;
-import static com.park_and_go.assets.Constants.LONGITUDE;
-import static com.park_and_go.assets.Constants.NOTIFICATION_MESSAGE;
-import static com.park_and_go.assets.Constants.NOTIFICATION_TITLE;
+import static com.park_and_go.assets.Constants.MY_CAR;
+import static com.park_and_go.assets.Constants.MY_CAR_LAT;
+import static com.park_and_go.assets.Constants.MY_CAR_LON;
 import static com.park_and_go.assets.Constants.OPTION;
-import static com.park_and_go.assets.Constants.SNIPPET;
-import static com.park_and_go.assets.Constants.TITLE;
+import static com.park_and_go.assets.Constants.PARKING;
+import static com.park_and_go.assets.Constants.PLACES;
 
 public class GpsService extends Service implements LocationListener {
 
@@ -41,6 +48,7 @@ public class GpsService extends Service implements LocationListener {
     private Location mCurrentLocation;
     private Location mMyCarLocation;
     SharedPreferences mPref;
+    float mDistance;
 
     public GpsService() {
     }
@@ -67,7 +75,9 @@ public class GpsService extends Service implements LocationListener {
             );
 
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(serviceChannel);
+            if (manager != null) {
+                manager.createNotificationChannel(serviceChannel);
+            }
         }
     }
 
@@ -77,16 +87,13 @@ public class GpsService extends Service implements LocationListener {
         super.onStartCommand(intent, flags, startId);
 
         createNotificationChannel();
-        Notification notification = new NotificationCompat.Builder(this, "1")
-                .setContentTitle("Location Service Activated")
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID_PERMANENTE)
+                .setContentTitle(getString(R.string.location_activated))
                 .setSmallIcon(R.drawable.location)
                 .build();
 
-        startForeground(1, notification);
-
-        // Set GPS Listener
+        startForeground(CHANNEL_PERMANENTE, notification);
         startLocation();
-        Log.d(TAG, "Listener set");
 
         return START_STICKY;
     }
@@ -106,7 +113,6 @@ public class GpsService extends Service implements LocationListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy");
         if (mLocManager != null) {
             mLocManager.removeUpdates(this);
         }
@@ -120,30 +126,19 @@ public class GpsService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG, "new location");
-
         mCurrentLocation = location;
         mMyCarLocation = new Location(location);
-        Log.d(TAG, "Location: " + location.getLongitude());
 
-        mMyCarLocation.setLatitude(mPref.getFloat(Constants.MY_CAR_LAT, 0));
-        mMyCarLocation.setLongitude(mPref.getFloat(Constants.MY_CAR_LON, 0));
+        mMyCarLocation.setLatitude(mPref.getFloat(MY_CAR_LAT, 0));
+        mMyCarLocation.setLongitude(mPref.getFloat(MY_CAR_LON, 0));
 
-        Log.d(TAG, "My car Location: " + mMyCarLocation.getLongitude());
-
-        Log.d(TAG, "Location despues del coche: " + location.getLongitude());
-
-        Log.d(TAG, "Distancia entre ambos: " + location.distanceTo(mMyCarLocation));
-
-        if (location.distanceTo(mMyCarLocation) < 500) {
+        mDistance = location.distanceTo(mMyCarLocation);
+        if (mDistance < 500) {
             showNotification();
         }
 
         Intent intent = new Intent(Constants.INTENT_LOCALIZATION_ACTION);
         intent.putExtra(LOCATION, mCurrentLocation);
-        //intent.putExtra(Constants.KEY_MESSAGE, "New Location");
-
-        Log.d(TAG, "Current Location: " + mCurrentLocation.getLongitude());
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -163,37 +158,34 @@ public class GpsService extends Service implements LocationListener {
     }
 
     private void showNotification() {
-        NotificationManager notificationManager = (NotificationManager) this.getSystemService(this.NOTIFICATION_SERVICE);
-
-        String CHANNEL_ID = "my_chanel_01";
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "my_chanel";
-            String Description = "This is my chanel";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChanel = new NotificationChannel(CHANNEL_ID, name, importance);
-            mChanel.setDescription(Description);
-            notificationManager.createNotificationChannel(mChanel);
+            NotificationChannel mChanel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            mChanel.setDescription(CHANNEL_DESCRIPTION);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(mChanel);
+            }
         }
 
+        PlacesResponse.Places carPlace = new PlacesResponse.Places(MY_CAR, new MyLocation(mMyCarLocation.getLatitude(), mMyCarLocation.getLongitude()), mDistance, PARKING);
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra(OPTION, false);
-        intent.putExtra(LATITUDE, mMyCarLocation.getLatitude());
-        intent.putExtra(LONGITUDE, mMyCarLocation.getLongitude());
-        intent.putExtra(TITLE, "My car");
-        intent.putExtra(SNIPPET, "Distancia: metros.");
+        intent.putExtra(PLACES, carPlace);
+        intent.putExtra(LOCATION, mCurrentLocation);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        //Igual que un intent pero para mandar a posteriori, a diferencia del intent que se ejecuta al momento
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.car)
-                .setContentTitle(NOTIFICATION_TITLE)
-                .setContentText(NOTIFICATION_MESSAGE + mPref.getFloat(Constants.MY_CAR_LAT, 0))
+                .setContentTitle(getString(R.string.alerta_proximidad))
+                .setContentText(getString(R.string.distancia_coche, mDistance))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
-        notificationManager.notify(1, builder.build());
+        if (notificationManager != null) {
+            notificationManager.notify(CHANNEL_CARLOCATION, builder.build());
+        }
     }
 }
