@@ -1,6 +1,8 @@
 package com.park_and_go.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
@@ -51,6 +55,9 @@ public class FilteredPlaces extends AppCompatActivity {
     private MyAdapter mAdapter = null;
     private ListView lv = null;
     private int mDistancia;
+    private boolean mParking;
+    private boolean mTeatro;
+    private boolean mEmbajada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +66,9 @@ public class FilteredPlaces extends AppCompatActivity {
 
         Intent intent = getIntent();
         mCurrentLocation = intent.getParcelableExtra(LOCATION);
-        boolean mParking = intent.getBooleanExtra(PARKING, false);
-        boolean mTeatro = intent.getBooleanExtra(THEATRE, false);
-        boolean mEmbajada = intent.getBooleanExtra(CONSULADO, false);
+        mParking = intent.getBooleanExtra(PARKING, false);
+        mTeatro = intent.getBooleanExtra(THEATRE, false);
+        mEmbajada = intent.getBooleanExtra(CONSULADO, false);
         mDistancia = intent.getIntExtra(DISTANCIA, 1000);
 
         lv = findViewById(R.id.lvFiltered);
@@ -73,15 +80,13 @@ public class FilteredPlaces extends AppCompatActivity {
             }
         });
 
-        if (mEmbajada) {
-            getEmbajadas(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(FilteredPlaces.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ActivityCompat.requestPermissions(FilteredPlaces.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            checkGps();
         }
-        if (mTeatro) {
-            getTeatros(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-        }
-        if (mParking) {
-            getParkings(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-        }
+
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -93,6 +98,34 @@ public class FilteredPlaces extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    public void checkGps() {
+        if (mCurrentLocation != null) {
+            if (mEmbajada) {
+                getEmbajadas(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            }
+            if (mTeatro) {
+                getTeatros(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            }
+            if (mParking) {
+                getParkings(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            }
+        } else {
+            Toast.makeText(this, R.string.no_gps, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(), R.string.gps_granted, Toast.LENGTH_SHORT).show();
+                checkGps();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.gps_denied, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -136,7 +169,6 @@ public class FilteredPlaces extends AppCompatActivity {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
                 mPlacesEmbajadas = response.body().graph;
-                Log.d(TAG, "Valor de response code " + response.code());
                 if (response.body() != null && !mPlacesEmbajadas.isEmpty()) {
 
                     for (int i = 0; i < mPlacesEmbajadas.size(); i++) {

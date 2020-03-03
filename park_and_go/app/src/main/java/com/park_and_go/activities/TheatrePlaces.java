@@ -1,6 +1,8 @@
 package com.park_and_go.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
@@ -54,9 +58,14 @@ public class TheatrePlaces extends AppCompatActivity {
 
         mCurrentLocation = location.getParcelableExtra(LOCATION);
 
-        getTheatres(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-        lv = (ListView) findViewById(R.id.listview_theatres);
+        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(TheatrePlaces.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ActivityCompat.requestPermissions(TheatrePlaces.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            checkGps();
+        }
 
+        lv = (ListView) findViewById(R.id.listview_theatres);
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -77,6 +86,25 @@ public class TheatrePlaces extends AppCompatActivity {
         });
     }
 
+    public void checkGps(){
+        if (mCurrentLocation != null) {
+            getTheatres(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        } else {
+            Toast.makeText(this, R.string.no_gps, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(), R.string.gps_granted, Toast.LENGTH_SHORT).show();
+                checkGps();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.gps_denied, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {

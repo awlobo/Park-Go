@@ -45,4 +45,5 @@
     <string name="aparcamiento_guardado">Aparcamiento guardado correctamente</string>
     <string name="aparcamiento_noguardado">No has guardado aparcamiento</string>
     <string name="cargando">cargando</string>
+    <string name="no_gps">No está activado el GPS</string>
 </resources>

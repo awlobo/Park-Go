@@ -1,6 +1,8 @@
 package com.park_and_go.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
@@ -58,7 +62,13 @@ public class ConsulatePlaces extends AppCompatActivity {
 
         mCurrentLocation = location.getParcelableExtra(LOCATION);
 
-        getConsulates(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+
+        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(ConsulatePlaces.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ActivityCompat.requestPermissions(ConsulatePlaces.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            checkGps();
+        }
 
         lv = findViewById(R.id.listview_consulates);
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -81,6 +91,26 @@ public class ConsulatePlaces extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void checkGps(){
+        if (mCurrentLocation != null) {
+            getConsulates(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        } else {
+            Toast.makeText(this, R.string.no_gps, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(), R.string.gps_granted, Toast.LENGTH_SHORT).show();
+                checkGps();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.gps_denied, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

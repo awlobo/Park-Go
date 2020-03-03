@@ -1,7 +1,9 @@
 package com.park_and_go.activities;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -13,6 +15,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -40,38 +44,37 @@ import static com.park_and_go.assets.Constants.URL_FAV;
 public class FavoritosPlaces extends AppCompatActivity {
 
     private MyAdapter mAdapter = null;
+    private ListView lv = null;
     public static List<PlacesResponse.Places> mFavsPlaces = new ArrayList<>();
-    Location myLocation;
+    Location mCurrentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favoritos_places);
 
-        ListView lv = findViewById(R.id.listaFavoritos);
+        lv = findViewById(R.id.listaFavoritos);
 
         readFav(getFilesDir() + URL_FAV);
         Intent intent = getIntent();
-        myLocation = intent.getParcelableExtra(LOCATION);
+        mCurrentLocation = intent.getParcelableExtra(LOCATION);
 
-        ProgressDialog pd = new ProgressDialog(FavoritosPlaces.this);
-        pd.setMessage(getString(R.string.cargando));
-        pd.show();
-        PlacesResponse.Places.ordenarDistancia(mFavsPlaces);
         if (mFavsPlaces != null && !mFavsPlaces.isEmpty()) {
-            mAdapter = new MyAdapter(FavoritosPlaces.this, R.layout.list_places, mFavsPlaces);
-            lv.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
+            if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(FavoritosPlaces.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(FavoritosPlaces.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            } else {
+                checkGps();
+            }
         } else {
             Toast.makeText(this, R.string.no_favs, Toast.LENGTH_LONG).show();
         }
-        pd.dismiss();
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 Intent intent = new Intent(FavoritosPlaces.this, MapsActivity.class);
-                intent.putExtra(LOCATION, myLocation);
+                intent.putExtra(LOCATION, mCurrentLocation);
                 intent.putExtra(PLACES, mFavsPlaces.get(i));
                 intent.putExtra(OPTION, false);
                 startActivity(intent);
@@ -85,6 +88,29 @@ public class FavoritosPlaces extends AppCompatActivity {
                 menu.add(0, 2, 1, R.string.mostrar_todo);
             }
         });
+    }
+
+    public void checkGps() {
+        if (mCurrentLocation != null) {
+            PlacesResponse.Places.ordenarDistancia(mFavsPlaces);
+            mAdapter = new MyAdapter(FavoritosPlaces.this, R.layout.list_places, mFavsPlaces);
+            lv.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(this, R.string.no_gps, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(), R.string.gps_granted, Toast.LENGTH_SHORT).show();
+                checkGps();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.gps_denied, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -106,7 +132,7 @@ public class FavoritosPlaces extends AppCompatActivity {
         } else if (item.getItemId() == 2) {
             Intent intent = new Intent(FavoritosPlaces.this, MapsActivity.class);
             intent.putExtra(OPTION, true);
-            intent.putExtra(LOCATION, myLocation);
+            intent.putExtra(LOCATION, mCurrentLocation);
             intent.putParcelableArrayListExtra(ALL_ITEMS, (ArrayList<? extends Parcelable>) mFavsPlaces);
             startActivity(intent);
         }

@@ -1,6 +1,9 @@
 package com.park_and_go.activities;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +15,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.park_and_go.MainActivity;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
@@ -55,7 +61,14 @@ public class ParkPlaces extends AppCompatActivity {
 
         mCurrentLocation = location.getParcelableExtra(LOCATION);
 
-        getParks(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+
+        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(ParkPlaces.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ActivityCompat.requestPermissions(ParkPlaces.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            checkGps();
+        }
+
 
         lv = (ListView) findViewById(R.id.listview_parks);
         lv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -78,6 +91,31 @@ public class ParkPlaces extends AppCompatActivity {
             }
 
         });
+    }
+
+    public void checkGps(){
+        if (mCurrentLocation != null) {
+            ProgressDialog pd = new ProgressDialog(ParkPlaces.this);
+            pd.setMessage(getString(R.string.cargando));
+            pd.show();
+            getParks(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            pd.dismiss();
+
+        } else {
+            Toast.makeText(this, R.string.no_gps, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(), R.string.gps_granted, Toast.LENGTH_SHORT).show();
+                checkGps();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.gps_denied, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
