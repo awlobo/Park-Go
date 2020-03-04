@@ -40,6 +40,7 @@ import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PLACES;
+import static com.park_and_go.assets.Constants.SERVER_DOWN;
 import static com.park_and_go.assets.Constants.URL_FAV;
 
 public class ConsulatePlaces extends AppCompatActivity {
@@ -83,7 +84,6 @@ public class ConsulatePlaces extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 Intent intent = new Intent(ConsulatePlaces.this, MapsActivity.class);
-                Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
                 intent.putExtra(PLACES, mPlaces.get(i));
                 intent.putExtra(OPTION, false);
                 intent.putExtra(LOCATION, mCurrentLocation);
@@ -167,14 +167,12 @@ public class ConsulatePlaces extends AppCompatActivity {
                     mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
-                } else {
-                    Log.d(TAG, "Response: " + response.body().graph.size());
                 }
             }
 
             @Override
             public void onFailure(Call<PlacesResponse> call, Throwable t) {
-                Log.e(TAG, "Response: empty array");
+                Toast.makeText(getApplicationContext(),SERVER_DOWN,Toast.LENGTH_LONG).show();
             }
         });
     }

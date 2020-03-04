@@ -15,19 +15,19 @@ import android.widget.Switch;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.park_and_go.R;
+import com.park_and_go.assets.Constants;
 
 import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.DISTANCIA;
+import static com.park_and_go.assets.Constants.KEY_DIST;
+import static com.park_and_go.assets.Constants.KEY_EMBA;
+import static com.park_and_go.assets.Constants.KEY_OCIO;
+import static com.park_and_go.assets.Constants.KEY_PARK;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.PARKING;
 import static com.park_and_go.assets.Constants.THEATRE;
 
 public class FiltrosPlaces extends AppCompatActivity {
-
-    public final static String KEY_PARK = "KEY_PARK";
-    public final static String KEY_OCIO = "KEY_OCIO";
-    public final static String KEY_EMBA = "KEY_EMBA";
-    public final static String KEY_DIST = "KEY_DIST";
     SharedPreferences mPrefs;
     Switch sP;
     Switch sO;

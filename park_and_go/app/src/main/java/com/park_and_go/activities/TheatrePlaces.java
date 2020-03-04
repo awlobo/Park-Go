@@ -38,6 +38,7 @@ import static com.park_and_go.assets.Constants.ALL_ITEMS;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PLACES;
+import static com.park_and_go.assets.Constants.SERVER_DOWN;
 import static com.park_and_go.assets.Constants.THEATRE;
 
 //import static com.park_and_go.MainActivity.mFavs;
@@ -161,14 +162,12 @@ public class TheatrePlaces extends AppCompatActivity {
                     mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
-                } else {
-                    Log.d(TAG, "Response: " + response.body().graph.size());
                 }
             }
 
             @Override
             public void onFailure(Call<PlacesResponse> call, Throwable t) {
-                Log.e(TAG, "Response: empty array");
+                Toast.makeText(getApplicationContext(),SERVER_DOWN,Toast.LENGTH_LONG);
             }
         });
     }

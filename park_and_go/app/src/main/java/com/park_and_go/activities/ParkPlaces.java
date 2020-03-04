@@ -40,6 +40,7 @@ import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PARKING;
 import static com.park_and_go.assets.Constants.PLACES;
+import static com.park_and_go.assets.Constants.SERVER_DOWN;
 import static com.park_and_go.assets.Constants.URL_FAV;
 
 public class ParkPlaces extends AppCompatActivity {
@@ -55,7 +56,6 @@ public class ParkPlaces extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_park_places);
-        Log.d(TAG, "En el onCreate de park places");
 
         Intent location = getIntent();
 
@@ -177,14 +177,12 @@ public class ParkPlaces extends AppCompatActivity {
                     mAdapter = new MyAdapter(ParkPlaces.this, R.layout.list_places, mPlaces);
                     lv.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
-                } else {
-                    Log.d(TAG, "Response: " + response.body().graph.size());
                 }
             }
 
             @Override
             public void onFailure(Call<PlacesResponse> call, Throwable t) {
-                Log.e(TAG, "Response: empty array");
+                Toast.makeText(getApplicationContext(),SERVER_DOWN,Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -61,7 +61,6 @@ public class GpsService extends Service implements LocationListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "Servicio creado");
         mPref = getSharedPreferences(KEY_PREFERENCES, MODE_PRIVATE);
     }
 
@@ -106,7 +105,7 @@ public class GpsService extends Service implements LocationListener {
             callGPSSettingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(callGPSSettingIntent);
         } else {
-            mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 300, this);
+            mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 100, this);
         }
     }
 
@@ -133,8 +132,7 @@ public class GpsService extends Service implements LocationListener {
         mMyCarLocation.setLatitude(mPref.getFloat(MY_CAR_LAT, 0));
         mMyCarLocation.setLongitude(mPref.getFloat(MY_CAR_LON, 0));
 
-        mDistance = location.distanceTo(mMyCarLocation);
-        if (mDistance < 500) {
+        if (location.distanceTo(mMyCarLocation) < 300) {
             showNotification();
         }
 

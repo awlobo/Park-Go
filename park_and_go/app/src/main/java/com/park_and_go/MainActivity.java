@@ -46,6 +46,7 @@ import static com.park_and_go.assets.Constants.PLACES;
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
+    private final String TAG = getClass().getSimpleName();
     private DrawerLayout drawerLayout;
     private NavigationView mNavigationView;
     private Intent mServiceIntent;
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         mPrefs = getSharedPreferences(KEY_PREFERENCES, MODE_PRIVATE);
-//        mPrefs= getPreferences(MODE_PRIVATE);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(Constants.INTENT_LOCALIZATION_ACTION));
@@ -97,12 +97,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        } else {
-            startService();
-        }
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -115,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements
     public void startService() {
         mServiceIntent = new Intent(getApplicationContext(), GpsService.class);
         startService(mServiceIntent);
-//        stopService(mServiceIntent);
     }
 
 
@@ -182,12 +175,15 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(intent);
 
         } else if (id == R.id.menu_guardar_aparcamiento) {
-            SharedPreferences.Editor prefsEditor = mPrefs.edit();
-            prefsEditor.putFloat(Constants.MY_CAR_LAT, (float) mCurrentLocation.getLatitude());
-            prefsEditor.putFloat(Constants.MY_CAR_LON, (float) mCurrentLocation.getLongitude());
-            prefsEditor.apply();
-            Toast.makeText(this, R.string.aparcamiento_guardado, Toast.LENGTH_LONG).show();
-
+            if (mCurrentLocation != null) {
+                SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                prefsEditor.putFloat(Constants.MY_CAR_LAT, (float) mCurrentLocation.getLatitude());
+                prefsEditor.putFloat(Constants.MY_CAR_LON, (float) mCurrentLocation.getLongitude());
+                prefsEditor.apply();
+                Toast.makeText(this, R.string.aparcamiento_guardado, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, R.string.no_gps, Toast.LENGTH_LONG).show();
+            }
         } else if (id == R.id.menu_recuperar_aparcamiento) {
             if (mPrefs != null) {
                 mCarLocation = new Location(MY_CAR);
