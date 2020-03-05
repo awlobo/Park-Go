@@ -7,4 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
+
+    <style name="Personalizado" parent="AppTheme">
+        <item name="colorAccent">@color/colorPrimaryLight</item>
+    </style>
 </resources>

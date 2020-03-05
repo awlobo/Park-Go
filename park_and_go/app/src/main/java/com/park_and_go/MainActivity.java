@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,24 +37,23 @@ import com.park_and_go.common.MyLocation;
 import com.park_and_go.common.PlacesResponse;
 import com.park_and_go.services.GpsService;
 
+import static com.park_and_go.activities.FavoritosPlaces.readFav;
 import static com.park_and_go.assets.Constants.KEY_PREFERENCES;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.MY_CAR;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PARKING;
 import static com.park_and_go.assets.Constants.PLACES;
+import static com.park_and_go.assets.Constants.URL_FAV;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
-    private final String TAG = getClass().getSimpleName();
     private DrawerLayout drawerLayout;
-    private NavigationView mNavigationView;
-    private Intent mServiceIntent;
     Location mCurrentLocation;
     Location mCarLocation;
     SharedPreferences mPrefs;
-
+    boolean mServicioActivado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements
         /* CONFIGURACION TOOLBAR */
         setToolBar();
         drawerLayout = findViewById(R.id.drawer_layout);
-        mNavigationView = findViewById(R.id.navview);
+        NavigationView mNavigationView = findViewById(R.id.navview);
 
         /* CONFIGURACION BOTONES MENU LATERAL */
         if (mNavigationView != null) {
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         mPrefs = getSharedPreferences(KEY_PREFERENCES, MODE_PRIVATE);
+        readFav(getFilesDir() + URL_FAV);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(Constants.INTENT_LOCALIZATION_ACTION));
@@ -91,12 +92,39 @@ public class MainActivity extends AppCompatActivity implements
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
             startService();
+            mServicioActivado = true;
         }
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        ImageButton bTeatros = findViewById(R.id.bTeatros);
+        ImageButton bParkings = findViewById(R.id.bParkings);
+        ImageButton bEmbajadas = findViewById(R.id.bEmbajadas);
+
+        bTeatros.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TheatrePlaces.class);
+                intent.putExtra(LOCATION, mCurrentLocation);
+                startActivity(intent);
+            }
+        });
+
+        bParkings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ParkPlaces.class);
+                intent.putExtra(LOCATION, mCurrentLocation);
+                startActivity(intent);
+            }
+        });
+
+        bEmbajadas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ConsulatePlaces.class);
+                intent.putExtra(LOCATION, mCurrentLocation);
+                startActivity(intent);
+            }
+        });
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -107,10 +135,9 @@ public class MainActivity extends AppCompatActivity implements
     };
 
     public void startService() {
-        mServiceIntent = new Intent(getApplicationContext(), GpsService.class);
+        Intent mServiceIntent = new Intent(getApplicationContext(), GpsService.class);
         startService(mServiceIntent);
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -184,8 +211,8 @@ public class MainActivity extends AppCompatActivity implements
             } else {
                 Toast.makeText(this, R.string.no_gps, Toast.LENGTH_LONG).show();
             }
-        } else if (id == R.id.menu_recuperar_aparcamiento) {
-            if (mPrefs != null) {
+        } else if (id == R.id.menu_recuperar_aparcamiento && mPrefs != null) {
+            if (mCurrentLocation != null) {
                 mCarLocation = new Location(MY_CAR);
                 if (mPrefs.contains(Constants.MY_CAR_LAT) && mPrefs.contains(Constants.MY_CAR_LON)) {
                     mCarLocation.setLatitude(mPrefs.getFloat(Constants.MY_CAR_LAT, 0));
@@ -200,6 +227,8 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     Toast.makeText(this, R.string.aparcamiento_noguardado, Toast.LENGTH_LONG).show();
                 }
+            } else {
+                Toast.makeText(this, R.string.no_gps, Toast.LENGTH_LONG).show();
             }
         }
         return false;

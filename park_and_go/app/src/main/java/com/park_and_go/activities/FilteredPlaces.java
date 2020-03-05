@@ -33,6 +33,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.park_and_go.activities.FavoritosPlaces.mFavsPlaces;
 import static com.park_and_go.assets.Constants.ALL_ITEMS;
 import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.DISTANCIA;
@@ -134,6 +135,7 @@ public class FilteredPlaces extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
+            p.setFavorito(true);
             if (p.title.contains(PARKING)) {
                 FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, PARKING);
             } else if (p.title.contains(CONSULADO) || p.title.contains(EMBAJADA)) {
@@ -178,6 +180,11 @@ public class FilteredPlaces extends AppCompatActivity {
                         location.setLongitude(mPlacesEmbajadas.get(i).location.longitude);
                         mPlacesEmbajadas.get(i).distance = mCurrentLocation.distanceTo(location);
                         mPlacesEmbajadas.get(i).setTipo(CONSULADO);
+                        for (PlacesResponse.Places f : mFavsPlaces) {
+                            if (mPlacesEmbajadas.get(i).title.equals(f.title)) {
+                                mPlacesEmbajadas.get(i).setFavorito(true);
+                            }
+                        }
                     }
                     mPlaces.addAll(mPlacesEmbajadas);
                     PlacesResponse.Places.ordenarDistancia(mPlaces);
@@ -220,6 +227,11 @@ public class FilteredPlaces extends AppCompatActivity {
                         location.setLongitude(mPlacesTeatros.get(i).location.longitude);
                         mPlacesTeatros.get(i).distance = mCurrentLocation.distanceTo(location);
                         mPlacesTeatros.get(i).setTipo(THEATRE);
+                        for (PlacesResponse.Places f : mFavsPlaces) {
+                            if (mPlacesTeatros.get(i).title.equals(f.title)) {
+                                mPlacesTeatros.get(i).setFavorito(true);
+                            }
+                        }
                     }
 
                     mPlaces.addAll(mPlacesTeatros);
@@ -262,6 +274,11 @@ public class FilteredPlaces extends AppCompatActivity {
                         location.setLongitude(mPlacesParkings.get(i).location.longitude);
                         mPlacesParkings.get(i).distance = mCurrentLocation.distanceTo(location);
                         mPlacesParkings.get(i).setTipo(PARKING);
+                        for (PlacesResponse.Places f : mFavsPlaces) {
+                            if (mPlacesParkings.get(i).title.equals(f.title)) {
+                                mPlacesParkings.get(i).setFavorito(true);
+                            }
+                        }
                     }
 
                     mPlaces.addAll(mPlacesParkings);

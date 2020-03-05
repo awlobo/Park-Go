@@ -34,6 +34,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.park_and_go.activities.FavoritosPlaces.mFavsPlaces;
 import static com.park_and_go.assets.Constants.ALL_ITEMS;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.OPTION;
@@ -87,7 +88,7 @@ public class TheatrePlaces extends AppCompatActivity {
         });
     }
 
-    public void checkGps(){
+    public void checkGps() {
         if (mCurrentLocation != null) {
             getTheatres(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         } else {
@@ -113,6 +114,7 @@ public class TheatrePlaces extends AppCompatActivity {
 
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
+            p.setFavorito(true);
             FavoritosPlaces.writeFav(getFilesDir() + "/fav.json", p, Constants.THEATRE);
             mAdapter.notifyDataSetChanged();
             Toast.makeText(TheatrePlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
@@ -157,6 +159,11 @@ public class TheatrePlaces extends AppCompatActivity {
                         float distance = mCurrentLocation.distanceTo(location);
                         mPlaces.get(i).distance = distance;
                         mPlaces.get(i).setTipo(THEATRE);
+                        for (PlacesResponse.Places f : mFavsPlaces) {
+                            if (mPlaces.get(i).title.equals(f.title)) {
+                                mPlaces.get(i).setFavorito(true);
+                            }
+                        }
                     }
                     PlacesResponse.Places.ordenarDistancia(mPlaces);
                     mAdapter = new MyAdapter(TheatrePlaces.this, R.layout.list_places, mPlaces);
@@ -167,7 +174,7 @@ public class TheatrePlaces extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PlacesResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),SERVER_DOWN,Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), SERVER_DOWN, Toast.LENGTH_LONG);
             }
         });
     }

@@ -44,7 +44,7 @@ public class FavoritosPlaces extends AppCompatActivity {
 
     private MyAdapter mAdapter = null;
     private ListView lv = null;
-    public static List<PlacesResponse.Places> mFavsPlaces = new ArrayList<>();
+    protected static List<PlacesResponse.Places> mFavsPlaces = new ArrayList<>();
     Location mCurrentLocation;
 
     @Override
@@ -159,6 +159,7 @@ public class FavoritosPlaces extends AppCompatActivity {
             }.getType();
             mFavsPlaces = gson.fromJson(reader, types);
             reader.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

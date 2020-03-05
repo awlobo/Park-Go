@@ -15,7 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -43,7 +42,6 @@ import static com.park_and_go.assets.Constants.PLACES;
 
 public class GpsService extends Service implements LocationListener {
 
-    private final String TAG = getClass().getSimpleName();
     private LocationManager mLocManager = null;
     private Location mCurrentLocation;
     private Location mMyCarLocation;
@@ -131,8 +129,9 @@ public class GpsService extends Service implements LocationListener {
 
         mMyCarLocation.setLatitude(mPref.getFloat(MY_CAR_LAT, 0));
         mMyCarLocation.setLongitude(mPref.getFloat(MY_CAR_LON, 0));
+        mDistance = location.distanceTo(mMyCarLocation);
 
-        if (location.distanceTo(mMyCarLocation) < 300) {
+        if (mDistance < 500) {
             showNotification();
         }
 

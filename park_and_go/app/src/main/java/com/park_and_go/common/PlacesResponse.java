@@ -23,6 +23,7 @@ public class PlacesResponse {
         public MyLocation location = null;
         public Float distance = null;
         private String tipo;
+        private boolean favorito;
 
         public Places(String title, MyLocation location, Float distance,String tipo) {
             this.title = title;
@@ -36,6 +37,7 @@ public class PlacesResponse {
             location = (MyLocation) in.readParcelable(MyLocation.class.getClassLoader());
             distance = in.readFloat();
             tipo=in.readString();
+            favorito=in.readBoolean();
         }
 
         public static void ordenarDistancia(List<Places> listaDesordenada){
@@ -46,6 +48,14 @@ public class PlacesResponse {
                 }
             };
             Collections.sort(listaDesordenada, compareByDistance);
+        }
+
+        public boolean isFavorito() {
+            return favorito;
+        }
+
+        public void setFavorito(boolean favorito) {
+            this.favorito = favorito;
         }
 
         public void setTipo(String tipo) {
@@ -67,6 +77,7 @@ public class PlacesResponse {
             parcel.writeParcelable(location, flags);
             parcel.writeFloat(distance);
             parcel.writeString(tipo);
+            parcel.writeBoolean(favorito);
         }
 
         public static final Parcelable.Creator<Places> CREATOR =

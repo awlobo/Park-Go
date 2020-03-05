@@ -55,6 +55,7 @@ public class MyAdapter extends BaseAdapter {
         }
 
         ImageView icon = v.findViewById(R.id.image);
+        ImageView fav = v.findViewById(R.id.favorito);
         TextView title = v.findViewById(R.id.name);
         TextView distance = v.findViewById(R.id.dista);
         switch (mPlaces.get(i).getTipo()) {
@@ -67,6 +68,9 @@ public class MyAdapter extends BaseAdapter {
             case Constants.THEATRE:
                 icon.setImageResource(R.drawable.ocio);
                 break;
+        }
+        if(mPlaces.get(i).isFavorito()){
+            fav.setImageResource(R.drawable.ic_favorite_black_24dp);
         }
         title.setText(mPlaces.get(i).title);
         distance.setText(mContext.getString(R.string.metros, mPlaces.get(i).distance));

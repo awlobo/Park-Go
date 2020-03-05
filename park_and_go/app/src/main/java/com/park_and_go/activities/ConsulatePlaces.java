@@ -35,6 +35,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.park_and_go.activities.FavoritosPlaces.mFavsPlaces;
 import static com.park_and_go.assets.Constants.ALL_ITEMS;
 import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.LOCATION;
@@ -93,7 +94,7 @@ public class ConsulatePlaces extends AppCompatActivity {
 
     }
 
-    public void checkGps(){
+    public void checkGps() {
         if (mCurrentLocation != null) {
             getConsulates(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         } else {
@@ -119,6 +120,7 @@ public class ConsulatePlaces extends AppCompatActivity {
 
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
+            p.setFavorito(true);
             FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, Constants.CONSULADO);
             mAdapter.notifyDataSetChanged();
             Toast.makeText(ConsulatePlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
@@ -162,6 +164,11 @@ public class ConsulatePlaces extends AppCompatActivity {
                         location.setLongitude(mPlaces.get(i).location.longitude);
                         mPlaces.get(i).distance = mCurrentLocation.distanceTo(location);
                         mPlaces.get(i).setTipo(CONSULADO);
+                        for (PlacesResponse.Places f : mFavsPlaces) {
+                            if (mPlaces.get(i).title.equals(f.title)) {
+                                mPlaces.get(i).setFavorito(true);
+                            }
+                        }
                     }
                     PlacesResponse.Places.ordenarDistancia(mPlaces);
                     mAdapter = new MyAdapter(ConsulatePlaces.this, R.layout.list_places, mPlaces);
@@ -172,7 +179,7 @@ public class ConsulatePlaces extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PlacesResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),SERVER_DOWN,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), SERVER_DOWN, Toast.LENGTH_LONG).show();
             }
         });
     }
