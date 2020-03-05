@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,17 +35,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.park_and_go.activities.FavoritosPlaces.mFavsPlaces;
 import static com.park_and_go.assets.Constants.ALL_ITEMS;
+import static com.park_and_go.assets.Constants.BASE_URL;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.SERVER_DOWN;
 import static com.park_and_go.assets.Constants.THEATRE;
-import static com.park_and_go.assets.Constants.URL_FAV;
-
-//import static com.park_and_go.MainActivity.mFavs;
 
 public class TheatrePlaces extends AppCompatActivity {
-    private final String TAG = getClass().getSimpleName();
     private ArrayList<PlacesResponse.Places> mPlaces;
     private Location mCurrentLocation;
     private MyAdapter mAdapter = null;
@@ -153,7 +149,7 @@ public class TheatrePlaces extends AppCompatActivity {
 
         Retrofit retrofit =
                 new Retrofit.Builder()
-                        .baseUrl("https://datos.madrid.es/")
+                        .baseUrl(BASE_URL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .client(client)
                         .build();
@@ -165,7 +161,6 @@ public class TheatrePlaces extends AppCompatActivity {
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
 
                 mPlaces = response.body().graph;
-
                 if (response.body() != null && !mPlaces.isEmpty()) {
                     for (int i = 0; i < mPlaces.size(); i++) {
                         Location location = new Location("");

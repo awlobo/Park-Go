@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +19,6 @@ import androidx.core.content.ContextCompat;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
-import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
 import com.park_and_go.common.PlacesResponse;
 
@@ -36,6 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.park_and_go.activities.FavoritosPlaces.mFavsPlaces;
 import static com.park_and_go.assets.Constants.ALL_ITEMS;
+import static com.park_and_go.assets.Constants.BASE_URL;
 import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.DISTANCIA;
 import static com.park_and_go.assets.Constants.EMBAJADA;
@@ -49,7 +48,6 @@ import static com.park_and_go.assets.Constants.URL_FAV;
 
 public class FilteredPlaces extends AppCompatActivity {
 
-    private final String TAG = getClass().getSimpleName();
     private ArrayList<PlacesResponse.Places> mPlaces = new ArrayList<>();
     private ArrayList<PlacesResponse.Places> mPlacesEmbajadas;
     private ArrayList<PlacesResponse.Places> mPlacesParkings;
@@ -148,7 +146,7 @@ public class FilteredPlaces extends AppCompatActivity {
         return true;
     }
 
-    private void addFavorites(PlacesResponse.Places p){
+    private void addFavorites(PlacesResponse.Places p) {
         boolean fav = false;
         for (PlacesResponse.Places f : mFavsPlaces) {
             if (p.title.equals(f.title)) {
@@ -179,7 +177,7 @@ public class FilteredPlaces extends AppCompatActivity {
                 .build();
         Retrofit retrofit =
                 new Retrofit.Builder()
-                        .baseUrl("https://datos.madrid.es/")
+                        .baseUrl(BASE_URL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .client(client)
                         .build();
@@ -212,7 +210,7 @@ public class FilteredPlaces extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PlacesResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),SERVER_DOWN,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), SERVER_DOWN, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -234,9 +232,7 @@ public class FilteredPlaces extends AppCompatActivity {
             @Override
             public void onResponse(Call<PlacesResponse> call, Response<PlacesResponse> response) {
                 mPlacesTeatros = response.body().graph;
-                Log.d(TAG, "Valor de response code " + response.code());
                 if (response.body() != null && !mPlacesTeatros.isEmpty()) {
-
                     for (int i = 0; i < mPlacesTeatros.size(); i++) {
                         Location location = new Location("");
                         location.setLatitude(mPlacesTeatros.get(i).location.latitude);
@@ -260,7 +256,7 @@ public class FilteredPlaces extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PlacesResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),SERVER_DOWN,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), SERVER_DOWN, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -307,7 +303,7 @@ public class FilteredPlaces extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PlacesResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),SERVER_DOWN,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), SERVER_DOWN, Toast.LENGTH_LONG).show();
             }
         });
     }

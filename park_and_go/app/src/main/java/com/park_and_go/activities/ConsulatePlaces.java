@@ -4,9 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.park_and_go.activities.FavoritosPlaces.mFavsPlaces;
 import static com.park_and_go.assets.Constants.ALL_ITEMS;
+import static com.park_and_go.assets.Constants.BASE_URL;
 import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.OPTION;
@@ -45,10 +44,7 @@ import static com.park_and_go.assets.Constants.SERVER_DOWN;
 import static com.park_and_go.assets.Constants.URL_FAV;
 
 public class ConsulatePlaces extends AppCompatActivity {
-    private final String TAG = getClass().getSimpleName();
 
-    private static final Integer PERMIS_GPS_FINE = 1;
-    private LocationManager mLocManager;
     private ArrayList<PlacesResponse.Places> mPlaces;
     private Location mCurrentLocation;
     private MyAdapter mAdapter = null;
@@ -158,7 +154,7 @@ public class ConsulatePlaces extends AppCompatActivity {
 
         Retrofit retrofit =
                 new Retrofit.Builder()
-                        .baseUrl("https://datos.madrid.es/")
+                        .baseUrl(BASE_URL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .client(client)
                         .build();

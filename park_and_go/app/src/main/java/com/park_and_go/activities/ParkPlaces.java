@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,11 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.park_and_go.MainActivity;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
-import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
 import com.park_and_go.common.PlacesResponse;
 
@@ -38,6 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.park_and_go.activities.FavoritosPlaces.mFavsPlaces;
 import static com.park_and_go.assets.Constants.ALL_ITEMS;
+import static com.park_and_go.assets.Constants.BASE_URL;
 import static com.park_and_go.assets.Constants.LOCATION;
 import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PARKING;
@@ -47,7 +45,6 @@ import static com.park_and_go.assets.Constants.URL_FAV;
 
 public class ParkPlaces extends AppCompatActivity {
 
-    private final String TAG = getClass().getSimpleName();
     private ArrayList<PlacesResponse.Places> mPlaces;
     private MyAdapter mAdapter = null;
     private Location mCurrentLocation;
@@ -85,7 +82,6 @@ public class ParkPlaces extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 Intent intent = new Intent(ParkPlaces.this, MapsActivity.class);
-                Log.d(TAG, "Intent  MapsActivity: " + mPlaces.get(i).location.latitude + ", " + mPlaces.get(i).location.longitude);
                 intent.putExtra(PLACES, mPlaces.get(i));
                 intent.putExtra(OPTION, false);
                 intent.putExtra(LOCATION, mCurrentLocation);
@@ -95,7 +91,7 @@ public class ParkPlaces extends AppCompatActivity {
         });
     }
 
-    public void checkGps(){
+    public void checkGps() {
         if (mCurrentLocation != null) {
             ProgressDialog pd = new ProgressDialog(ParkPlaces.this);
             pd.setMessage(getString(R.string.cargando));
@@ -166,14 +162,12 @@ public class ParkPlaces extends AppCompatActivity {
 
         Retrofit retrofit =
                 new Retrofit.Builder()
-                        .baseUrl("https://datos.madrid.es/")
+                        .baseUrl(BASE_URL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .client(client)
                         .build();
 
         DataMadrid dm = retrofit.create(DataMadrid.class);
-
-        Log.d(TAG, "En getPlaces");
 
         dm.getPlaces(latitude, longitude, 1000).enqueue(new Callback<PlacesResponse>() {
             @Override
@@ -181,7 +175,6 @@ public class ParkPlaces extends AppCompatActivity {
 
                 mPlaces = response.body().graph;
 
-                Log.d(TAG, "Valor de response code " + String.valueOf(response.code()));
                 if (response.body() != null && !mPlaces.isEmpty()) {
                     for (int i = 0; i < mPlaces.size(); i++) {
                         Location location = new Location("");
@@ -206,7 +199,7 @@ public class ParkPlaces extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PlacesResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),SERVER_DOWN,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), SERVER_DOWN, Toast.LENGTH_LONG).show();
             }
         });
     }

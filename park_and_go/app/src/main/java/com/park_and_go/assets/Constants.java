@@ -27,6 +27,7 @@ public class Constants {
     public static final String CHANNEL_ID_PERMANENTE = "1";
     public static final CharSequence CHANNEL_NAME = "my_chanel";
     public static final String CHANNEL_DESCRIPTION = "This is my chanel";
+    public static final String BASE_URL = "https://datos.madrid.es/";
     public static final int CHANNEL_PERMANENTE = 1;
     public static final int CHANNEL_CARLOCATION = 2;
 }
