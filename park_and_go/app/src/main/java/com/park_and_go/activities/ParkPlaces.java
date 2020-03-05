@@ -22,6 +22,7 @@ import com.park_and_go.MainActivity;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
+import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
 import com.park_and_go.common.PlacesResponse;
 
@@ -126,9 +127,7 @@ public class ParkPlaces extends AppCompatActivity {
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
             p.setFavorito(true);
-            FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, PARKING);
-            mAdapter.notifyDataSetChanged();
-            Toast.makeText(ParkPlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
+            addFavoritos(p);
         } else if (item.getItemId() == 2) {
             Intent intent = new Intent(this, MapsActivity.class);
             intent.putExtra(OPTION, true);
@@ -137,6 +136,23 @@ public class ParkPlaces extends AppCompatActivity {
             startActivity(intent);
         }
         return true;
+    }
+
+    private void addFavoritos(PlacesResponse.Places p) {
+        boolean fav = false;
+        for (PlacesResponse.Places f : mFavsPlaces) {
+            if (p.title.equals(f.title)) {
+                fav = true;
+                break;
+            }
+        }
+        if (!fav) {
+            FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, PARKING);
+            mAdapter.notifyDataSetChanged();
+            Toast.makeText(ParkPlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(ParkPlaces.this, R.string.ya_fav, Toast.LENGTH_SHORT).show();
+        }
     }
 
 

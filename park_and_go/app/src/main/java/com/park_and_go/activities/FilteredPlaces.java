@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import com.park_and_go.MapsActivity;
 import com.park_and_go.R;
 import com.park_and_go.adapters.MyAdapter;
+import com.park_and_go.assets.Constants;
 import com.park_and_go.common.DataMadrid;
 import com.park_and_go.common.PlacesResponse;
 
@@ -136,6 +137,26 @@ public class FilteredPlaces extends AppCompatActivity {
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
             p.setFavorito(true);
+            addFavorites(p);
+        } else if (item.getItemId() == 2) {
+            Intent intent = new Intent(FilteredPlaces.this, MapsActivity.class);
+            intent.putExtra(OPTION, true);
+            intent.putExtra(LOCATION, mCurrentLocation);
+            intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
+            startActivity(intent);
+        }
+        return true;
+    }
+
+    private void addFavorites(PlacesResponse.Places p){
+        boolean fav = false;
+        for (PlacesResponse.Places f : mFavsPlaces) {
+            if (p.title.equals(f.title)) {
+                fav = true;
+                break;
+            }
+        }
+        if (!fav) {
             if (p.title.contains(PARKING)) {
                 FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, PARKING);
             } else if (p.title.contains(CONSULADO) || p.title.contains(EMBAJADA)) {
@@ -145,14 +166,9 @@ public class FilteredPlaces extends AppCompatActivity {
             }
             mAdapter.notifyDataSetChanged();
             Toast.makeText(FilteredPlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
-        } else if (item.getItemId() == 2) {
-            Intent intent = new Intent(FilteredPlaces.this, MapsActivity.class);
-            intent.putExtra(OPTION, true);
-            intent.putExtra(LOCATION, mCurrentLocation);
-            intent.putParcelableArrayListExtra(ALL_ITEMS, mPlaces);
-            startActivity(intent);
+        } else {
+            Toast.makeText(this, R.string.ya_fav, Toast.LENGTH_SHORT).show();
         }
-        return true;
     }
 
     public void getEmbajadas(double latitude, double longitude) {

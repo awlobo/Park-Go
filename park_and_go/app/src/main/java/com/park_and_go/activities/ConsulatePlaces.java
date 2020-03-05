@@ -117,13 +117,10 @@ public class ConsulatePlaces extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
             p.setFavorito(true);
-            FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, Constants.CONSULADO);
-            mAdapter.notifyDataSetChanged();
-            Toast.makeText(ConsulatePlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
+            addFavoritos(p);
         } else if (item.getItemId() == 2) {
             Intent intent = new Intent(this, MapsActivity.class);
             intent.putExtra(OPTION, true);
@@ -134,7 +131,24 @@ public class ConsulatePlaces extends AppCompatActivity {
         return true;
     }
 
-    public void getConsulates(double latitude, double longitude) {
+    private void addFavoritos(PlacesResponse.Places p) {
+        boolean fav = false;
+        for (PlacesResponse.Places f : mFavsPlaces) {
+            if (p.title.equals(f.title)) {
+                fav = true;
+                break;
+            }
+        }
+        if (!fav) {
+            FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, Constants.CONSULADO);
+            mAdapter.notifyDataSetChanged();
+            Toast.makeText(ConsulatePlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(ConsulatePlaces.this, R.string.ya_fav, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void getConsulates(double latitude, double longitude) {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

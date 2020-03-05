@@ -41,6 +41,7 @@ import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.SERVER_DOWN;
 import static com.park_and_go.assets.Constants.THEATRE;
+import static com.park_and_go.assets.Constants.URL_FAV;
 
 //import static com.park_and_go.MainActivity.mFavs;
 
@@ -57,7 +58,6 @@ public class TheatrePlaces extends AppCompatActivity {
         setContentView(R.layout.activity_theatre_places);
 
         Intent location = getIntent();
-
         mCurrentLocation = location.getParcelableExtra(LOCATION);
 
         if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(TheatrePlaces.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -88,6 +88,23 @@ public class TheatrePlaces extends AppCompatActivity {
         });
     }
 
+    private void addFavoritos(PlacesResponse.Places p) {
+        boolean fav = false;
+        for (PlacesResponse.Places f : mFavsPlaces) {
+            if (p.title.equals(f.title)) {
+                fav = true;
+                break;
+            }
+        }
+        if (!fav) {
+            FavoritosPlaces.writeFav(getFilesDir() + "/fav.json", p, Constants.THEATRE);
+            mAdapter.notifyDataSetChanged();
+            Toast.makeText(TheatrePlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(TheatrePlaces.this, R.string.ya_fav, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void checkGps() {
         if (mCurrentLocation != null) {
             getTheatres(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
@@ -115,9 +132,7 @@ public class TheatrePlaces extends AppCompatActivity {
         if (item.getItemId() == 1) {
             PlacesResponse.Places p = mPlaces.get(info.position);
             p.setFavorito(true);
-            FavoritosPlaces.writeFav(getFilesDir() + "/fav.json", p, Constants.THEATRE);
-            mAdapter.notifyDataSetChanged();
-            Toast.makeText(TheatrePlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
+            addFavoritos(p);
         } else if (item.getItemId() == 2) {
             Intent intent = new Intent(this, MapsActivity.class);
             intent.putExtra(OPTION, true);
