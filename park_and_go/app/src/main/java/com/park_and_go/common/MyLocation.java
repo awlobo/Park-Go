@@ -7,7 +7,6 @@ public class MyLocation implements Parcelable {
     public Double latitude = null;
     public Double longitude = null;
 
-
     public MyLocation(Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -31,7 +30,6 @@ public class MyLocation implements Parcelable {
 
     public static final Parcelable.Creator<MyLocation> CREATOR =
             new Parcelable.Creator<MyLocation>() {
-
                 public MyLocation createFromParcel(Parcel in) {
                     return new MyLocation(in);
                 }

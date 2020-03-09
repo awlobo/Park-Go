@@ -45,6 +45,7 @@ import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.SERVER_DOWN;
 import static com.park_and_go.assets.Constants.THEATRE;
 import static com.park_and_go.assets.Constants.URL_FAV;
+import static com.park_and_go.assets.Constants.VACIO;
 
 public class FilteredPlaces extends AppCompatActivity {
 
@@ -189,7 +190,7 @@ public class FilteredPlaces extends AppCompatActivity {
                 if (response.body() != null && !mPlacesEmbajadas.isEmpty()) {
 
                     for (int i = 0; i < mPlacesEmbajadas.size(); i++) {
-                        Location location = new Location("");
+                        Location location = new Location(VACIO);
                         location.setLatitude(mPlacesEmbajadas.get(i).location.latitude);
                         location.setLongitude(mPlacesEmbajadas.get(i).location.longitude);
                         mPlacesEmbajadas.get(i).distance = mCurrentLocation.distanceTo(location);
@@ -223,7 +224,7 @@ public class FilteredPlaces extends AppCompatActivity {
                 .build();
         Retrofit retrofit =
                 new Retrofit.Builder()
-                        .baseUrl("https://datos.madrid.es/")
+                        .baseUrl(BASE_URL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .client(client)
                         .build();
@@ -234,7 +235,7 @@ public class FilteredPlaces extends AppCompatActivity {
                 mPlacesTeatros = response.body().graph;
                 if (response.body() != null && !mPlacesTeatros.isEmpty()) {
                     for (int i = 0; i < mPlacesTeatros.size(); i++) {
-                        Location location = new Location("");
+                        Location location = new Location(VACIO);
                         location.setLatitude(mPlacesTeatros.get(i).location.latitude);
                         location.setLongitude(mPlacesTeatros.get(i).location.longitude);
                         mPlacesTeatros.get(i).distance = mCurrentLocation.distanceTo(location);
@@ -269,7 +270,7 @@ public class FilteredPlaces extends AppCompatActivity {
                 .build();
         Retrofit retrofit =
                 new Retrofit.Builder()
-                        .baseUrl("https://datos.madrid.es/")
+                        .baseUrl(BASE_URL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .client(client)
                         .build();
@@ -281,7 +282,7 @@ public class FilteredPlaces extends AppCompatActivity {
                 if (response.body() != null && !mPlacesParkings.isEmpty()) {
 
                     for (int i = 0; i < mPlacesParkings.size(); i++) {
-                        Location location = new Location("");
+                        Location location = new Location(VACIO);
                         location.setLatitude(mPlacesParkings.get(i).location.latitude);
                         location.setLongitude(mPlacesParkings.get(i).location.longitude);
                         mPlacesParkings.get(i).distance = mCurrentLocation.distanceTo(location);

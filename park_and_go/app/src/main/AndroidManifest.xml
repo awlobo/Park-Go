@@ -30,7 +30,7 @@
 
         <activity android:name=".activities.FavoritosPlaces" />
         <activity android:name=".activities.FiltrosPlaces" />
-        <activity android:name=".assets.Splash_screen">
+        <activity android:name=".assets.SplashScreen">
 
             <!-- android:theme="@style/SplahTheme" -->
 

@@ -3,7 +3,6 @@ package com.park_and_go;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -28,11 +27,11 @@ import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.THEATRE;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-    private final String TAG = getClass().getSimpleName();
     private ArrayList<PlacesResponse.Places> mPlaces;
     private PlacesResponse.Places mPlaceAlone;
     private boolean option;
-    private Double mLatitude, mLongitude;
+    private Double mLatitude;
+    private Double mLongitude;
     private String mTitle;
     private String mSnip;
     private GoogleMap mMap;
@@ -93,7 +92,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     } else {
                         mMap.addMarker(new MarkerOptions().position(loc).title(p.title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     }
-//                    mMap.addMarker(new MarkerOptions().position(loc).title(p.title));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15));
                     mMap.setMyLocationEnabled(true);
                 } else {

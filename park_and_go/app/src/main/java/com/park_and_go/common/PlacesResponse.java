@@ -25,22 +25,22 @@ public class PlacesResponse {
         private String tipo;
         private boolean favorito;
 
-        public Places(String title, MyLocation location, Float distance,String tipo) {
+        public Places(String title, MyLocation location, Float distance, String tipo) {
             this.title = title;
             this.location = location;
             this.distance = distance;
-            this.tipo=tipo;
+            this.tipo = tipo;
         }
 
         public Places(Parcel in) {
             title = in.readString();
             location = (MyLocation) in.readParcelable(MyLocation.class.getClassLoader());
             distance = in.readFloat();
-            tipo=in.readString();
-            favorito=in.readBoolean();
+            tipo = in.readString();
+            favorito = in.readBoolean();
         }
 
-        public static void ordenarDistancia(List<Places> listaDesordenada){
+        public static void ordenarDistancia(List<Places> listaDesordenada) {
             Comparator<Places> compareByDistance = new Comparator<Places>() {
                 @Override
                 public int compare(Places o1, Places o2) {

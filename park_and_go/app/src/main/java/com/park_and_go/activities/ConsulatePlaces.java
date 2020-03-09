@@ -42,6 +42,7 @@ import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.SERVER_DOWN;
 import static com.park_and_go.assets.Constants.URL_FAV;
+import static com.park_and_go.assets.Constants.VACIO;
 
 public class ConsulatePlaces extends AppCompatActivity {
 
@@ -169,7 +170,7 @@ public class ConsulatePlaces extends AppCompatActivity {
 
                 if (response.body() != null && !mPlaces.isEmpty()) {
                     for (int i = 0; i < mPlaces.size(); i++) {
-                        Location location = new Location("");
+                        Location location = new Location(VACIO);
                         location.setLatitude(mPlaces.get(i).location.latitude);
                         location.setLongitude(mPlaces.get(i).location.longitude);
                         mPlaces.get(i).distance = mCurrentLocation.distanceTo(location);

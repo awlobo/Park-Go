@@ -117,14 +117,14 @@ public class FavoritosPlaces extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         if (item.getItemId() == 1) {
             try {
-                Writer writer = new FileWriter(getFilesDir() + URL_FAV);
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                PlacesResponse.Places p = mFavsPlaces.get(info.position);
-                mFavsPlaces.remove(p);
-                gson.toJson(mFavsPlaces, writer);
-                Toast.makeText(FavoritosPlaces.this, R.string.borrado_correcto, Toast.LENGTH_SHORT).show();
-                mAdapter.notifyDataSetChanged();
-                writer.close();
+                try (Writer writer = new FileWriter(getFilesDir() + URL_FAV)) {
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    PlacesResponse.Places p = mFavsPlaces.get(info.position);
+                    mFavsPlaces.remove(p);
+                    gson.toJson(mFavsPlaces, writer);
+                    Toast.makeText(FavoritosPlaces.this, R.string.borrado_correcto, Toast.LENGTH_SHORT).show();
+                    mAdapter.notifyDataSetChanged();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -140,12 +140,12 @@ public class FavoritosPlaces extends AppCompatActivity {
 
     public static void writeFav(String file, PlacesResponse.Places p, String tipo) {
         try {
-            Writer writer = new FileWriter(file);
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            p.setTipo(tipo);
-            mFavsPlaces.add(p);
-            gson.toJson(mFavsPlaces, writer);
-            writer.close();
+            try (Writer writer = new FileWriter(file)) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                p.setTipo(tipo);
+                mFavsPlaces.add(p);
+                gson.toJson(mFavsPlaces, writer);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -153,13 +153,12 @@ public class FavoritosPlaces extends AppCompatActivity {
 
     public static void readFav(String file) {
         try {
-            Reader reader = new FileReader(file);
-            Gson gson = new Gson();
-            Type types = new TypeToken<ArrayList<PlacesResponse.Places>>() {
-            }.getType();
-            mFavsPlaces = gson.fromJson(reader, types);
-            reader.close();
-
+            try (Reader reader = new FileReader(file)) {
+                Gson gson = new Gson();
+                Type types = new TypeToken<ArrayList<PlacesResponse.Places>>() {
+                }.getType();
+                mFavsPlaces = gson.fromJson(reader, types);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

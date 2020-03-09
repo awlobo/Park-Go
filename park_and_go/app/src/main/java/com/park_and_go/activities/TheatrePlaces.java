@@ -41,6 +41,8 @@ import static com.park_and_go.assets.Constants.OPTION;
 import static com.park_and_go.assets.Constants.PLACES;
 import static com.park_and_go.assets.Constants.SERVER_DOWN;
 import static com.park_and_go.assets.Constants.THEATRE;
+import static com.park_and_go.assets.Constants.URL_FAV;
+import static com.park_and_go.assets.Constants.VACIO;
 
 public class TheatrePlaces extends AppCompatActivity {
     private ArrayList<PlacesResponse.Places> mPlaces;
@@ -93,7 +95,7 @@ public class TheatrePlaces extends AppCompatActivity {
             }
         }
         if (!fav) {
-            FavoritosPlaces.writeFav(getFilesDir() + "/fav.json", p, Constants.THEATRE);
+            FavoritosPlaces.writeFav(getFilesDir() + URL_FAV, p, Constants.THEATRE);
             mAdapter.notifyDataSetChanged();
             Toast.makeText(TheatrePlaces.this, getString(R.string.fav_correcto), Toast.LENGTH_SHORT).show();
         } else {
@@ -163,7 +165,7 @@ public class TheatrePlaces extends AppCompatActivity {
                 mPlaces = response.body().graph;
                 if (response.body() != null && !mPlaces.isEmpty()) {
                     for (int i = 0; i < mPlaces.size(); i++) {
-                        Location location = new Location("");
+                        Location location = new Location(VACIO);
                         location.setLatitude(mPlaces.get(i).location.latitude);
                         location.setLongitude(mPlaces.get(i).location.longitude);
                         float distance = mCurrentLocation.distanceTo(location);

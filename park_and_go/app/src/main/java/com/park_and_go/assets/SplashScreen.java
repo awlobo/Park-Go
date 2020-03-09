@@ -9,20 +9,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.park_and_go.MainActivity;
 import com.park_and_go.R;
 
-public class Splash_screen extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        int SPLASH_DISPLAY_LENGTH = 1000;
+        final int SPLASH_DISPLAY_LENGTH = 1000; // 1 segundo
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent mainIntent = new Intent(Splash_screen.this, MainActivity.class);
-                Splash_screen.this.startActivity(mainIntent);
-                Splash_screen.this.finish();
+                Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
+                SplashScreen.this.startActivity(mainIntent);
+                SplashScreen.this.finish();
             }
         }, SPLASH_DISPLAY_LENGTH);
     }

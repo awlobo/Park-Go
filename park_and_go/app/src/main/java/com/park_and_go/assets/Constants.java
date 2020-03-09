@@ -2,6 +2,7 @@ package com.park_and_go.assets;
 
 public class Constants {
 
+    public static final String VACIO = "";
     public static final String CONSULADO = "Consulado";
     public static final String EMBAJADA = "Embajada";
     public static final String THEATRE = "Teatro";
@@ -16,10 +17,10 @@ public class Constants {
     public static final String LOCATION = "location";
     public static final String DISTANCIA = "distancia";
     public static final String URL_FAV = "/fav.json";
-    public final static String KEY_PARK = "KEY_PARK";
-    public final static String KEY_OCIO = "KEY_OCIO";
-    public final static String KEY_EMBA = "KEY_EMBA";
-    public final static String KEY_DIST = "KEY_DIST";
+    public static final String KEY_PARK = "KEY_PARK";
+    public static final String KEY_OCIO = "KEY_OCIO";
+    public static final String KEY_EMBA = "KEY_EMBA";
+    public static final String KEY_DIST = "KEY_DIST";
     public static final String SERVER_DOWN = "ERROR DE CONEXION";
     public static final String KEY_PREFERENCES = "PREFERENCES_LOCATION_CAR";
     public static final String URL_WEBVIEW = "URL";

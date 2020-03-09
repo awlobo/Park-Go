@@ -1,7 +1,6 @@
 package com.park_and_go.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import com.park_and_go.R;
 import com.park_and_go.assets.Constants;
 import com.park_and_go.common.PlacesResponse;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class MyAdapter extends BaseAdapter {
@@ -69,7 +67,7 @@ public class MyAdapter extends BaseAdapter {
                 icon.setImageResource(R.drawable.ocio);
                 break;
         }
-        if(mPlaces.get(i).isFavorito()){
+        if (mPlaces.get(i).isFavorito()) {
             fav.setImageResource(R.drawable.ic_favorite_black_24dp);
         }
         title.setText(mPlaces.get(i).title);

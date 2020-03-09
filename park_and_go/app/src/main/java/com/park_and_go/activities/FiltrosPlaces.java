@@ -15,7 +15,6 @@ import android.widget.Switch;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.park_and_go.R;
-import com.park_and_go.assets.Constants;
 
 import static com.park_and_go.assets.Constants.CONSULADO;
 import static com.park_and_go.assets.Constants.DISTANCIA;
@@ -86,9 +85,11 @@ public class FiltrosPlaces extends AppCompatActivity {
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Nada
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Nada
             }
         });
 
@@ -105,10 +106,10 @@ public class FiltrosPlaces extends AppCompatActivity {
             }
         });
 
-        PersistData();
+        persistData();
     }
 
-    private void PersistData() {
+    private void persistData() {
         if (mPrefs != null) {
             sP.setChecked(mPrefs.getBoolean(KEY_PARK, false));
             sO.setChecked(mPrefs.getBoolean(KEY_OCIO, false));

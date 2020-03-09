@@ -137,7 +137,5 @@ public class TransporteCompartido extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 }
