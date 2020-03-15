@@ -1,5 +1,6 @@
 package com.park_and_go.common;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -37,7 +38,9 @@ public class PlacesResponse {
             location = (MyLocation) in.readParcelable(MyLocation.class.getClassLoader());
             distance = in.readFloat();
             tipo = in.readString();
-            favorito = in.readBoolean();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                favorito = in.readBoolean();
+            }
         }
 
         public static void ordenarDistancia(List<Places> listaDesordenada) {
@@ -77,7 +80,9 @@ public class PlacesResponse {
             parcel.writeParcelable(location, flags);
             parcel.writeFloat(distance);
             parcel.writeString(tipo);
-            parcel.writeBoolean(favorito);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                parcel.writeBoolean(favorito);
+            }
         }
 
         public static final Parcelable.Creator<Places> CREATOR =
