@@ -69,6 +69,8 @@ public class MyAdapter extends BaseAdapter {
         }
         if (mPlaces.get(i).isFavorito()) {
             fav.setImageResource(R.drawable.ic_favorite_black_24dp);
+        }else{
+            fav.setImageResource(0);
         }
         title.setText(mPlaces.get(i).title);
         distance.setText(mContext.getString(R.string.metros, mPlaces.get(i).distance));
