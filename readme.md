@@ -25,8 +25,8 @@
 - [Getting Started](#getting_started)
 - [Usage](#usage)
 - [Built Using](#built_using)
-- [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
+- [TODO](#todo)
+- [Contributing](#contributing)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgement)
 
@@ -68,6 +68,44 @@ Clone the repo, open the project in Android Studio, hit "Run". Done!
 - [Retrofit2](https://square.github.io/retrofit/) - HTTP client 
 - [Picasso](https://square.github.io/picasso/) - Image downloader
 - [OkHttp](https://square.github.io/okhttp/) - HTTP request
+
+## Contributing <a name = "contributing"></a>
+
+### Submitting changes
+
+- Fork the repo
+  - <https://github.com/wilkin25/Park-Go/fork>
+- Check out a new branch based and name it to what you intend to do:
+  - Example:
+    ````
+    $ git checkout -b BRANCH_NAME
+    ````
+    If you get an error, you may need to fetch fooBar first by using
+    ````
+    $ git remote update && git fetch
+    ````
+  - Use one branch per fix / feature
+- Commit your changes
+  - Please provide a git message that explains what you've done
+  - Please make sure your commits follow the [conventions](https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53#file-commit-message-guidelines-md)
+  - Commit to the forked repository
+  - Example:
+    ````
+    $ git commit -am 'Add some fooBar'
+    ````
+- Push to the branch
+  - Example:
+    ````
+    $ git push origin BRANCH_NAME
+    ````
+- Make a pull request
+  - Make sure you send the PR to the <code>fooBar</code> branch
+  - Travis CI is watching you!
+
+If you follow these instructions, your PR will land pretty safely in the main repo!
+
+## :pencil: To-Do <a name = "todo"></a>
+
 
 ## ✍️ Authors <a name = "authors"></a>
 - [@rubencete1987](https://github.com/rubencete1987) - Idea & Initial work
