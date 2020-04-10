@@ -70,7 +70,7 @@ To be made...
 - [Picasso](https://square.github.io/picasso/) - Image downloader
 - [OkHttp](https://square.github.io/okhttp/) - HTTP request
 
-## :handshaking: Contributing <a name = "contributing"></a>
+## 🤝 Contributing <a name = "contributing"></a>
 
 ### Submitting changes
 
