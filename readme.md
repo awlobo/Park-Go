@@ -28,7 +28,6 @@
 - [TODO](#todo)
 - [Contributing](#contributing)
 - [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
 
 ## 🧐 About <a name = "about"></a>
 The project is a result of the need to provide the user with mobility, security and entertainment in Madrid.
@@ -69,7 +68,7 @@ Clone the repo, open the project in Android Studio, hit "Run". Done!
 - [Picasso](https://square.github.io/picasso/) - Image downloader
 - [OkHttp](https://square.github.io/okhttp/) - HTTP request
 
-## Contributing <a name = "contributing"></a>
+## :handshaking: Contributing <a name = "contributing"></a>
 
 ### Submitting changes
 
@@ -104,7 +103,7 @@ Clone the repo, open the project in Android Studio, hit "Run". Done!
 
 If you follow these instructions, your PR will land pretty safely in the main repo!
 
-## :pencil: To-Do <a name = "todo"></a>
+## :pencil2: To-Do <a name = "todo"></a>
 
 
 ## ✍️ Authors <a name = "authors"></a>
