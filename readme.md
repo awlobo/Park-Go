@@ -6,6 +6,7 @@
 <h3 align="center">Park & GO</h3>
 
 <div align="center">
+  
   [![Status](https://img.shields.io/badge/status-active-success.svg)]() 
   [![GitHub issues](https://img.shields.io/github/issues/wilkin25/Park-Go)](https://github.com/wilkin25/Park-Go/issues)
   [![GitHub forks](https://img.shields.io/github/forks/wilkin25/Park-Go)](https://github.com/wilkin25/Park-Go/network)
@@ -32,7 +33,7 @@
 ## 🧐 About <a name = "about"></a>
 The project is a result of the need to provide the user with mobility, security and entertainment in Madrid.
 
-## Functions  <a name = "functions"></a>
+## :gear: Functions  <a name = "functions"></a>
 - Access to consulates, public parkings and theaters nearby
 - Save vehicle parking location, receiving a notification when you are within 500 meters
 - Favorite list
