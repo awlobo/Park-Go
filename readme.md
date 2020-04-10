@@ -61,6 +61,7 @@ Clone the repo, open the project in Android Studio, hit "Run". Done!
 
 ## 🎈 Usage <a name="usage"></a>
 
+To be made...
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 - [Android Studio](https://developer.android.com/) - IDE
