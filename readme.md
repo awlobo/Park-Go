@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="https://i.imgur.com/7bRy61P.png" alt="Project logo"></a>
+ <img width=30% src="https://i.imgur.com/7bRy61P.png" alt="Project logo"></a>
 </p>
 
 <h3 align="center">Park & GO</h3>
@@ -15,14 +15,14 @@
 
 ---
 
-<p align="center"> Few lines describing your project.
+<p align="center"> Android app aimed at tourists traveling in Madrid.
     <br> 
 </p>
 
 ## 📝 Table of Contents
 - [About](#about)
+- [Functions](#functions)
 - [Getting Started](#getting_started)
-- [Deployment](#deployment)
 - [Usage](#usage)
 - [Built Using](#built_using)
 - [TODO](../TODO.md)
@@ -31,70 +31,45 @@
 - [Acknowledgments](#acknowledgement)
 
 ## 🧐 About <a name = "about"></a>
-Write about 1-2 paragraphs describing the purpose of your project.
+The project is a result of the need to provide the user with mobility, security and entertainment in Madrid.
+
+## Functions  <a name = "functions"></a>
+- Access to consulates, public parkings and theaters nearby
+- Save vehicle parking location, receiving a notification when you are within 500 meters
+- Favorite list
+- Filters that manage the information we want to show
+- Map - with single or multiple display and colors that differentiate the types of places
+- Emergency call
+- Shared transport - With own browser
+
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
 ### Prerequisites
-What things you need to install the software and how to install them.
 
 ```
-Give examples
+Android Studio
+Sdk min: 23
+Sdk:29
 ```
 
 ### Installing
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
 
 ```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo.
-
-## 🔧 Running the tests <a name = "tests"></a>
-Explain how to run the automated tests for this system.
-
-### Break down into end to end tests
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-Explain what these tests test and why
-
-```
-Give an example
+Clone the repo, open the project in Android Studio, hit "Run". Done!
 ```
 
 ## 🎈 Usage <a name="usage"></a>
-Add notes about how to use the system.
 
-## 🚀 Deployment <a name = "deployment"></a>
-Add additional notes about how to deploy this on a live system.
 
 ## ⛏️ Built Using <a name = "built_using"></a>
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
+- [Android Studio](https://developer.android.com/) - IDE
+- [Java 8](https://docs.oracle.com/javase/8/docs/api/) - Programming Language
+- [Retrofit2](https://square.github.io/retrofit/) - HTTP client 
+- [Picasso](https://square.github.io/picasso/) - Image downloader
+- [OkHttp](https://square.github.io/okhttp/) - HTTP request
 
 ## ✍️ Authors <a name = "authors"></a>
-- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
+- [@rubencete1987](https://github.com/rubencete1987) - Idea & Initial work
+- [@wilkin25](https://github.com/wilkin25) - Idea & Initial work
 
-See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
-
-## 🎉 Acknowledgements <a name = "acknowledgement"></a>
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
