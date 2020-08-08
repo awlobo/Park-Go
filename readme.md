@@ -110,5 +110,5 @@ If you follow these instructions, your PR will land pretty safely in the main re
 
 ## ✍️ Authors <a name = "authors"></a>
 - [@rubencete1987](https://github.com/rubencete1987) - Idea & Initial work
-- [@wilkin25](https://github.com/wilkin25) - Idea & Initial work
+- [@awlobo](https://github.com/awlobo) - Idea & Initial work
 
